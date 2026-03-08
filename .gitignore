@@ -15,7 +15,8 @@ config/
 
 # Temporary and Data folders
 temp/
-glpi_backup/
+glpi_backup/*.json
+glpi_backup/**/*.json
 templates_new/temp/
 
 # Binary and Data exports
