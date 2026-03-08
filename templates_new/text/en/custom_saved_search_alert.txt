@@ -1,0 +1,9 @@
+Subject: [REPORT] Saved Search Alert: ##savedsearch.name##
+
+Dear User,
+
+There are new results for your saved search ##savedsearch.name##.
+
+Count: ##savedsearch.count##
+
+View Results (##savedsearch.url##)

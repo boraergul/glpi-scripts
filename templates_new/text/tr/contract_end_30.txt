@@ -1,0 +1,14 @@
+Subject: ÖNEMLİ: Sözleşme Bitiş Bildirimi - 30 Gün
+
+⚠️ ÖNEMLİ HATIRLATMA
+
+Sayın ##ticket.authors##,
+
+Mevcut hizmet sözleşmenizin bitiş tarihine 30 gün kaldı. Kesintisiz hizmet için acil karar beklenmektedir.
+
+Açıklama 	 ##ticket.content##
+
+Bitiş Tarihi 	 ##ticket.duedate##
+
+Saygılarımızla,
+Ultron Bilişim Account Management

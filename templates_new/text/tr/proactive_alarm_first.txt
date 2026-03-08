@@ -1,0 +1,27 @@
+Subject: Proaktif Alarm: ##ticket.title##
+
+Merhaba ##ticket.authors##,
+
+Monitoring sistemlerimiz bir alarm tespit etti ###ticket.id##
+
+Alarm Tipi: 	 ##ticket.title##
+
+Tespit Zamanı: 	 ##ticket.creationdate##
+
+Etkilenen Sistem: 	 ##ticket.category##
+
+Öncelik Seviyesi: 	 ##ticket.priority##
+
+SLA Hedefi: 	 ##ticket.sla_ttr##
+
+Durumu: 	 ##ticket.status##
+
+ALARM AÇIKLAMASI:
+
+##ticket.content##
+
+ATILAN ADIMLAR:
+
+iNOC ekibimiz alarm üzerinde çalışmaya başlamıştır. İlk değerlendirme ve müdahale devam etmektedir.
+
+Talebi Görüntüle (##ticket.url##)

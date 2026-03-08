@@ -1,0 +1,24 @@
+Subject: [EMERGENCY CHANGE] Acil Değişiklik - ##ticket.title##
+
+ACİL DEĞİŞİKLİK BİLDİRİMİ
+
+Sayın ##ticket.authors##,
+
+Kritik bir durumu çözmek için acil bir değişiklik uygulanacaktır.
+
+ACİL DEĞİŞİKLİK DETAYLARI:
+
+• Emergency Change ID: ##ticket.id##
+
+• Uygulama Zamanı: ##ticket.creationdate##
+
+• Etkilenen Sistemler: ##ticket.item.name##
+
+ACİLİYET SEBEBİ:
+
+##ticket.content##
+
+Anlayışınız için teşekkür ederiz.
+
+Saygılarımızla,
+Ultron Bilişim Change Management

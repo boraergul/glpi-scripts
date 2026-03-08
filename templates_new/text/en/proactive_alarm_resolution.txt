@@ -1,0 +1,27 @@
+Subject: Resolved - ##ticket.title##
+
+Hello ##ticket.authors##,
+
+Resolution record created ###ticket.id##
+
+Subject: 	 ##ticket.title##
+
+Creation Date: 	 ##ticket.creationdate##
+
+Support Specialist: 	 ##ticket.assigntogroups##
+
+Status: 	 ##ticket.status##
+
+Customer: 	 ##ticket.shortentity##
+
+Responding Agent: 	 ##ticket.solution.author##
+
+RESOLUTION DETAILS:
+
+##ticket.solution.description##
+
+• Resolution Date: ##ticket.solvedate##
+
+• Resolution Time: ##ticket.time##
+
+View Ticket (##ticket.url##)

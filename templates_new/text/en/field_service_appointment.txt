@@ -1,0 +1,31 @@
+Subject: Field Service Appointment Request - ##ticket.title##
+
+Hello ##ticket.authors##,
+
+It has been determined that an on-site intervention is required for your ticket ###ticket.id##
+
+Subject: 	 ##ticket.title##
+
+Creation Date: 	 ##ticket.creationdate##
+
+Intervention Type: 	 ##ticket.category##
+
+Assigned Technician: 	 ##ticket.assigntousers##
+
+Status: 	 ##ticket.status##
+
+Customer: 	 ##ticket.shortentity##
+
+REQUIRED FROM YOU:
+
+• Full location address and directions
+
+• Contact person and phone number
+
+• Security/parking procedures
+
+• Special equipment/tool requirements
+
+Please reply to this email to confirm the appointment option that suits you best.
+
+View Ticket (##ticket.url##)

@@ -1,0 +1,9 @@
+Subject: [BİLGİ BANKASI] Yeni Makale: ##knowbaseitem.name##
+
+Bilgi Bankasına yeni bir makale eklendi.
+
+Başlık: ##knowbaseitem.name##
+
+Kategori: ##knowbaseitem.category##
+
+Okumak İçin Tıklayın (##knowbaseitem.url##)

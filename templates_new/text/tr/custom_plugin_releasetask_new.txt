@@ -1,0 +1,7 @@
+Subject: [RELEASE] Yeni Görev: ##task.description##
+
+Release yönetimi kapsamında yeni bir görev eklendi.
+
+Görev: ##task.description##
+
+Durum: ##task.state##

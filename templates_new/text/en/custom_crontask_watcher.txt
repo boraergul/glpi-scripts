@@ -1,0 +1,9 @@
+Subject: [AUTOMATION] Cron Task Error: ##crontask.name##
+
+⚠️ AUTOMATED TASK ERROR
+
+An issue occurred with the automated task ##crontask.name##.
+
+Error Detail:
+
+##crontask.description##

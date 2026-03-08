@@ -1,0 +1,30 @@
+Subject: [MAJOR INCIDENT - ÇÖZÜLDÜ] ##ticket.title##
+
+✅ MAJOR INCIDENT ÇÖZÜLDÜ
+
+Sayın ##ticket.authors##,
+
+Major incident başarıyla çözülmüş ve servisler normal duruma dönmüştür.
+
+ÖZET BİLGİLER:
+
+• Incident ID: ##ticket.id##
+
+• Başlangıç: ##ticket.creationdate##
+
+• Çözüm: ##ticket.solvedate##
+
+• Toplam Süre: ##ticket.actiontime##
+
+ÇÖZÜM ÖZETİ:
+
+##ticket.solution.description##
+
+POST-INCIDENT REVIEW:
+
+Detaylı Post-Incident Review raporu 48 saat içinde paylaşılacaktır.
+
+Gösterdiğiniz anlayış ve sabır için çok teşekkür ederiz.
+
+Saygılarımızla,
+Ultron Bilişim Major Incident Ekibi

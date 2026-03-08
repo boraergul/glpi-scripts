@@ -1,0 +1,5 @@
+Subject: [RELEASE] Görev Silindi: ##task.description##
+
+⚠️ RELEASE GÖREVİ SİLİNDİ
+
+##task.description## görevi silinmiştir.

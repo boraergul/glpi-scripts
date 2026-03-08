@@ -1,0 +1,20 @@
+Subject: [PROJE] Yeni Proje: ##project.name##
+
+Merhaba,
+
+Sisteme yeni bir proje eklenmiştir.
+
+PROJE KARTI:
+
+• Proje Kodu: ##project.code##
+
+• Proje Adı: ##project.name##
+
+• Öncelik: ##project.priority##
+
+• Yönetici: ##project.manager##
+
+Açıklama:
+##project.content##
+
+Projeyi Görüntüle (##project.url##)

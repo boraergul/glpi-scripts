@@ -1,0 +1,55 @@
+/* Giriş Ekranı Logosu */
+body.login-page #login-logo {
+    background: none !important;
+    background-image: url("https://itsm.ultron.com.tr/front/document.send.php?docid=6") !important;
+    width: 300px !important;
+    height: 90px !important;
+    margin: 20px auto !important;
+    display: block !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-size: contain !important;
+}
+
+/* Genel Sayfa Arkaplanı */
+body:not(.login-page) {
+    background-image: url("https://nportal.ultron.com.tr/tenant-favicons/1758833178_68d5aa1acf196.png");
+    background-size: 150px 150px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+}
+
+/* ============ SOL ÜST KÖŞE LOGOLARI (ANA GÖRÜNÜM) ============ */
+
+/* Eski logo IMG etiketlerini kesinlikle gizler */
+.main-header .logo img,
+.main-header .logo-mini img {
+    display: none !important;
+}
+
+/* 1. Sol Üst Logo (Açık Menü - Yüksek Çözünürlük) */
+span.glpi-logo {
+    text-indent: -9999px !important;
+    overflow: hidden !important;
+    display: block !important;
+    background-image: url("https://itsm.ultron.com.tr/front/document.send.php?docid=6") !important;
+    width: 200px !important;
+    height: 55px !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-size: contain !important;
+}
+
+/* 2. Katlanmış Menü Logosu (Küçük Simge) */
+.main-header .logo-mini {
+    text-indent: -9999px !important;
+    overflow: hidden !important;
+    display: block !important;
+    background-image: url("https://nportal.ultron.com.tr/tenant-favicons/1758833178_68d5aa1acf196.png") !important;
+    width: 50px !important;
+    height: 50px !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-size: contain !important;
+}

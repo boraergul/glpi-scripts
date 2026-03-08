@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Yorum Eklendi</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .email-header {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: #ffffff;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .email-header .ticket-id {
+            font-size: 14px;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        .email-body {
+            padding: 20px 15px;
+        }
+
+        .info-section {
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #333333;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #555555;
+            font-size: 14px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 3px solid #17a2b8;
+            border-radius: 4px;
+        }
+
+        .followup-box {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            color: #0c5460;
+            line-height: 1.6;
+        }
+
+        .followup-meta {
+            font-size: 12px;
+            color: #0c5460;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #bee5eb;
+        }
+
+        .followup-meta strong {
+            color: #084c5a;
+        }
+
+        .timeline-item {
+            background-color: #f8f9fa;
+            border-left: 3px solid #17a2b8;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        .timeline-date {
+            font-size: 11px;
+            color: #6c757d;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .timeline-author {
+            font-size: 13px;
+            color: #17a2b8;
+            font-weight: 600;
+        }
+
+        .timeline-content {
+            font-size: 13px;
+            color: #333;
+            margin-top: 5px;
+        }
+
+        .action-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .action-button:hover {
+            opacity: 0.9;
+        }
+
+        .email-footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #6c757d;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #e9ecef;
+            margin: 15px 0;
+        }
+
+        .sla-info {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            color: #856404;
+            text-align: left;
+        }
+
+        .sla-info strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .sla-info ul {
+            margin: 8px 0;
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        /* Mobil Optimizasyon */
+        @media only screen and (max-width: 600px) {
+            .email-body {
+                padding: 15px 10px !important;
+            }
+
+            .info-section {
+                margin-bottom: 12px !important;
+            }
+
+            .action-button {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h1>💬 Yeni Yorum Eklendi</h1>
+            <div class="ticket-id">Talep No: ###ticket.id##</div>
+        </div>
+
+        <!-- Body -->
+        <div class="email-body">
+            <!-- Ticket Bilgileri -->
+            <div class="info-section">
+                <div class="info-label">Konu</div>
+                <div class="info-value">##ticket.title##</div>
+            </div>
+
+            <div class="info-section">
+                <div class="info-label">Durum</div>
+                <div class="info-value">##ticket.status##</div>
+            </div>
+
+            <div class="info-section">
+                <div class="info-label">Müşteri</div>
+                <div class="info-value">##ticket.shortentity##</div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Son Eklenen Yorum/Followup -->
+            <div class="info-section">
+                <div class="info-label">Son Eklenen Yorum</div>
+
+                ##FOREACHtimelineitems##
+                <div class="timeline-item">
+                    <div class="timeline-date">[##timelineitems.date##]</div>
+                    <div class="timeline-author">👤 ##timelineitems.author##</div>
+                    <div class="timeline-content">##timelineitems.description##</div>
+                </div>
+                ##ENDFOREACHtimelineitems##
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Ticket Detayları -->
+            <div class="info-section">
+                <div class="info-label">Öncelik</div>
+                <div class="info-value">##ticket.priority##</div>
+            </div>
+
+            ##IFticket.assigntogroups##
+            <div class="info-section">
+                <div class="info-label">Atanan Grup</div>
+                <div class="info-value">##ticket.assigntogroups##</div>
+            </div>
+            ##ENDIFticket.assigntogroups##
+
+            ##IFticket.assigntousers##
+            <div class="info-section">
+                <div class="info-label">Atanan Teknisyen</div>
+                <div class="info-value">##ticket.assigntousers##</div>
+            </div>
+            ##ENDIFticket.assigntousers##
+
+            <!-- Action Button -->
+            <div style="text-align: center;">
+                <a href="##ticket.url##" class="action-button">
+                    Talebi Görüntüle ve Yanıtla
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <div class="sla-info">
+                <strong>ℹ️ Bilgilendirme</strong>
+                <p style="margin: 8px 0 0 0; line-height: 1.6;">
+                    Sözleşmeli müşterilerimiz için sözleşme kapsamındaki SLA sürelerine uygun olarak dönüş sağlanmaktadır, sözleşme dışı talepleriniz ile ilgili uzmanlarımız sizlerle müsait olduklarında iletişime geçecektir.
+                </p>
+                <p style="margin: 8px 0 0 0;">
+                    <small>Anlayışınız için teşekkür ederiz.</small>
+                </p>
+            </div>
+            <p>Bu otomatik bir bildirimdir. Lütfen yanıtlamayın.</p>
+            <p>GLPI ITSM Sistemi - ##ticket.shortentity##</p>
+            <p style="margin-top: 10px;">
+                <small>Toplam Yorum: ##ticket.numberoffollowups##</small>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

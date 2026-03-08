@@ -1,0 +1,107 @@
+# SLA Breach Report Plugin - English Translation
+# Copyright (C) 2025 Bora Ergül
+# This file is distributed under the same license as the slareport plugin.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: slareport 1.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-03 00:00+0000\n"
+"PO-Revision-Date: 2025-03-03 00:00+0000\n"
+"Last-Translator: Bora Ergül\n"
+"Language-Team: English\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "SLA Breach Report"
+msgstr "SLA Breach Report"
+
+msgid "Start Date"
+msgstr "Start Date"
+
+msgid "End Date"
+msgstr "End Date"
+
+msgid "Entity"
+msgstr "Entity"
+
+msgid "All"
+msgstr "All"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Export to CSV"
+msgstr "Export to CSV"
+
+msgid "Total Tickets"
+msgstr "Total Tickets"
+
+msgid "SLA Tickets"
+msgstr "SLA Tickets"
+
+msgid "Non-SLA Tickets"
+msgstr "Non-SLA Tickets"
+
+msgid "SLA Compliant (Completed)"
+msgstr "SLA Compliant (Completed)"
+
+msgid "SLA Violated"
+msgstr "SLA Violated"
+
+msgid "SLA In Progress (Active)"
+msgstr "SLA In Progress (Active)"
+
+msgid "SLA Compliance Rate"
+msgstr "SLA Compliance Rate"
+
+msgid "Overall SLA Status"
+msgstr "Overall SLA Status"
+
+msgid "Top Violating Entities (Top 10)"
+msgstr "Top Violating Entities (Top 10)"
+
+msgid "Subject"
+msgstr "Subject"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "SLA Definition"
+msgstr "SLA Definition"
+
+msgid "Resolution Deadline"
+msgstr "Resolution Deadline"
+
+msgid "Resolution Date"
+msgstr "Resolution Date"
+
+msgid "Elapsed Time"
+msgstr "Elapsed Time"
+
+msgid "Violated"
+msgstr "VIOLATED"
+
+msgid "Active"
+msgstr "ACTIVE"
+
+msgid "Compliant"
+msgstr "COMPLIANT"
+
+msgid "SLA Not Defined"
+msgstr "SLA Not Defined"
+
+msgid "No data found for the selected criteria."
+msgstr "No data found for the selected criteria."
+
+msgid "%1$d h %2$d m"
+msgstr "%1$d h %2$d m"
+
+msgid "%1$d m"
+msgstr "%1$d m"

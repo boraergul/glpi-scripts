@@ -1,0 +1,17 @@
+Subject: [HATIRLATMA] ##ticket.id## - ##ticket.title##
+
+Merhaba,
+
+Bu otomatik bir hatırlatmadır. Aşağıdaki ticket henüz çözüme ulaşmamıştır veya işlem beklemektedir.
+
+TICKET BİLGİSİ:
+
+• ID: ##ticket.id##
+
+• Başlık: ##ticket.title##
+
+• Durum: ##ticket.status##
+
+• Son Güncelleme: ##ticket.updatedate##
+
+Ticket'a Git (##ticket.url##)

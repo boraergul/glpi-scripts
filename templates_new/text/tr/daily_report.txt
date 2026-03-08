@@ -1,0 +1,14 @@
+Subject: Günlük Operasyon Raporu - ##ticket.creationdate##
+
+Sayın ##ticket.authors##,
+
+##ticket.creationdate## tarihli günlük operasyon raporumuzu paylaşmak isteriz.
+
+Rapor detayları ekte veya aşağıdaki açıklama alanındadır.
+
+RAPOR İÇERİĞİ:
+
+##ticket.content##
+
+Saygılarımızla,
+Ultron Bilişim Operations Team

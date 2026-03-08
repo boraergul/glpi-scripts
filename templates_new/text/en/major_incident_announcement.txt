@@ -1,0 +1,31 @@
+Subject: [MAJOR INCIDENT] ##ticket.title##
+
+⚠️ MAJOR INCIDENT ANNOUNCEMENT
+
+Dear ##ticket.authors##,
+
+A critical incident has been detected and the Major Incident procedure has been initiated.
+
+INCIDENT DETAILS:
+
+• Incident ID: ##ticket.id##
+
+• Start Time: ##ticket.creationdate##
+
+• Affected Services: ##ticket.category##
+
+CURRENT STATUS:
+
+##ticket.content##
+
+HANDLING TEAM:
+
+• Major Incident Manager: ##ticket.assigntousers##
+
+UPDATE FREQUENCY: Updates will be provided every 15 minutes.
+
+War Room Link (##ticket.url##)
+
+We appreciate your patience and understanding in this critical situation.
+
+Ultron Bilişim Major Incident Team

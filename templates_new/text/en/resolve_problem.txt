@@ -1,0 +1,15 @@
+Subject: Problem Resolved: ##problem.title##
+
+✅ PROBLEM RESOLVED
+
+Dear User,
+
+The problem record has been resolved.
+
+RESOLUTION:
+
+##problem.solution.description##
+
+Analysis Type: ##problem.solution.type##
+
+View Details (##problem.url##)

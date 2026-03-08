@@ -1,0 +1,7 @@
+Subject: [RELEASE] Task Updated: ##task.description##
+
+Release task has been updated.
+
+Task: ##task.description##
+
+State: ##task.state##

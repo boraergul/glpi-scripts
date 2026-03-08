@@ -1,0 +1,14 @@
+Subject: IMPORTANT: Contract Expiration Notification - 30 Days
+
+⚠️ IMPORTANT REMINDER
+
+Dear ##ticket.authors##,
+
+There are 30 days remaining until your current service contract expires. Immediate decision is expected for uninterrupted service.
+
+Description 	 ##ticket.content##
+
+End Date 	 ##ticket.duedate##
+
+Best Regards,
+Ultron Bilişim Account Management

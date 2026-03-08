@@ -1,0 +1,14 @@
+Subject: Monthly Service Performance Report
+
+Dear ##ticket.authors##,
+
+We are pleased to present our service performance report.
+
+REPORT SUMMARY:
+
+##ticket.content##
+
+Detailed report and charts are attached.
+
+Best Regards,
+Ultron Bilişim Account Management

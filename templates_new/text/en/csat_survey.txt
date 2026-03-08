@@ -1,0 +1,29 @@
+Subject: Satisfaction Survey - Ticket ##ticket.id##
+
+Dear ##ticket.authors##,
+
+Ticket ##ticket.id## has been resolved. We request you to evaluate our service.
+
+RATE OUR SERVICE QUALITY:
+
+1 = Very Poor | 5 = Excellent
+
+1. Response Time:
+&#9744; 1   &#9744; 2   &#9744; 3   &#9744; 4   &#9744; 5
+
+2. Resolution Quality:
+&#9744; 1   &#9744; 2   &#9744; 3   &#9744; 4   &#9744; 5
+
+3. Communication:
+&#9744; 1   &#9744; 2   &#9744; 3   &#9744; 4   &#9744; 5
+
+4. Technical Competence:
+&#9744; 1   &#9744; 2   &#9744; 3   &#9744; 4   &#9744; 5
+
+YOUR COMMENTS:
+
+Click to Complete Survey (##ticket.urlapproval##)
+
+Thank you for your valuable feedback.
+
+Ultron Bilişim

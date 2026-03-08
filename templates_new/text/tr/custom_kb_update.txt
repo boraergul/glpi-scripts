@@ -1,0 +1,7 @@
+Subject: [KB GÜNCELLEME] ##knowbaseitem.name##
+
+Bir makale güncellendi.
+
+##knowbaseitem.name##
+
+Değişiklikleri Gör (##knowbaseitem.url##)

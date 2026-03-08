@@ -1,0 +1,19 @@
+Subject: [CHANGE ONAY] ##change.id## - ##change.name##
+
+⚠️ DEĞİŞİKLİK ONAYI BEKLENİYOR
+
+Sayın İlgili,
+
+Aşağıdaki değişiklik talebi onayınıza sunulmuştur.
+
+CHANGE DETAYLARI:
+
+• ID: ##change.id##
+
+• Başlık: ##change.name##
+
+• Etki Analizi: ##change.impactcontent##
+
+• Geri Dönüş Planı: ##change.controlistcontent##
+
+Onay Ekranına Git (##change.urlvalidation##)

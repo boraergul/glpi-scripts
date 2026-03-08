@@ -1,0 +1,22 @@
+Subject: New Problem: ##problem.title##
+
+⚠️ NEW PROBLEM RECORD
+
+Dear User,
+
+A new problem record has been created in the system.
+
+PROBLEM DETAILS:
+
+• ID: ##problem.id##
+
+• Title: ##problem.title##
+
+• Date: ##problem.creationdate##
+
+• Priority: ##problem.priority##
+
+Description:
+##problem.content##
+
+View Problem (##problem.url##)

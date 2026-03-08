@@ -1,0 +1,9 @@
+Subject: [KNOWLEDGE BASE] New Article: ##knowbaseitem.name##
+
+A new article has been added to the Knowledge Base.
+
+Title: ##knowbaseitem.name##
+
+Category: ##knowbaseitem.category##
+
+Click to Read (##knowbaseitem.url##)

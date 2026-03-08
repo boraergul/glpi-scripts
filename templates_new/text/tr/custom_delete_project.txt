@@ -1,0 +1,7 @@
+Subject: [SİLİNDİ] Proje: ##project.name##
+
+⚠️ PROJE SİLİNDİ
+
+##project.name## (##project.code##) projesi sistemden silinmiştir.
+
+Silen: ##project.users_id_lastupdater##

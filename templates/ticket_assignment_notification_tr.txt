@@ -1,0 +1,55 @@
+YENİ ATAMA
+═════════════════════════════
+Talep No: ##ticket.id##
+═════════════════════════════
+
+KONU     : ##ticket.title##
+DURUM    : ##ticket.status##
+ÖNCELİK  : ##ticket.priority##
+
+ATAMA DETAYLARI
+═════════════════════════════
+
+##IFticket.assigntogroups##
+ATANAN GRUP: ##ticket.assigntogroups##
+##ENDIFticket.assigntogroups##
+
+##IFticket.assigntousers##
+ATANAN TEKNİSYEN: ##ticket.assigntousers##
+##ENDIFticket.assigntousers##
+
+##FOREACHauthors##
+TALEP EDEN: ##author.name##
+##IFauthor.email##E-posta: ##author.email##
+##ENDIFauthor.email##
+##ENDFOREACHauthors##
+
+##FOREACHobservers##
+GÖZLEMCİ: ##observer.name##
+##ENDFOREACHobservers##
+
+═════════════════════════════
+TALEP DETAYLARI
+═════════════════════════════
+
+Müşteri: ##ticket.shortentity##
+##IFticket.category##
+Kategori: ##ticket.category##
+##ENDIFticket.category##
+
+═════════════════════════════
+Talebi Görüntüle: ##ticket.url##
+═════════════════════════════
+BİLGİLENDİRME
+═════════════════════════════
+Sözleşmeli müşterilerimiz için sözleşme kapsamındaki SLA 
+sürelerine uygun olarak dönüş sağlanmaktadır, sözleşme dışı 
+talepleriniz ile ilgili uzmanlarımız sizlerle müsait 
+olduklarında iletişime geçecektir.
+
+Anlayışınız için teşekkür ederiz.
+
+──────────────────────────────
+Bu otomatik bir bildirimdir. Lütfen yanıtlamayın.
+GLPI ITSM Sistemi - ##ticket.shortentity##
+══════════════════════════════

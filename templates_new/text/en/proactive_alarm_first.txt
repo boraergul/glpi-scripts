@@ -1,0 +1,27 @@
+Subject: Proactive Alarm: ##ticket.title##
+
+Hello ##ticket.authors##,
+
+Our monitoring systems detected an alarm ###ticket.id##
+
+Alarm Type: 	 ##ticket.title##
+
+Detection Time: 	 ##ticket.creationdate##
+
+Affected System: 	 ##ticket.category##
+
+Priority Level: 	 ##ticket.priority##
+
+SLA Target: 	 ##ticket.sla_ttr##
+
+Status: 	 ##ticket.status##
+
+ALARM DESCRIPTION:
+
+##ticket.content##
+
+ACTIONS TAKEN:
+
+Our iNOC team has started working on the alarm. Initial assessment and intervention are in progress.
+
+View Ticket (##ticket.url##)

@@ -1,0 +1,79 @@
+<div>##IFticket.storestatus=5##</div>
+<div>##lang.ticket.url## : <a href="##ticket.urlapprove##">##ticket.urlapprove##</a> <strong> </strong></div>
+<div><strong>##lang.ticket.autoclosewarning##</strong></div>
+<div><span style="color: #888888;"><strong><span
+                style="text-decoration: underline;">##lang.ticket.solvedate##</span></strong></span> :
+    ##ticket.solvedate##<br><span
+        style="text-decoration: underline; color: #888888;"><strong>##lang.ticket.solution.type##</strong></span> :
+    ##ticket.solution.type##<br><span
+        style="text-decoration: underline; color: #888888;"><strong>##lang.ticket.solution.description##</strong></span>
+    : ##ticket.solution.description## ##ENDIFticket.storestatus##</div>
+<div>##ELSEticket.storestatus## ##lang.ticket.url## : <a href="##ticket.url##">##ticket.url##</a>
+    ##ENDELSEticket.storestatus##</div>
+<p class="description b"><strong>##lang.ticket.description##</strong></p>
+<p><span style="color: #8b8c8f; font-weight: bold; text-decoration: underline;">
+        ##lang.ticket.title##</span> :##ticket.title## <br><span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;">
+        ##lang.ticket.authors##</span> :##IFticket.authors## ##ticket.authors## ##ENDIFticket.authors##
+    ##ELSEticket.authors##--##ENDELSEticket.authors## <br><span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;">
+        ##lang.ticket.creationdate##</span> :##ticket.creationdate## <br><span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;">
+        ##lang.ticket.closedate##</span> :##ticket.closedate## <br><span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;">
+        ##lang.ticket.requesttype##</span> :##ticket.requesttype##<br><br><span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"> ##lang.ticket.item.name##</span> :</p>
+<p>##FOREACHitems##</p>
+<div class="description b">##IFticket.itemtype## ##ticket.itemtype## - ##ticket.item.name## ##IFticket.item.model##
+    ##lang.ticket.item.model## : ##ticket.item.model## ##ENDIFticket.item.model## ##IFticket.item.serial##
+    ##lang.ticket.item.serial## : ##ticket.item.serial## ##ENDIFticket.item.serial## ##IFticket.item.otherserial##
+    ##lang.ticket.item.otherserial## : ##ticket.item.otherserial## ##ENDIFticket.item.otherserial##
+    ##ENDIFticket.itemtype##</div>
+<p> </p>
+<p>##ENDFOREACHitems##</p>
+<p>##IFticket.assigntousers## <span style="color: #8b8c8f; font-weight: bold; text-decoration: underline;">
+        ##lang.ticket.assigntousers##</span> : ##ticket.assigntousers## ##ENDIFticket.assigntousers##<br><span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;">##lang.ticket.status## </span> :
+    ##ticket.status##<br>##IFticket.assigntogroups## <span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"> ##lang.ticket.assigntogroups##</span> :
+    ##ticket.assigntogroups## ##ENDIFticket.assigntogroups##<br><span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"> ##lang.ticket.urgency##</span> :
+    ##ticket.urgency##<br><span style="color: #8b8c8f; font-weight: bold; text-decoration: underline;">
+        ##lang.ticket.impact##</span> : ##ticket.impact##<br><span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"> ##lang.ticket.priority##</span> :
+    ##ticket.priority## <br>##IFticket.user.email##<span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"> ##lang.ticket.user.email##</span> :
+    ##ticket.user.email ##ENDIFticket.user.email## <br>##IFticket.category##<span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;">##lang.ticket.category##
+    </span> :##ticket.category## ##ENDIFticket.category## ##ELSEticket.category## ##lang.ticket.nocategoryassigned##
+    ##ENDELSEticket.category## <br><span style="color: #8b8c8f; font-weight: bold; text-decoration: underline;">
+        ##lang.ticket.content##</span> : ##ticket.content## <br>##IFticket.storestatus=6##<br><span
+        style="text-decoration: underline;"><strong><span
+                style="color: #888888;">##lang.ticket.solvedate##</span></strong></span> : ##ticket.solvedate##<br><span
+        style="color: #888888;"><strong><span
+                style="text-decoration: underline;">##lang.ticket.solution.type##</span></strong></span> :
+    ##ticket.solution.type##<br><span
+        style="text-decoration: underline; color: #888888;"><strong>##lang.ticket.solution.description##</strong></span>
+    : ##ticket.solution.description##<br>##ENDIFticket.storestatus##</p>
+<p>##FOREACHtimelineitems##</p>
+<div class="description b"><br><strong> [##timelineitems.date##]</strong><br><span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"> ##lang.timelineitems.author## </span>
+    <span
+        style="color: #000000; font-weight: bold; text-decoration: underline;">##timelineitems.author##</span><br><span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"> ##lang.timelineitems.description##
+    </span> <span
+        style="color: #000000; font-weight: bold; text-decoration: underline;">##timelineitems.description##</span><br><span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;"> ##lang.timelineitems.date## </span>
+    <span style="color: #000000; font-weight: bold; text-decoration: underline;">##timelineitems.date##</span><br><span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;">##lang.timelineitems.position##
+    </span><span style="color: #000000; font-weight: bold; text-decoration: underline;">
+        ##timelineitems.position##</span></div>
+<div class="description b"><span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;">##lang.timelineitems.type## </span><span
+        style="color: #000000; font-weight: bold; text-decoration: underline;"> ##timelineitems.type##</span></div>
+<div class="description b"><span
+        style="color: #8b8c8f; font-weight: bold; text-decoration: underline;">##lang.timelineitems.typename## </span>
+    <span style="color: #000000; font-weight: bold; text-decoration: underline;">##timelineitems.typename##</span></div>
+<p>##ENDFOREACHtimelineitems##</p>
+<div class="description b">##lang.ticket.numberoffollowups## : ##ticket.numberoffollowups##</div>
+<div class="description b">##lang.ticket.numberoftasks## : ##ticket.numberoftasks##</div>

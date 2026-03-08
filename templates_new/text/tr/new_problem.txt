@@ -1,0 +1,22 @@
+Subject: Yeni Problem: ##problem.title##
+
+⚠️ YENİ PROBLEM KAYDI
+
+Sayın İlgili,
+
+Sistemde yeni bir problem kaydı oluşturulmuştur.
+
+PROBLEM DETAYLARI:
+
+• ID: ##problem.id##
+
+• Başlık: ##problem.title##
+
+• Tarih: ##problem.creationdate##
+
+• Öncelik: ##problem.priority##
+
+Açıklama:
+##problem.content##
+
+Problemi Görüntüle (##problem.url##)

@@ -1,0 +1,19 @@
+Subject: [STOCK ALERT] ##item.name## - Low Stock
+
+⚠️ CRITICAL STOCK LEVEL
+
+Dear Stock Manager,
+
+The stock level for the following consumable or cartridge has fallen below the alarm threshold.
+
+PRODUCT INFO:
+
+• Product: ##item.name##
+
+• Reference: ##item.ref##
+
+• Remaining Stock: ##item.stock##
+
+• Alarm Threshold: ##item.alarm_threshold##
+
+Please initiate the procurement process.

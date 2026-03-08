@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destek Talebi Transfer Bildirimi</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .email-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .email-header .ticket-id {
+            font-size: 14px;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        .email-body {
+            padding: 20px 15px;
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        .greeting {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .transfer-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        .transfer-info strong {
+            color: #667eea;
+        }
+
+        .info-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            color: #856404;
+        }
+
+        .info-box p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .action-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .action-button:hover {
+            opacity: 0.9;
+        }
+
+        .email-footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #6c757d;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .signature {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #e9ecef;
+            margin: 15px 0;
+        }
+
+        .sla-info {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            color: #856404;
+            text-align: left;
+        }
+
+        .sla-info strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .sla-info ul {
+            margin: 8px 0;
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        /* Mobil Optimizasyon */
+        @media only screen and (max-width: 600px) {
+            .email-body {
+                padding: 15px 10px !important;
+            }
+
+            .info-section {
+                margin-bottom: 12px !important;
+            }
+
+            .action-button {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h1>🔄 Destek Talebi Transfer Edildi</h1>
+            <div class="ticket-id">Ticket ##ticket.id##</div>
+        </div>
+
+        <!-- Body -->
+        <div class="email-body">
+            <!-- Greeting -->
+            <div class="greeting">
+                Merhaba <strong>##recipient.name##</strong>,
+            </div>
+
+            <!-- Transfer Information -->
+            <div class="transfer-info">
+                <p>
+                    <strong>##ticket.id##</strong> numaralı talep
+                    <strong>##FOREACHassigntogroups####assigntogroups.name####ENDFOREACHassigntogroups##</strong>
+                    bölümüne atandı.
+                </p>
+                <p style="margin-top: 10px;">
+                    <strong>Ticket Başlığı:</strong> ##ticket.title##
+                </p>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SLA Information -->
+            <div class="info-box">
+                <p>
+                    Sözleşmeli müşterilerimiz için sözleşme kapsamındaki SLA sürelerine uygun olarak dönüş
+                    sağlanmaktadır,
+                    sözleşmeniz yok ise ilgili departmandaki uzmanlarımız sizlerle ilk müsait olduklarında iletişime
+                    geçecektir.
+                </p>
+            </div>
+
+            <p style="margin-top: 15px;">
+                Anlayışınız için teşekkür ederiz.
+            </p>
+
+            <p style="margin-top: 15px; color: #666;">
+                Destek talebini görüntülemek / yanıtlamak için lütfen sisteme giriş yapın.
+            </p>
+
+            <!-- Action Button -->
+            <div style="text-align: center;">
+                <a href="##ticket.url##" class="action-button">
+                    Talebi Görüntüle
+                </a>
+            </div>
+
+            <!-- Signature -->
+            <div class="signature">
+                Ultron Yardım Masası
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <div class="sla-info">
+                <strong>ℹ️ Bilgilendirme</strong>
+                <p style="margin: 8px 0 0 0; line-height: 1.6;">
+                    Sözleşmeli müşterilerimiz için sözleşme kapsamındaki SLA sürelerine uygun olarak dönüş
+                    sağlanmaktadır, sözleşme dışı talepleriniz ile ilgili uzmanlarımız sizlerle müsait olduklarında
+                    iletişime geçecektir.
+                </p>
+                <p style="margin: 8px 0 0 0;">
+                    <small>Anlayışınız için teşekkür ederiz.</small>
+                </p>
+            </div>
+            <p>Bu otomatik bir bildirimdir. Lütfen yanıtlamayın.</p>
+            <p>GLPI ITSM Sistemi - ##ticket.shortentity##</p>
+        </div>
+    </div>
+</body>
+
+</html>

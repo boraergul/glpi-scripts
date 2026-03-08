@@ -1,0 +1,7 @@
+Subject: [KİLİT] Kilit Açma İsteği: ##item.type##
+
+Kilitli bir nesne için kilit açma isteği gönderildi.
+
+Nesne: ##item.type##
+
+İsteyen: ##user.realname##

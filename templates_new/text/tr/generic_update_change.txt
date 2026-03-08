@@ -1,0 +1,11 @@
+Subject: [CHANGE] ##change.id## - Güncelleme: ##change.name##
+
+Sayın İlgili,
+
+Change kaydında bir güncelleme yapılmıştır.
+
+SON DURUM:
+
+##change.content##
+
+Değişikliği Görüntüle (##change.url##)

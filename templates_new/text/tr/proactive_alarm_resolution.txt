@@ -1,0 +1,27 @@
+Subject: Çözüldü - ##ticket.title##
+
+Merhaba ##ticket.authors##,
+
+Çözüm kaydı oluşturuldu ###ticket.id##
+
+Konu: 	 ##ticket.title##
+
+Oluşturma Tarihi: 	 ##ticket.creationdate##
+
+Destek Uzmanı: 	 ##ticket.assigntogroups##
+
+Durumu: 	 ##ticket.status##
+
+Müşteri: 	 ##ticket.shortentity##
+
+Cevap Yazan Temsilci: 	 ##ticket.solution.author##
+
+ÇÖZÜM BİLGİSİ:
+
+##ticket.solution.description##
+
+• Çözüm Tarihi: ##ticket.solvedate##
+
+• Çözüm Süresi: ##ticket.time##
+
+Talebi Görüntüle (##ticket.url##)

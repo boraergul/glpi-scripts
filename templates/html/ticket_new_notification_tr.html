@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Talep Bildirimi</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .email-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .email-header .ticket-id {
+            font-size: 14px;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        .email-body {
+            padding: 20px 15px;
+        }
+
+        .info-section {
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #333333;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #555555;
+            font-size: 14px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 3px solid #667eea;
+            border-radius: 4px;
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .priority-very-high {
+            background-color: #dc3545;
+            color: #ffffff;
+        }
+
+        .priority-high {
+            background-color: #fd7e14;
+            color: #ffffff;
+        }
+
+        .priority-medium {
+            background-color: #ffc107;
+            color: #000000;
+        }
+
+        .priority-low {
+            background-color: #28a745;
+            color: #ffffff;
+        }
+
+        .priority-very-low {
+            background-color: #6c757d;
+            color: #ffffff;
+        }
+
+        .description-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
+            margin-top: 10px;
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        .action-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .action-button:hover {
+            opacity: 0.9;
+        }
+
+        .email-footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #6c757d;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .sla-info {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            color: #856404;
+            text-align: left;
+        }
+
+        .sla-info strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .sla-info ul {
+            margin: 8px 0;
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #e9ecef;
+            margin: 15px 0;
+        }
+
+        /* Mobil Optimizasyon */
+        @media only screen and (max-width: 600px) {
+            .email-body {
+                padding: 15px 10px !important;
+            }
+
+            .info-section {
+                margin-bottom: 12px !important;
+            }
+
+            .action-button {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h1>🎫 Yeni Talep Oluşturuldu</h1>
+            <div class="ticket-id">Talep No: ###ticket.id##</div>
+        </div>
+
+        <!-- Body -->
+        <div class="email-body">
+            <!-- Talep Bilgileri -->
+            <div class="info-section">
+                <div class="info-label">Konu</div>
+                <div class="info-value">##ticket.title##</div>
+            </div>
+
+            <div class="info-section">
+                <div class="info-label">Durum</div>
+                <div class="info-value">##ticket.status##</div>
+            </div>
+
+            <div class="info-section">
+                <div class="info-label">Öncelik</div>
+                <div>
+                    <span class="priority-badge priority-##ticket.priorityclass##">
+                        ##ticket.priority##
+                    </span>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Detaylar -->
+            ##FOREACHauthors##
+            <div class="info-section">
+                <div class="info-label">Talep Eden</div>
+                <div class="info-value">
+                    <strong>##author.name##</strong><br>
+                    ##IFauthor.email##📧 ##author.email##<br>##ENDIFauthor.email##
+                    ##IFauthor.phone##📞 ##author.phone####ENDIFauthor.phone##
+                </div>
+            </div>
+            ##ENDFOREACHauthors##
+
+            ##IFticket.itilcategory##
+            <div class="info-section">
+                <div class="info-label">Kategori</div>
+                <div class="info-value">##ticket.itilcategory##</div>
+            </div>
+            ##ENDIFticket.itilcategory##
+
+            <div class="info-section">
+                <div class="info-label">Müşteri</div>
+                <div class="info-value">##ticket.shortentity##</div>
+            </div>
+
+            ##IFticket.assigntogroups##
+            <div class="info-section">
+                <div class="info-label">Atanan Grup</div>
+                <div class="info-value">##ticket.assigntogroups##</div>
+            </div>
+            ##ENDIFticket.assigntogroups##
+
+            ##IFticket.assigntousers##
+            <div class="info-section">
+                <div class="info-label">Atanan Teknisyen</div>
+                <div class="info-value">##ticket.assigntousers##</div>
+            </div>
+            ##ENDIFticket.assigntousers##
+
+            <div class="divider"></div>
+
+            <!-- Açıklama -->
+            <div class="info-section">
+                <div class="info-label">Açıklama</div>
+                <div class="description-box">
+                    ##ticket.content##
+                </div>
+            </div>
+
+            <!-- SLA Bilgileri (varsa) -->
+            ##IFticket.sla_tto##
+            <div class="info-section">
+                <div class="info-label">SLA - Müdahale Süresi</div>
+                <div class="info-value">##ticket.sla_tto##</div>
+            </div>
+            ##ENDIFticket.sla_tto##
+
+            ##IFticket.sla_ttr##
+            <div class="info-section">
+                <div class="info-label">SLA - Çözüm Süresi</div>
+                <div class="info-value">##ticket.sla_ttr##</div>
+            </div>
+            ##ENDIFticket.sla_ttr##
+
+            <!-- Action Button -->
+            <div style="text-align: center;">
+                <a href="##ticket.url##" class="action-button">
+                    Talep Detaylarını Görüntüle
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <div class="sla-info">
+                <strong>ℹ️ Bilgilendirme</strong>
+                <p style="margin: 8px 0 0 0; line-height: 1.6;">
+                    Sözleşmeli müşterilerimiz için sözleşme kapsamındaki SLA sürelerine uygun olarak dönüş sağlanmaktadır, sözleşme dışı talepleriniz ile ilgili uzmanlarımız sizlerle müsait olduklarında iletişime geçecektir.
+                </p>
+                <p style="margin: 8px 0 0 0;">
+                    <small>Anlayışınız için teşekkür ederiz.</small>
+                </p>
+            </div>
+            <p>Bu otomatik bir bildirimdir. Lütfen yanıtlamayın.</p>
+            <p>GLPI ITSM Sistemi - ##ticket.shortentity##</p>
+            <p style="margin-top: 10px;">
+                <small>Oluşturulma Tarihi: ##ticket.creationdate##</small>
+                ##IFticket.lastupdate##
+                <br><small>Son Güncelleme: ##ticket.lastupdate##</small>
+                ##ENDIFticket.lastupdate##
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

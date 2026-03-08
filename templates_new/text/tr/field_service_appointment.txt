@@ -1,0 +1,31 @@
+Subject: Saha Ziyareti Randevu Talebi - ##ticket.title##
+
+Merhaba ##ticket.authors##,
+
+Ticket'ınız için saha müdahalesi gerektiği tespit edilmiştir ###ticket.id##
+
+Konu: 	 ##ticket.title##
+
+Oluşturma Tarihi: 	 ##ticket.creationdate##
+
+Müdahale Tipi: 	 ##ticket.category##
+
+Atanan Teknisyen: 	 ##ticket.assigntousers##
+
+Durumu: 	 ##ticket.status##
+
+Müşteri: 	 ##ticket.shortentity##
+
+BİZE SAĞLAMANIZ GEREKENLER:
+
+• Lokasyon tam adresi ve yol tarifi
+
+• İrtibat kişisi ve telefon
+
+• Güvenlik/otopark prosedürleri
+
+• Özel ekipman/araç gereç ihtiyacı
+
+Lütfen size uygun olan randevu seçeneğini bu email'i yanıtlayarak bildiriniz.
+
+Talebi Görüntüle (##ticket.url##)

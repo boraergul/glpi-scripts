@@ -1,0 +1,15 @@
+Subject: Problem Çözüldü: ##problem.title##
+
+✅ PROBLEM ÇÖZÜLDÜ
+
+Sayın İlgili,
+
+Problem kaydı çözüme kavuşturulmuştur.
+
+ÇÖZÜM:
+
+##problem.solution.description##
+
+Analiz Türü: ##problem.solution.type##
+
+Detayları Görüntüle (##problem.url##)

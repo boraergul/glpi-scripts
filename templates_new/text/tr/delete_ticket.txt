@@ -1,0 +1,9 @@
+Subject: [SİLİNDİ] Ticket ##ticket.id## - ##ticket.title##
+
+Sayın Kullanıcı,
+
+##ticket.id## numaralı ticket sistemden silinmiştir.
+
+SİLİNME NEDENİ:
+
+Yönetici veya sistem tarafından silme işlemi gerçekleştirildi.

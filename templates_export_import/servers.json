@@ -1,0 +1,17 @@
+{
+    "servers": {
+        "GLPI11L": {
+            "url": "http://192.168.50.218/api.php/v1",
+            "app_token": "hvDT9Cb9LtvMUdbIJ5bAwXr2AlKC7MR4ofhzzDuN",
+            "user_token": "XUhoKsa2WUicxyCzmcT4vwjSvdFYRlDFsfvLs745",
+            "description": "Yerel test sunucusu — bilgileri doldurun"
+        },
+        "ITSM": {
+            "url": "https://itsm.ultron.com.tr/apirest.php",
+            "app_token": "5bQBvhQUCXKiRE4wKTTuwscq7IFnGq51h9JZ0NjQ",
+            "user_token": "pKT2zJecwMOIPQj9MAB9XE1LLNF9LVvbNLZAIA5e",
+            "description": "Development  GLPI sistemi"
+        }
+    },
+    "_note": "url, app_token, user_token zorunlu."
+}

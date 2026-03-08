@@ -1,0 +1,11 @@
+Subject: [SYSTEM] MySQL Synchronization Alert
+
+⚠️ SQL REPLICA SYNCHRONIZATION ISSUE
+
+Attention DB Admin,
+
+A synchronization issue has been detected in GLPI database replication.
+
+##mysqlvalidator.text##
+
+Please check database logs.

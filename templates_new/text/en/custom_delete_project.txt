@@ -1,0 +1,7 @@
+Subject: [DELETED] Project: ##project.name##
+
+⚠️ PROJECT DELETED
+
+Project ##project.name## (##project.code##) has been deleted from the system.
+
+Deleted by: ##project.users_id_lastupdater##

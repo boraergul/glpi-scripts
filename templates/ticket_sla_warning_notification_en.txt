@@ -1,0 +1,46 @@
+SLA WARNING
+═════════════════════════════
+Ticket ID: ##ticket.id##
+═════════════════════════════
+
+SUBJECT  : ##ticket.title##
+STATUS   : ##ticket.status##
+PRIORITY : ##ticket.priority##
+
+SLA INFORMATION
+═════════════════════════════
+
+##IFticket.sla_tto##
+TIME TO OWN: ##ticket.sla_tto##
+##ENDIFticket.sla_tto##
+##IFticket.sla_ttr##
+TIME TO RESOLVE: ##ticket.sla_ttr##
+##ENDIFticket.sla_ttr##
+
+TICKET INFORMATION
+═════════════════════════════
+
+ENTITY: ##ticket.shortentity##
+##IFticket.assigntogroups##
+ASSIGNED GROUP: ##ticket.assigntogroups##
+##ENDIFticket.assigntogroups##
+##IFticket.assigntousers##
+ASSIGNED TECHNICIAN: ##ticket.assigntousers##
+##ENDIFticket.assigntousers##
+
+═════════════════════════════
+View Ticket: ##ticket.url##
+Created: ##ticket.creationdate##
+═════════════════════════════
+NOTICE
+═════════════════════════════
+For contracted customers, responses are provided according to SLA times 
+within the contract scope. For non-contracted requests, our specialists
+will contact you when available.
+
+Thank you for your understanding.
+
+──────────────────────────────
+This is an automated notification. Please do not reply.
+GLPI ITSM System - ##ticket.shortentity##
+══════════════════════════════

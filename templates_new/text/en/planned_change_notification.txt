@@ -1,0 +1,31 @@
+Subject: [CHANGE] Planned Maintenance Notification - ##ticket.title##
+
+Hello ##ticket.authors##,
+
+A planned change/maintenance will be performed on your systems ###ticket.id##
+
+Change ID: 	 ##ticket.id##
+
+Change Type: 	 ##ticket.category##
+
+Start: 	 ##ticket.creationdate##
+
+Estimated Resolution: 	 ##ticket.sla_ttr##
+
+Affected Systems: 	 ##ticket.item.name##
+
+Status: 	 ##ticket.status##
+
+PURPOSE OF CHANGE:
+
+##ticket.content##
+
+RECOMMENDATIONS FOR USERS:
+
+• Please save your work.
+
+• Access to the system may be unavailable during the downtime.
+
+Access dashboard to view details
+
+##ticket.url## (##ticket.url##)

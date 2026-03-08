@@ -1,0 +1,5 @@
+Subject: [DELETED] Problem: ##problem.name##
+
+⚠️ PROBLEM DELETED
+
+Record ##problem.id## - ##problem.name## has been deleted.

@@ -1,0 +1,5 @@
+Subject: [RELEASE] Task Deleted: ##task.description##
+
+⚠️ RELEASE TASK DELETED
+
+Task ##task.description## has been deleted.

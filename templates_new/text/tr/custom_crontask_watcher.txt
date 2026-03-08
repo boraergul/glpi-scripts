@@ -1,0 +1,9 @@
+Subject: [OTOMASYON] Cron Görevi Hatası: ##crontask.name##
+
+⚠️ OTOMATİK GÖREV HATASI
+
+##crontask.name## adlı otomatik görevde sorun yaşanmıştır.
+
+Hata Detayı:
+
+##crontask.description##

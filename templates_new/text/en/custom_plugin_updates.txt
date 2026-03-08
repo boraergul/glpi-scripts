@@ -1,0 +1,5 @@
+Subject: [MARKETPLACE] Plugin Update Check
+
+Plugin updates have been checked.
+
+##plugin.updates##

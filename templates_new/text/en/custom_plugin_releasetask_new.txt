@@ -1,0 +1,7 @@
+Subject: [RELEASE] New Task: ##task.description##
+
+A new task has been added within release management.
+
+Task: ##task.description##
+
+State: ##task.state##

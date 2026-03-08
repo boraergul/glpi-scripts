@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talep Transferred</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .email-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .email-header {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: #ffffff;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .email-body {
+            padding: 20px 15px;
+        }
+
+        .transfer-box {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-left: 4px solid #17a2b8;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 20px 0;
+            color: #0c5460;
+        }
+
+        .info-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            color: #856404;
+        }
+
+        .action-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .email-footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .sla-info {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            color: #856404;
+            text-align: left;
+        }
+
+        .sla-info strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .sla-info ul {
+            margin: 8px 0;
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        /* Mobil Optimizasyon */
+        @media only screen and (max-width: 600px) {
+            .email-body {
+                padding: 15px 10px !important;
+            }
+
+            .info-section {
+                margin-bottom: 12px !important;
+            }
+
+            .action-button {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>🔄 Support Request Transferred</h1>
+            <p style="margin: 10px 0 0 0; opacity: 0.9;">Talep No: ###ticket.id##</p>
+        </div>
+
+        <div class="email-body">
+            <p>Hello ##recipient.name##,</p>
+
+            <div class="transfer-box">
+                <p style="margin: 0; font-size: 16px;">
+                    <strong>Talep No: ###ticket.id##</strong> has been assigned to
+                    <strong>##FOREACHassigntogroups####assigntogroups.name####ENDFOREACHassigntogroups##</strong>
+                    department.
+                </p>
+            </div>
+
+            <p><strong>Ticket Subject:</strong> ##ticket.title##</p>
+
+            <div class="info-box">
+                <p style="margin: 0; line-height: 1.6;">
+                    <strong>Important Information</strong><br><br>
+                    For contracted customers, responses are provided according to SLA times within the contract scope.
+                    If you don't have a contract, our specialists in the relevant department will contact you as soon as
+                    they are available.
+                </p>
+            </div>
+
+            <p>Thank you for your understanding.</p>
+
+            <p>Please log in to the system to view/respond to the support request.</p>
+
+            <div style="text-align: center;">
+                <a href="##ticket.url##" class="action-button">View Ticket</a>
+            </div>
+
+            <p style="margin-top: 30px; text-align: center; color: #666;">
+                <strong>Ultron Help Desk</strong>
+            </p>
+        </div>
+
+        <div class="email-footer">
+            <div class="sla-info">
+                <strong>ℹ️ Notice</strong>
+                <p style="margin: 8px 0 0 0; line-height: 1.6;">
+                    For contracted customers, responses are provided according to SLA times within the contract scope.
+                    For non-contracted requests, our specialists will contact you when available.
+                </p>
+                <p style="margin: 8px 0 0 0;">
+                    <small>Thank you for your understanding.</small>
+                </p>
+            </div>
+            <p>This is an automated notification. Please do not reply.</p>
+            <p>GLPI ITSM System - ##ticket.shortentity##</p>
+        </div>
+    </div>
+</body>
+
+</html>

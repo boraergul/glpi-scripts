@@ -1,0 +1,11 @@
+Subject: Problem Güncelleme: ##problem.title##
+
+Sayın İlgili,
+
+Problem kaydı güncellenmiştir.
+
+GÜNCELLEME DETAYI:
+
+##problem.content##
+
+Problemi Görüntüle (##problem.url##)

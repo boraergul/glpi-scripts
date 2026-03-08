@@ -1,0 +1,19 @@
+Subject: [STOK UYARISI] ##item.name## - Stok Azalıyor
+
+⚠️ STOK KRİTİK SEVİYEDE
+
+Sayın Stok Yöneticisi,
+
+Aşağıdaki sarf malzemesi veya kartuş için stok seviyesi alarm eşiğinin altına düşmüştür.
+
+ÜRÜN BİLGİSİ:
+
+• Ürün: ##item.name##
+
+• Referans: ##item.ref##
+
+• Kalan Stok: ##item.stock##
+
+• Alarm Eşiği: ##item.alarm_threshold##
+
+Lütfen tedarik süreci başlatınız.

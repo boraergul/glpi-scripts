@@ -1,0 +1,15 @@
+Subject: [REZERVASYON] ##reservation.item##
+
+Sayın ##user.realname##,
+
+Rezervasyon işleminiz başarıyla kaydedilmiştir.
+
+REZERVASYON DETAYLARI:
+
+• Öğe: ##reservation.item##
+
+• Başlangıç: ##reservation.begin##
+
+• Bitiş: ##reservation.end##
+
+##reservation.comment##

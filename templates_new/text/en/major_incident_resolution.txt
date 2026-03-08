@@ -1,0 +1,30 @@
+Subject: [MAJOR INCIDENT - RESOLVED] ##ticket.title##
+
+✅ MAJOR INCIDENT RESOLVED
+
+Dear ##ticket.authors##,
+
+The major incident has been successfully resolved and services have returned to normal status.
+
+SUMMARY:
+
+• Incident ID: ##ticket.id##
+
+• Start Time: ##ticket.creationdate##
+
+• Resolution Time: ##ticket.solvedate##
+
+• Total Duration: ##ticket.actiontime##
+
+RESOLUTION SUMMARY:
+
+##ticket.solution.description##
+
+POST-INCIDENT REVIEW:
+
+A detailed Post-Incident Review report will be shared within 48 hours.
+
+We thank you for your patience and understanding.
+
+Best Regards,
+Ultron Bilişim Major Incident Team

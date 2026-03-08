@@ -1,0 +1,29 @@
+Subject: Memnuniyet Anketi - Ticket ##ticket.id##
+
+Sayın ##ticket.authors##,
+
+Ticket ##ticket.id## çözümlendi. Hizmetimizi değerlendirmenizi rica ederiz.
+
+HİZMET KALİTESİNİ DEĞERLENDİRİN:
+
+1 = Çok Kötü | 5 = Mükemmel
+
+1. Yanıt Süresi:
+&#9744; 1   &#9744; 2   &#9744; 3   &#9744; 4   &#9744; 5
+
+2. Çözüm Kalitesi:
+&#9744; 1   &#9744; 2   &#9744; 3   &#9744; 4   &#9744; 5
+
+3. İletişim:
+&#9744; 1   &#9744; 2   &#9744; 3   &#9744; 4   &#9744; 5
+
+4. Teknik Yetkinlik:
+&#9744; 1   &#9744; 2   &#9744; 3   &#9744; 4   &#9744; 5
+
+EK YORUMLARINIZ:
+
+Anketi Tamamlamak İçin Tıklayın (##ticket.urlapproval##)
+
+Değerli görüşleriniz için teşekkür ederiz.
+
+Ultron Bilişim

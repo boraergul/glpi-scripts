@@ -1,0 +1,583 @@
+/* ============================================
+   GLPI GUI CUSTOMIZATION - ENHANCED VERSION
+   ============================================ */
+
+/* ============ LOGOLAR ============ */
+
+/* Giriş Ekranı Logosu */
+body.login-page #login-logo {
+    background: none !important;
+    background-image: url("https://itsm.ultron.com.tr/front/document.send.php?docid=6") !important;
+    width: 300px !important;
+    height: 90px !important;
+    margin: 20px auto !important;
+    display: block !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-size: contain !important;
+}
+
+/* Genel Sayfa Arkaplanı */
+body:not(.login-page) {
+    background-image: url("https://nportal.ultron.com.tr/tenant-favicons/1758833178_68d5aa1acf196.png");
+    background-size: 150px 150px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+}
+
+/* Eski logo IMG etiketlerini kesinlikle gizler */
+.main-header .logo img,
+.main-header .logo-mini img {
+    display: none !important;
+}
+
+/* Sol Üst Logo (Açık Menü) */
+span.glpi-logo {
+    text-indent: -9999px !important;
+    overflow: hidden !important;
+    display: block !important;
+    background-image: url("https://itsm.ultron.com.tr/front/document.send.php?docid=6") !important;
+    width: 200px !important;
+    height: 55px !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-size: contain !important;
+}
+
+/* Katlanmış Menü Logosu (Küçük Simge) */
+.main-header .logo-mini {
+    text-indent: -9999px !important;
+    overflow: hidden !important;
+    display: block !important;
+    background-image: url("https://nportal.ultron.com.tr/tenant-favicons/1758833178_68d5aa1acf196.png") !important;
+    width: 50px !important;
+    height: 50px !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-size: contain !important;
+}
+
+/* ============ TİPOGRAFİ İYİLEŞTİRMELERİ ============ */
+
+/* Google Fonts - Inter (Modern ve Okunabilir) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Genel Font Ayarları */
+body,
+.main-container,
+#page {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    color: #333 !important;
+}
+
+/* Başlıklar */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.card-header,
+.page-header h1,
+.page-header h2 {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+    color: #1a1a1a !important;
+}
+
+h1 {
+    font-size: 28px !important;
+}
+
+h2 {
+    font-size: 24px !important;
+}
+
+h3 {
+    font-size: 20px !important;
+}
+
+h4 {
+    font-size: 18px !important;
+}
+
+h5 {
+    font-size: 16px !important;
+}
+
+h6 {
+    font-size: 14px !important;
+}
+
+/* Link Stilleri */
+a {
+    color: #0066cc !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease !important;
+}
+
+a:hover {
+    color: #0052a3 !important;
+    text-decoration: underline !important;
+}
+
+/* ============ MODERN KART TASARIMI ============ */
+
+/* Genel Kart Stilleri */
+.card,
+.main-container .card,
+#page .card {
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
+    margin-bottom: 20px !important;
+    transition: box-shadow 0.3s ease, transform 0.2s ease !important;
+    background-color: #ffffff !important;
+}
+
+/* Kart Hover Efekti */
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Kart Başlığı */
+.card-header {
+    background-color: #f8f9fa !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+    border-radius: 8px 8px 0 0 !important;
+    padding: 15px 20px !important;
+    font-weight: 600 !important;
+}
+
+/* Kart İçeriği */
+.card-body {
+    padding: 20px !important;
+}
+
+/* Kart Alt Bilgi */
+.card-footer {
+    background-color: #f8f9fa !important;
+    border-top: 1px solid #e0e0e0 !important;
+    border-radius: 0 0 8px 8px !important;
+    padding: 12px 20px !important;
+}
+
+/* Dashboard Widget Kartları */
+.dashboard-card,
+.grid-stack-item .card {
+    border-radius: 10px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ============ FORM ELEMANLARI ============ */
+
+/* Input, Textarea, Select */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+textarea,
+select,
+.form-control {
+    border: 1px solid #d1d5db !important;
+    border-radius: 6px !important;
+    padding: 10px 14px !important;
+    font-size: 14px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    background-color: #ffffff !important;
+}
+
+/* Input Focus Durumu */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="datetime-local"]:focus,
+textarea:focus,
+select:focus,
+.form-control:focus {
+    border-color: #0066cc !important;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1) !important;
+    outline: none !important;
+}
+
+/* Textarea */
+textarea {
+    min-height: 100px !important;
+    resize: vertical !important;
+}
+
+/* Select Dropdown */
+select {
+    appearance: none !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 12px center !important;
+    padding-right: 40px !important;
+}
+
+/* Form Labels */
+label,
+.form-label {
+    font-weight: 500 !important;
+    color: #374151 !important;
+    margin-bottom: 6px !important;
+    font-size: 14px !important;
+}
+
+/* ============ BUTONLAR ============ */
+
+/* Genel Buton Stilleri */
+.btn,
+button,
+input[type="submit"],
+input[type="button"] {
+    border-radius: 6px !important;
+    padding: 10px 20px !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    transition: all 0.2s ease !important;
+    border: none !important;
+    cursor: pointer !important;
+}
+
+/* Primary Buton */
+.btn-primary,
+.submit {
+    background-color: #0066cc !important;
+    color: #ffffff !important;
+}
+
+.btn-primary:hover,
+.submit:hover {
+    background-color: #0052a3 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3) !important;
+}
+
+/* Secondary Buton */
+.btn-secondary {
+    background-color: #6b7280 !important;
+    color: #ffffff !important;
+}
+
+.btn-secondary:hover {
+    background-color: #4b5563 !important;
+}
+
+/* Success Buton */
+.btn-success {
+    background-color: #10b981 !important;
+    color: #ffffff !important;
+}
+
+.btn-success:hover {
+    background-color: #059669 !important;
+}
+
+/* Danger Buton */
+.btn-danger {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+}
+
+.btn-danger:hover {
+    background-color: #dc2626 !important;
+}
+
+/* Warning Buton */
+.btn-warning {
+    background-color: #f59e0b !important;
+    color: #ffffff !important;
+}
+
+.btn-warning:hover {
+    background-color: #d97706 !important;
+}
+
+/* Info Buton */
+.btn-info {
+    background-color: #3b82f6 !important;
+    color: #ffffff !important;
+}
+
+.btn-info:hover {
+    background-color: #2563eb !important;
+}
+
+/* Outline Butonlar */
+.btn-outline {
+    background-color: transparent !important;
+    border: 2px solid #d1d5db !important;
+    color: #374151 !important;
+}
+
+.btn-outline:hover {
+    background-color: #f3f4f6 !important;
+    border-color: #9ca3af !important;
+}
+
+/* ============ CHECKBOX VE RADIO BUTTON ============ */
+
+/* Checkbox */
+input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+    border: 2px solid #d1d5db !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #0066cc !important;
+    border-color: #0066cc !important;
+}
+
+/* Radio Button */
+input[type="radio"] {
+    width: 18px !important;
+    height: 18px !important;
+    border: 2px solid #d1d5db !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+input[type="radio"]:checked {
+    border-color: #0066cc !important;
+}
+
+/* ============ TABLO İYİLEŞTİRMELERİ ============ */
+
+/* Genel Tablo Stilleri */
+table,
+.table {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+/* Tablo Başlığı */
+table thead th,
+.table thead th {
+    background-color: #f8f9fa !important;
+    color: #374151 !important;
+    font-weight: 600 !important;
+    padding: 12px 16px !important;
+    border-bottom: 2px solid #e0e0e0 !important;
+    text-align: left !important;
+}
+
+/* Tablo Satırları */
+table tbody tr,
+.table tbody tr {
+    transition: background-color 0.2s ease !important;
+}
+
+/* Zebra Striping */
+table tbody tr:nth-child(even),
+.table tbody tr:nth-child(even) {
+    background-color: #f9fafb !important;
+}
+
+/* Hover Efekti */
+table tbody tr:hover,
+.table tbody tr:hover {
+    background-color: #f3f4f6 !important;
+}
+
+/* Tablo Hücreleri */
+table tbody td,
+.table tbody td {
+    padding: 12px 16px !important;
+    border-bottom: 1px solid #e5e7eb !important;
+}
+
+/* ============ RESPONSIVE TASARIM ============ */
+
+/* Tablet ve Küçük Ekranlar */
+@media (max-width: 768px) {
+
+    /* Logo Boyutları */
+    span.glpi-logo {
+        width: 150px !important;
+        height: 40px !important;
+    }
+
+    body.login-page #login-logo {
+        width: 250px !important;
+        height: 75px !important;
+    }
+
+    /* Font Boyutları */
+    body {
+        font-size: 13px !important;
+    }
+
+    h1 {
+        font-size: 24px !important;
+    }
+
+    h2 {
+        font-size: 20px !important;
+    }
+
+    h3 {
+        font-size: 18px !important;
+    }
+
+    /* Kart Padding */
+    .card-body {
+        padding: 15px !important;
+    }
+
+    /* Buton Boyutları */
+    .btn {
+        padding: 8px 16px !important;
+        font-size: 13px !important;
+    }
+}
+
+/* Mobil Cihazlar */
+@media (max-width: 480px) {
+
+    /* Logo Boyutları */
+    span.glpi-logo {
+        width: 120px !important;
+        height: 35px !important;
+    }
+
+    body.login-page #login-logo {
+        width: 200px !important;
+        height: 60px !important;
+    }
+
+    /* Kart Margin */
+    .card {
+        margin-bottom: 15px !important;
+    }
+
+    /* Tablo Responsive */
+    table,
+    .table {
+        font-size: 12px !important;
+    }
+
+    table thead th,
+    table tbody td {
+        padding: 8px 10px !important;
+    }
+}
+
+/* ============ ANIMASYONLAR ============ */
+
+/* Smooth Scroll */
+html {
+    scroll-behavior: smooth !important;
+}
+
+/* Fade In Animasyonu */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeIn 0.3s ease !important;
+}
+
+/* ============ EK İYİLEŞTİRMELER ============ */
+
+/* Scrollbar Özelleştirmesi (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 10px !important;
+    height: 10px !important;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1 !important;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1 !important;
+    border-radius: 5px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8 !important;
+}
+
+/* Tooltip Stilleri */
+.tooltip,
+[data-tooltip] {
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Badge/Label Stilleri */
+.badge,
+.label {
+    border-radius: 4px !important;
+    padding: 4px 10px !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+}
+
+/* Alert/Bildirim Kutuları */
+.alert {
+    border-radius: 8px !important;
+    padding: 14px 18px !important;
+    border-left: 4px solid !important;
+    margin-bottom: 16px !important;
+}
+
+.alert-success {
+    background-color: #d1fae5 !important;
+    border-left-color: #10b981 !important;
+    color: #065f46 !important;
+}
+
+.alert-danger,
+.alert-error {
+    background-color: #fee2e2 !important;
+    border-left-color: #ef4444 !important;
+    color: #991b1b !important;
+}
+
+.alert-warning {
+    background-color: #fef3c7 !important;
+    border-left-color: #f59e0b !important;
+    color: #92400e !important;
+}
+
+.alert-info {
+    background-color: #dbeafe !important;
+    border-left-color: #3b82f6 !important;
+    color: #1e40af !important;
+}

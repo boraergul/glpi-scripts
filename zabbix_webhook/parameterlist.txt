@@ -1,0 +1,15 @@
+alert_message={ALERT.MESSAGE}
+alert_subject={ALERT.SUBJECT}
+event_id={EVENT.ID}
+event_nseverity={EVENT.NSEVERITY}
+event_severity={EVENT.SEVERITY}
+event_source={EVENT.SOURCE}
+event_update_status={EVENT.UPDATE.STATUS}
+event_value={EVENT.VALUE}
+glpi_app_token=<VARSA_APP_TOKEN>
+glpi_ticket_id={EVENT.TAGS.__zbx_glpi_ticket_id}
+glpi_url=https://itsm.ultron.com.tr
+glpi_user_token=<USER_TOKEN>
+host={HOST.HOST}
+trigger_id={TRIGGER.ID}
+zabbix_url=<ZABBIX_URL>

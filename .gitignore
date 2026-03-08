@@ -1,0 +1,29 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.vscode/
+.idea/
+*.log
+
+# Sensitive Config
+config/
+
+# Temporary and Data folders
+temp/
+glpi_backup/
+templates_new/temp/
+
+# Binary and Data exports
+*.csv
+*.sql
+*.zip
+*.tar.gz
+
+# OS specific
+.DS_Store
+Thumbs.db

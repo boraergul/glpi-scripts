@@ -1,0 +1,108 @@
+Fetching data from https://itsmp.ultron.com.tr/api.php/v1...
+
+| ID | Name | Type | Current Template |
+|---|---|---|---|
+| 1 | Alert Tickets not closed | Ticket | ticket_recall (248) |
+| 2 | New Ticket | Ticket | ticket_opening_confirmation (249) |
+| 3 | Update Ticket | Ticket | status_update (250) |
+| 4 | Close Ticket | Ticket | generic_ticket_resolution (251) |
+| 5 | Add Followup | Ticket | status_update (250) |
+| 6 | Add Task | Ticket | ticket_task_notification (252) |
+| 7 | Update Followup | Ticket | status_update (250) |
+| 8 | Update Task | Ticket | ticket_task_notification (252) |
+| 9 | Delete Followup | Ticket | status_update (250) |
+| 10 | Delete Task | Ticket | ticket_task_notification (252) |
+| 11 | Resolve ticket | Ticket | generic_ticket_resolution (251) |
+| 12 | Ticket Validation | Ticket | ticket_validation_request (253) |
+| 13 | New Reservation | Reservation | new_reservation (254) |
+| 14 | Update Reservation | Reservation | new_reservation (254) |
+| 15 | Delete Reservation | Reservation | new_reservation (254) |
+| 16 | Alert Reservation | Reservation | new_reservation (254) |
+| 17 | Contract Notice | Contract | contract_renewal_90 (255) |
+| 18 | Contract End | Contract | contract_end_30 (256) |
+| 19 | MySQL Synchronization | DBConnection | custom_mysql_sync (257) |
+| 20 | Cartridges | CartridgeItem | consumable_alert (258) |
+| 21 | Consumables | ConsumableItem | consumable_alert (258) |
+| 22 | Infocoms | Infocom | custom_infocoms (259) |
+| 23 | Software Licenses | SoftwareLicense | contract_end_30 (256) |
+| 24 | Ticket Recall | Ticket | sla_breach_warning (260) |
+| 25 | Password Forget | User | password_forget (261) |
+| 26 | Ticket Satisfaction | Ticket | csat_survey (262) |
+| 27 | Item not unique | FieldUnicity | custom_item_not_unique (263) |
+| 28 | CronTask Watcher | CronTask | custom_crontask_watcher (264) |
+| 29 | New Problem | Problem | new_problem (265) |
+| 30 | Update Problem | Problem | update_problem (266) |
+| 31 | Resolve Problem | Problem | resolve_problem (267) |
+| 32 | Add Task | Problem | update_problem (266) |
+| 33 | Update Task | Problem | update_problem (266) |
+| 34 | Delete Task | Problem | update_problem (266) |
+| 35 | Close Problem | Problem | resolve_problem (267) |
+| 36 | Delete Problem | Problem | custom_delete_problem (268) |
+| 37 | Ticket Validation Answer | Ticket | ticket_validation_request (253) |
+| 38 | Contract End Periodicity | Contract | contract_end_30 (256) |
+| 39 | Contract Notice Periodicity | Contract | contract_renewal_90 (255) |
+| 40 | Planning recall | PlanningRecall | ticket_recall (248) |
+| 41 | Delete Ticket | Ticket | delete_ticket (269) |
+| 42 | New Change | Change | planned_change_notification (270) |
+| 43 | Update Change | Change | generic_update_change (271) |
+| 44 | Resolve Change | Change | generic_update_change (271) |
+| 45 | Add Task | Change | generic_update_change (271) |
+| 46 | Update Task | Change | generic_update_change (271) |
+| 47 | Delete Task | Change | generic_update_change (271) |
+| 48 | Close Change | Change | generic_update_change (271) |
+| 49 | Delete Change | Change | custom_delete_change (272) |
+| 50 | Ticket Satisfaction Answer | Ticket | csat_survey (262) |
+| 51 | Receiver errors | MailCollector | custom_receiver_errors (273) |
+| 52 | New Project | Project | new_project (274) |
+| 53 | Update Project | Project | new_project (274) |
+| 54 | Delete Project | Project | custom_delete_project (275) |
+| 55 | New Project Task | ProjectTask | project_task (276) |
+| 56 | Update Project Task | ProjectTask | project_task (276) |
+| 57 | Delete Project Task | ProjectTask | project_task (276) |
+| 58 | Request Unlock Items | ObjectLock | custom_unlock_item (277) |
+| 59 | New user in requesters | Ticket | ticket_opening_confirmation (249) |
+| 60 | New group in requesters | Ticket | ticket_opening_confirmation (249) |
+| 61 | New user in observers | Ticket | status_update (250) |
+| 62 | New group in observers | Ticket | status_update (250) |
+| 63 | New user in assignees | Ticket | escalation_customer (278) |
+| 64 | New group in assignees | Ticket | escalation_customer (278) |
+| 65 | New supplier in assignees | Ticket | escalation_customer (278) |
+| 66 | Saved searches | SavedSearch_Alert | Saved searches alerts (279) |
+| 67 | Certificates | Certificate | contract_end_30 (256) |
+| 68 | Alert expired domains | Domain | contract_end_30 (256) |
+| 69 | Alert domains close expiries | Domain | contract_end_30 (256) |
+| 70 | Password expires alert | User | password_expiration (280) |
+| 71 | Check plugin updates | Glpi\Marketplace\Controller | custom_plugin_updates (281) |
+| 72 | New user mentioned | Ticket | status_update (250) |
+| 73 | New Task | GlpiPlugin\Releases\Task | custom_plugin_releasetask_new (282) |
+| 74 | Update Task | GlpiPlugin\Releases\Task | custom_plugin_releasetask_update (283) |
+| 75 | Delete Task | GlpiPlugin\Releases\Task | custom_plugin_releasetask_delete (284) |
+| 76 | Notification for "More Reporting" | PluginMreportingNotification | daily_report (285) |
+| 79 | Credit expired | PluginCreditEntity | custom_credit_expired (286) |
+| 80 | Low credits | PluginCreditEntity | custom_low_credits (287) |
+| 81 | New knowledge base item | KnowbaseItem | custom_kb_new (288) |
+| 82 | Updating knowledge base item | KnowbaseItem | custom_kb_update (289) |
+| 83 | Delete knowledge base item | KnowbaseItem | custom_kb_delete (290) |
+| 84 | Password Initialization | User | password_forget (261) |
+| 85 | Change Satisfaction | Change | csat_survey (262) |
+| 86 | Change Satisfaction Answer | Change | csat_survey (262) |
+| 87 | Automatic reminder | Ticket | ticket_recall (248) |
+| 88 | New Task | GlpiPlugin\Tasklists\Task | ticket_task_notification (252) |
+| 89 | Update Task | GlpiPlugin\Tasklists\Task | ticket_task_notification (252) |
+| 90 | Delete Task | GlpiPlugin\Tasklists\Task | ticket_task_notification (252) |
+| 91 | Notification for &quot;More Reporting&quot; | PluginMreportingNotification | Notification for &quot;More Reporting&quot; (293) |
+| 92 | Saved Search BULUTMIX - TUM | SavedSearch_Alert | Saved searches alerts (279) |
+| 93 | Kaydedilmiþ arama TUM - ACIK | SavedSearch_Alert | Saved searches alerts (279) |
+| 94 | Kaydedilmiþ arama BULUTMIX - ACIK | SavedSearch_Alert | Saved searches alerts (279) |
+| 95 | Kaydedilmiþ arama SECURITY-TUM | SavedSearch_Alert | Saved searches alerts (279) |
+| 96 | Kaydedilmiþ arama MONITORING - TUM | SavedSearch_Alert | Saved searches alerts (279) |
+| 97 | Kaydedilmiþ arama MONITORING - ACIK | SavedSearch_Alert | Saved searches alerts (279) |
+| 98 | Kaydedilmiþ arama SYSTEM - TUM | SavedSearch_Alert | Saved searches alerts (279) |
+| 99 | Kaydedilmiþ arama SYSTEM - ACIK | SavedSearch_Alert | Saved searches alerts (279) |
+| 100 | Kaydedilmiþ arama GEN DEST - TUM | SavedSearch_Alert | Saved searches alerts (279) |
+| 101 | Kaydedilmiþ arama GEN DEST - ACIK | SavedSearch_Alert | Saved searches alerts (279) |
+| 102 | Kaydedilmiþ arama SECURITY - ACIK | SavedSearch_Alert | Saved searches alerts (279) |
+| 103 | Kaydedilmiþ arama NETWORK - ACIK | SavedSearch_Alert | Saved searches alerts (279) |
+| 104 | Kaydedilmiþ arama NETWORK - TUM | SavedSearch_Alert | Saved searches alerts (279) |
+| 105 | Kaydedilmiþ arama TUM - ATANMAMIS | SavedSearch_Alert | Saved searches alerts (279) |
+| 106 | Kaydedilmiþ arama TTR SLA Aþýlanlar | SavedSearch_Alert | Saved searches alerts (279) |

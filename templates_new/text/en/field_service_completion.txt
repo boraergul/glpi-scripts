@@ -1,0 +1,25 @@
+Subject: Field Intervention Completed - ##ticket.title##
+
+Hello ##ticket.authors##,
+
+Our field intervention has been successfully completed ###ticket.id##
+
+Subject: 	 ##ticket.title##
+
+Creation Date: 	 ##ticket.creationdate##
+
+Technician: 	 ##ticket.assigntousers##
+
+Status: 	 ##ticket.status##
+
+Customer: 	 ##ticket.shortentity##
+
+WORK PERFORMED:
+
+##ticket.solution.description##
+
+• Completion Time: ##ticket.solvedate##
+
+Related documents and photos have been attached to the ticket.
+
+View Ticket (##ticket.url##)

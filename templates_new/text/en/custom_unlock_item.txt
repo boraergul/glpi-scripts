@@ -1,0 +1,7 @@
+Subject: [LOCK] Unlock Request: ##item.type##
+
+An unlock request has been sent for a locked item.
+
+Item: ##item.type##
+
+Requester: ##user.realname##

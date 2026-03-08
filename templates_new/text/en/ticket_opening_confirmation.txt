@@ -1,0 +1,29 @@
+Subject: Support Request Received - ##ticket.title##
+
+Hello ##ticket.authors##,
+
+New support request created ###ticket.id##
+
+Subject: 	 ##ticket.title##
+
+Creation Date: 	 ##ticket.creationdate##
+
+Support Specialist: 	 ##ticket.assigntogroups##
+
+Status: 	 ##ticket.status##
+
+Customer: 	 ##ticket.shortentity##
+
+Priority: 	 ##ticket.priority##
+
+Category: 	 ##ticket.category##
+
+PROBLEM DESCRIPTION:
+
+##ticket.content##
+
+INFORMATION:
+
+For our contracted customers, responses are provided in accordance with the SLA periods within the scope of the contract. If you do not have a contract, our specialists in the relevant department will contact you as soon as they are available.
+
+View Ticket (##ticket.url##)

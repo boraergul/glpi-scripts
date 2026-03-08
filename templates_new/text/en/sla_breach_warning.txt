@@ -1,0 +1,29 @@
+Subject: [SLA ALERT] Ticket ##ticket.id## - SLA Breach Risk
+
+⚠️ SLA BREACH RISK
+
+Dear Managers,
+
+The following ticket carries a risk of SLA breach.
+
+TICKET DETAILS:
+
+• Ticket ID: ##ticket.id##
+
+• Customer: ##ticket.authors##
+
+• Priority: ##ticket.priority##
+
+• Assigned To: ##ticket.assigntousers##
+
+SLA STATUS:
+
+• Response SLA: ##ticket.internal_time_to_own##
+
+• Resolution SLA: ##ticket.time_to_resolve##
+
+REQUIRED ACTION:
+
+Please intervene immediately or escalate.
+
+GLPI Automation

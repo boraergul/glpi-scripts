@@ -1,0 +1,31 @@
+Subject: [CHANGE] Planlı Bakım Bildirimi - ##ticket.title##
+
+Merhaba ##ticket.authors##,
+
+Sistemlerinizde planlı bir değişiklik/bakım gerçekleştirilecektir ###ticket.id##
+
+Change ID: 	 ##ticket.id##
+
+Change Türü: 	 ##ticket.category##
+
+Başlangıç: 	 ##ticket.creationdate##
+
+Tahmini Çözüm: 	 ##ticket.sla_ttr##
+
+Etkilenen Sistemler: 	 ##ticket.item.name##
+
+Durumu: 	 ##ticket.status##
+
+DEĞİŞİKLİĞİN AMACI:
+
+##ticket.content##
+
+KULLANICILARA TAVSİYELER:
+
+• Lütfen çalışmalarınızı kaydediniz.
+
+• Kesinti süresince sisteme erişim olmayabilir.
+
+Detayları görüntülemek için dashboard'a erişin
+
+##ticket.url## (##ticket.url##)

@@ -1,0 +1,3 @@
+Subject: [KB SİLİNDİ] ##knowbaseitem.name##
+
+##knowbaseitem.name## başlıklı makale silinmiştir.

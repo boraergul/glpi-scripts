@@ -1,0 +1,26 @@
+Subject: [MAJOR INCIDENT] Güncelleme - ##ticket.title##
+
+MAJOR INCIDENT GÜNCELLEMESİ
+
+Sayın ##ticket.authors##,
+
+Devam eden major incident hakkında son güncelleme:
+
+GÜNCEL DURUM:
+
+##IFfollowup####followup.content####ENDIFfollowup##
+
+SON İŞLEMLER / RECENT ACTIVITY:
+
+##FOREACHtimelineitems##
+
+•
+##timelineitems.date## - ##timelineitems.author##:
+
+##timelineitems.description##
+
+##ENDFOREACHtimelineitems##
+
+TAHMİNİ ÇÖZÜM SÜRESİ: ##ticket.sla_ttr##
+
+Ultron Bilişim Major Incident Ekibi

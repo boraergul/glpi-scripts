@@ -1,0 +1,7 @@
+Subject: [KB UPDATE] ##knowbaseitem.name##
+
+An article has been updated.
+
+##knowbaseitem.name##
+
+View Changes (##knowbaseitem.url##)

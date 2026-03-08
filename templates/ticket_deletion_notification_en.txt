@@ -1,0 +1,39 @@
+TICKET DELETED
+═════════════════════════════
+Ticket ID: ##ticket.id##
+═════════════════════════════
+
+SUBJECT  : ##ticket.title##
+DATE     : ##ticket.date##
+
+DELETED BY
+═════════════════════════════
+
+##FOREACHauthors##
+NAME  : ##author.name##
+##ENDFOREACHauthors##
+
+TICKET INFORMATION
+═════════════════════════════
+
+ENTITY: ##ticket.shortentity##
+##IFticket.assigntogroups##
+ASSIGNED GROUP: ##ticket.assigntogroups##
+##ENDIFticket.assigntogroups##
+##IFticket.assigntousers##
+ASSIGNED TECHNICIAN: ##ticket.assigntousers##
+##ENDIFticket.assigntousers##
+
+═════════════════════════════
+NOTICE
+═════════════════════════════
+For contracted customers, responses are provided according to SLA times 
+within the contract scope. For non-contracted requests, our specialists 
+will contact you when available.
+
+Thank you for your understanding.
+
+──────────────────────────────
+This is an automated notification. Please do not reply.
+GLPI ITSM System - ##ticket.shortentity##
+══════════════════════════════

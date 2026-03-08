@@ -1,0 +1,25 @@
+Subject: Saha Müdahalesi Tamamlandı - ##ticket.title##
+
+Merhaba ##ticket.authors##,
+
+Saha müdahalemiz başarıyla tamamlanmıştır ###ticket.id##
+
+Konu: 	 ##ticket.title##
+
+Oluşturma Tarihi: 	 ##ticket.creationdate##
+
+Teknisyen: 	 ##ticket.assigntousers##
+
+Durumu: 	 ##ticket.status##
+
+Müşteri: 	 ##ticket.shortentity##
+
+YAPILAN İŞLEMLER:
+
+##ticket.solution.description##
+
+• Tamamlanma Zamanı: ##ticket.solvedate##
+
+İlgili dökümanlar ve fotoğraflar ticket'a eklenmiştir.
+
+Talebi Görüntüle (##ticket.url##)

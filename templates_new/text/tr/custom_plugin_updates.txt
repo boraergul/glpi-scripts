@@ -1,0 +1,5 @@
+Subject: [MARKETPLACE] Eklenti Güncelleme Kontrolü
+
+Eklenti güncellemeleri kontrol edildi.
+
+##plugin.updates##

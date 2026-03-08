@@ -1,0 +1,31 @@
+Subject: [MAJOR INCIDENT] ##ticket.title##
+
+⚠️ MAJOR INCIDENT DUYURUSU
+
+Sayın ##ticket.authors##,
+
+Kritik bir olay tespit edilmiş ve Major Incident prosedürü başlatılmıştır.
+
+INCIDENT DETAYLARI:
+
+• Incident ID: ##ticket.id##
+
+• Başlangıç Zamanı: ##ticket.creationdate##
+
+• Etkilenen Servisler: ##ticket.category##
+
+GÜNCEL DURUM:
+
+##ticket.content##
+
+ÇALIŞAN EKİP:
+
+• Major Incident Manager: ##ticket.assigntousers##
+
+GÜNCELLEME SIKLIĞI: 15 dakikada bir güncelleme yapılacaktır.
+
+War Room Linki (##ticket.url##)
+
+Bu kritik durumda sabır ve anlayışınız için teşekkür ederiz.
+
+Ultron Bilişim Major Incident Ekibi

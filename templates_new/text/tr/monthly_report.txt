@@ -1,0 +1,14 @@
+Subject: Aylık Hizmet Performans Raporu
+
+Sayın ##ticket.authors##,
+
+Hizmet performans raporumuzu sunmaktan memnuniyet duyarız.
+
+RAPOR ÖZETİ:
+
+##ticket.content##
+
+Detaylı rapor ve grafikler ekte mevcuttur.
+
+Saygılarımızla,
+Ultron Bilişim Account Management

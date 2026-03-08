@@ -1,0 +1,5 @@
+Subject: [SİLİNDİ] Problem: ##problem.name##
+
+⚠️ PROBLEM SİLİNDİ
+
+##problem.id## - ##problem.name## kaydı silinmiştir.

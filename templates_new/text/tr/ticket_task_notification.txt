@@ -1,0 +1,11 @@
+Subject: [GÖREV] ##ticket.title##
+
+Talep ###ticket.id## için yeni bir görev eklendi veya güncellendi.
+
+Görev Tanımı: ##task.description##
+
+Durum: ##task.status##
+
+Atanan: ##task.tech##
+
+Talebe Git (##ticket.url##)

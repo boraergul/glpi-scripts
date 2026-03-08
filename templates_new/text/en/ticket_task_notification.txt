@@ -1,0 +1,11 @@
+Subject: [TASK] ##ticket.title##
+
+A new task has been added or updated for Ticket ###ticket.id##.
+
+Task Description: ##task.description##
+
+Status: ##task.status##
+
+Technician: ##task.tech##
+
+Go to Ticket (##ticket.url##)

@@ -1,0 +1,5 @@
+Subject: [SİLİNDİ] Change: ##change.name##
+
+⚠️ DEĞİŞİKLİK SİLİNDİ
+
+##change.id## - ##change.name## kaydı silinmiştir.

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLA Uyarısı</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .email-header {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: #ffffff;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .email-header .ticket-id {
+            font-size: 14px;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        .email-body {
+            padding: 20px 15px;
+        }
+
+        .info-section {
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #333333;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #555555;
+            font-size: 14px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 3px solid #dc3545;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-left: 4px solid #dc3545;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 20px 0;
+            color: #721c24;
+        }
+
+        .warning-box strong {
+            color: #5a1419;
+            font-size: 16px;
+        }
+
+        .warning-icon {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .sla-info {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            color: #856404;
+        }
+
+        .sla-info strong {
+            color: #664d03;
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            background-color: #dc3545;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .action-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .action-button:hover {
+            opacity: 0.9;
+        }
+
+        .email-footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #6c757d;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #e9ecef;
+            margin: 15px 0;
+        }
+
+        .sla-info {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            color: #856404;
+            text-align: left;
+        }
+
+        .sla-info strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .sla-info ul {
+            margin: 8px 0;
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        /* Mobil Optimizasyon */
+        @media only screen and (max-width: 600px) {
+            .email-body {
+                padding: 15px 10px !important;
+            }
+            
+            .info-section {
+                margin-bottom: 12px !important;
+            }
+            
+            .action-button {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h1>⚠️ SLA UYARISI</h1>
+            <div class="ticket-id">Talep No: ###ticket.id##</div>
+        </div>
+
+        <!-- Body -->
+        <div class="email-body">
+            <!-- Warning Message -->
+            <div class="warning-box">
+                <div class="warning-icon">🚨</div>
+                <strong>ACİL MÜDAHALE GEREKLİ!</strong><br><br>
+                <p style="margin: 10px 0; line-height: 1.6;">
+                    Bu ticket için tanımlı SLA süreleri dolmak üzere veya aşılmış durumda.
+                    Lütfen en kısa sürede gerekli aksiyonu alınız.
+                </p>
+            </div>
+
+            <!-- Talep Bilgileri -->
+            <div class="info-section">
+                <div class="info-label">Konu</div>
+                <div class="info-value">##ticket.title##</div>
+            </div>
+
+            <div class="info-section">
+                <div class="info-label">Durum</div>
+                <div class="info-value">##ticket.status##</div>
+            </div>
+
+            <div class="info-section">
+                <div class="info-label">Öncelik</div>
+                <div style="margin-top: 8px;">
+                    <span class="priority-badge">##ticket.priority##</span>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- SLA Bilgileri -->
+            <div class="info-section">
+                <div class="info-label">SLA Durumu</div>
+
+                ##IFticket.sla_tto##
+                <div class="sla-info">
+                    <strong>⏱️ Müdahale Süresi (TTO)</strong><br>
+                    <div style="margin-top: 8px;">
+                        SLA: ##ticket.sla_tto##<br>
+                        ##IFticket.sla_tto_date##Hedef Tarih: ##ticket.sla_tto_date####ENDIFticket.sla_tto_date##
+                    </div>
+                </div>
+                ##ENDIFticket.sla_tto##
+
+                ##IFticket.sla_ttr##
+                <div class="sla-info">
+                    <strong>⏱️ Çözüm Süresi (TTR)</strong><br>
+                    <div style="margin-top: 8px;">
+                        SLA: ##ticket.sla_ttr##<br>
+                        ##IFticket.sla_ttr_date##Hedef Tarih: ##ticket.sla_ttr_date####ENDIFticket.sla_ttr_date##
+                    </div>
+                </div>
+                ##ENDIFticket.sla_ttr##
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Atama Bilgileri -->
+            ##IFticket.assigntogroups##
+            <div class="info-section">
+                <div class="info-label">Atanan Grup</div>
+                <div class="info-value">##ticket.assigntogroups##</div>
+            </div>
+            ##ENDIFticket.assigntogroups##
+
+            ##IFticket.assigntousers##
+            <div class="info-section">
+                <div class="info-label">Atanan Teknisyen</div>
+                <div class="info-value">##ticket.assigntousers##</div>
+            </div>
+            ##ENDIFticket.assigntousers##
+
+            <div class="info-section">
+                <div class="info-label">Müşteri</div>
+                <div class="info-value">##ticket.shortentity##</div>
+            </div>
+
+            <!-- Action Button -->
+            <div style="text-align: center;">
+                <a href="##ticket.url##" class="action-button">
+                    ACİL MÜDAHALE ET
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <div class="sla-info">
+                <strong>ℹ️ Bilgilendirme</strong>
+                <p style="margin: 8px 0 0 0; line-height: 1.6;">
+                    Sözleşmeli müşterilerimiz için sözleşme kapsamındaki SLA sürelerine uygun olarak dönüş sağlanmaktadır, sözleşme dışı talepleriniz ile ilgili uzmanlarımız sizlerle müsait olduklarında iletişime geçecektir.
+                </p>
+                <p style="margin: 8px 0 0 0;">
+                    <small>Anlayışınız için teşekkür ederiz.</small>
+                </p>
+            </div>
+            <p style="color: #dc3545; font-weight: 600;">⚠️ Bu kritik bir SLA uyarısıdır!</p>
+            <p>GLPI ITSM Sistemi - ##ticket.shortentity##</p>
+        </div>
+    </div>
+</body>
+
+</html>

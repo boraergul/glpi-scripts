@@ -1,0 +1,9 @@
+Subject: [DELETED] Ticket ##ticket.id## - ##ticket.title##
+
+Dear User,
+
+Ticket ##ticket.id## has been deleted from the system.
+
+REASON:
+
+Deletion performed by administrator or system.

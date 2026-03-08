@@ -1,0 +1,45 @@
+YENİ YORUM EKLENDİ
+═════════════════════════════
+Talep No: # ##ticket.id##
+═════════════════════════════
+
+KONU     : ##ticket.title##
+DURUM    : ##ticket.status##
+ÖNCELİK  : ##ticket.priority##
+
+YORUM DETAYLARI
+═════════════════════════════
+##FOREACHfollowups##
+YAZAR: ##followup.author##
+TARİH: ##followup.date##
+##followup.description##
+
+##ENDFOREACHfollowups##
+
+TALEP BİLGİLERİ
+═════════════════════════════
+
+MÜŞTERİ: ##ticket.shortentity##
+##IFticket.assigntogroups##
+ATANAN GRUP: ##ticket.assigntogroups##
+##ENDIFticket.assigntogroups##
+##IFticket.assigntousers##
+ATANAN TEKNİSYEN: ##ticket.assigntousers##
+##ENDIFticket.assigntousers##
+
+═════════════════════════════
+Talebi Görüntüle: ##ticket.url##
+Toplam Yorum: ##ticket.numberoffollowups##
+═════════════════════════════
+BİLGİLENDİRME
+═════════════════════════════
+Sözleşmeli müşterilerimiz için sözleşme kapsamındaki SLA sürelerine 
+uygun olarak dönüş sağlanmaktadır, sözleşme dışı talepleriniz ile 
+ilgili uzmanlarımız sizlerle müsait olduklarında iletişime geçecektir.
+
+Anlayışınız için teşekkür ederiz.
+
+──────────────────────────────
+Bu otomatik bir bildirimdir. Lütfen yanıtlamayın.
+GLPI ITSM Sistemi - ##ticket.shortentity##
+══════════════════════════════

@@ -1,0 +1,3 @@
+Subject: [KB DELETED] ##knowbaseitem.name##
+
+The article ##knowbaseitem.name## has been deleted.

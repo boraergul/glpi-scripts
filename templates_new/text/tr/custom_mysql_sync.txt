@@ -1,0 +1,11 @@
+Subject: [SİSTEM] MySQL Senkronizasyon Uyarısı
+
+⚠️ SQL REPLİKA SENKRONİZASYON SORUNU
+
+DB Yöneticisi Dikkatine,
+
+GLPI veritabanı replikasyonu arasında senkronizasyon sorunu tespit edilmiştir.
+
+##mysqlvalidator.text##
+
+Lütfen veritabanı loglarını kontrol ediniz.

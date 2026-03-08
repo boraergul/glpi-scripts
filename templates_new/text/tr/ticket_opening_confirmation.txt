@@ -1,0 +1,29 @@
+Subject: Destek Talebiniz Alındı - ##ticket.title##
+
+Merhaba ##ticket.authors##,
+
+Yeni destek talebi oluşturuldu ###ticket.id##
+
+Konu: 	 ##ticket.title##
+
+Oluşturma Tarihi: 	 ##ticket.creationdate##
+
+Destek Uzmanı: 	 ##ticket.assigntogroups##
+
+Durumu: 	 ##ticket.status##
+
+Müşteri: 	 ##ticket.shortentity##
+
+Öncelik: 	 ##ticket.priority##
+
+Kategori: 	 ##ticket.category##
+
+PROBLEM AÇIKLAMASI:
+
+##ticket.content##
+
+BİLGİLENDİRME:
+
+Sözleşmeli müşterilerimiz için sözleşme kapsamındaki SLA sürelerine uygun olarak dönüş sağlanmaktadır, sözleşmeniz yok ise ilgili departmandaki uzmanlarımız sizlerle ilk müsait olduklarında iletişime geçecektir.
+
+Talebi Görüntüle (##ticket.url##)

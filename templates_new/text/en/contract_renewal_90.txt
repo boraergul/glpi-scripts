@@ -1,0 +1,16 @@
+Subject: Contract Renewal - 90 Days Remaining
+
+Dear ##ticket.authors##,
+
+There are 90 days remaining until the expiration of your current service contract.
+
+CONTRACT DETAILS:
+
+##ticket.content##
+
+RENEWAL MEETING:
+
+We would like to schedule a meeting to discuss renewal terms and evaluate your needs.
+
+Best Regards,
+Ultron Bilişim Account Management

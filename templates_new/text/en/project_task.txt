@@ -1,0 +1,19 @@
+Subject: [PROJECT TASK] ##projecttask.name## - ##project.name##
+
+Dear User,
+
+A new project task has been assigned to you or updated.
+
+TASK DETAIL:
+
+• Task: ##projecttask.name##
+
+• Project: ##project.name##
+
+• Start: ##projecttask.begin##
+
+• End: ##projecttask.end##
+
+##projecttask.content##
+
+View Task (##projecttask.url##)

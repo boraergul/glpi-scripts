@@ -1,0 +1,7 @@
+Subject: [VERİ] Mükerrer Kayıt Uyarısı
+
+Sistemde benzersiz olması gereken bir alan için mükerrer kayıt tespit edildi.
+
+Nesne: ##item.type##
+
+Mesaj: ##item.message##

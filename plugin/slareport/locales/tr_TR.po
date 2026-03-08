@@ -1,0 +1,131 @@
+# SLA Breach Report Plugin - Turkish Translation
+# Copyright (C) 2025 Bora Ergül
+# This file is distributed under the same license as the slareport plugin.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: slareport 1.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-03 00:00+0000\n"
+"PO-Revision-Date: 2025-03-03 00:00+0000\n"
+"Last-Translator: Bora Ergül\n"
+"Language-Team: Turkish\n"
+"Language: tr_TR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "SLA Breach Report"
+msgstr "SLA İhlal Raporu"
+
+msgid "Start Date"
+msgstr "Başlangıç Tarihi"
+
+msgid "End Date"
+msgstr "Bitiş Tarihi"
+
+msgid "Entity"
+msgstr "Birim (Entity)"
+
+msgid "All"
+msgstr "Hepsi"
+
+msgid "Search"
+msgstr "Sorgula"
+
+msgid "Export to CSV"
+msgstr "CSV Dışa Aktar"
+
+msgid "Total Tickets"
+msgstr "Toplam Ticket"
+
+msgid "SLA Tickets"
+msgstr "SLA'lı Ticket"
+
+msgid "Non-SLA Tickets"
+msgstr "SLA Tanımlanmamış Ticket"
+
+msgid "SLA Compliant"
+msgstr "SLA Uygun"
+
+msgid "TTO Violated"
+msgstr "TTO İhlali"
+
+msgid "TTR Violated"
+msgstr "TTR İhlali"
+
+msgid "SLA Active"
+msgstr "SLA Aktif"
+
+msgid "SLA Compliance Rate"
+msgstr "SLA Uyum Oranı"
+
+msgid "Overall SLA Status"
+msgstr "Genel SLA Durumu"
+
+msgid "Top Violating Entities (Top 10)"
+msgstr "En Çok İhlal Yapan Birimler (İlk 10)"
+
+msgid "Subject"
+msgstr "Konu"
+
+msgid "Date"
+msgstr "Tarih"
+
+msgid "Status"
+msgstr "Durum"
+
+msgid "SLA Definition"
+msgstr "SLA Tanımı"
+
+msgid "Deadline"
+msgstr "Hedef Süre"
+
+msgid "Resolved"
+msgstr "Çözülme Tarihi"
+
+msgid "Delay (TTO/TTR)"
+msgstr "Gecikme (TTO/TTR)"
+
+msgid "Violation"
+msgstr "İhlal Türü"
+
+msgid "Violation Type"
+msgstr "İhlal Tipi"
+
+msgid "TTO Deadline"
+msgstr "TTO Hedefi"
+
+msgid "TTR Deadline"
+msgstr "TTR Hedefi"
+
+msgid "TTO Delay"
+msgstr "TTO Gecikmesi"
+
+msgid "TTR Delay"
+msgstr "TTR Gecikmesi"
+
+msgid "Elapsed Time"
+msgstr "Geçen Süre"
+
+msgid "Violated"
+msgstr "İHLAL EDİLDİ"
+
+msgid "Active"
+msgstr "AKTİF"
+
+msgid "Compliant"
+msgstr "UYGUN"
+
+msgid "SLA Not Defined"
+msgstr "SLA Tanımlanmamış"
+
+msgid "No data found for the selected criteria."
+msgstr "Seçilen kriterlere uygun veri bulunamadı."
+
+msgid "%1$d h %2$d m"
+msgstr "%1$d sa %2$d dk"
+
+msgid "%1$d m"
+msgstr "%1$d dk"

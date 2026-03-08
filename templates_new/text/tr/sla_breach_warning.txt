@@ -1,0 +1,29 @@
+Subject: [SLA ALERT] Ticket ##ticket.id## - SLA İhlali Riski
+
+⚠️ SLA İHLALİ RİSKİ
+
+Sayın Yöneticiler,
+
+Aşağıdaki ticket SLA ihlali riski taşımaktadır.
+
+TICKET DETAYLARI:
+
+• Ticket ID: ##ticket.id##
+
+• Müşteri: ##ticket.authors##
+
+• Öncelik: ##ticket.priority##
+
+• Atanan: ##ticket.assigntousers##
+
+SLA DURUMU:
+
+• Response SLA: ##ticket.internal_time_to_own##
+
+• Resolution SLA: ##ticket.time_to_resolve##
+
+GEREKLİ AKSİYON:
+
+Lütfen acil müdahale edin veya eskalasyon yapın.
+
+GLPI Otomasyon

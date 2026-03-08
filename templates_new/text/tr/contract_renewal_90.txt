@@ -1,0 +1,16 @@
+Subject: Sözleşme Yenileme - 90 Gün Kaldı
+
+Sayın ##ticket.authors##,
+
+Mevcut hizmet sözleşmenizin bitiş tarihine 90 gün kaldı.
+
+SÖZLEŞME BİLGİLERİ:
+
+##ticket.content##
+
+YENİLEME TOPLANTISI:
+
+Yenileme koşullarını görüşmek ve ihtiyaçlarınızı değerlendirmek için bir toplantı planlamak isteriz.
+
+Saygılarımızla,
+Ultron Bilişim Account Management

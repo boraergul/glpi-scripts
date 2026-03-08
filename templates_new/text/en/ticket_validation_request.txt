@@ -1,0 +1,22 @@
+Subject: [APPROVAL REQUIRED] ##ticket.id## - ##ticket.title##
+
+⚠️ APPROVAL REQUIRED
+
+Dear ##ticket.authors##,
+
+Your approval is required for the following request.
+
+REQUEST DETAILS:
+
+• Requester: ##ticket.authors##
+
+• Title: ##ticket.title##
+
+• Date: ##ticket.creationdate##
+
+Description:
+##ticket.content##
+
+Please log in to the system to provide your approval.
+
+Go to Approval Page (##ticket.urlvalidation##)

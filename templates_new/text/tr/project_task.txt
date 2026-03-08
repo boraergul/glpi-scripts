@@ -1,0 +1,19 @@
+Subject: [PROJE GÖREVİ] ##projecttask.name## - ##project.name##
+
+Sayın İlgili,
+
+Size yeni bir proje görevi atanmış veya güncellenmiştir.
+
+GÖREV DETAYI:
+
+• Görev: ##projecttask.name##
+
+• Proje: ##project.name##
+
+• Başlangıç: ##projecttask.begin##
+
+• Bitiş: ##projecttask.end##
+
+##projecttask.content##
+
+Görevi Görüntüle (##projecttask.url##)

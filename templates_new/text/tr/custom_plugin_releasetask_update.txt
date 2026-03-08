@@ -1,0 +1,7 @@
+Subject: [RELEASE] Görev Güncellendi: ##task.description##
+
+Release görevi güncellendi.
+
+Görev: ##task.description##
+
+Son Durum: ##task.state##

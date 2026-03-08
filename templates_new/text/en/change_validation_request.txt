@@ -1,0 +1,19 @@
+Subject: [CHANGE APPROVAL] ##change.id## - ##change.name##
+
+⚠️ CHANGE APPROVAL REQUIRED
+
+Dear User,
+
+The following change request has been submitted for your approval.
+
+CHANGE DETAILS:
+
+• ID: ##change.id##
+
+• Title: ##change.name##
+
+• Impact Analysis: ##change.impactcontent##
+
+• Rollback Plan: ##change.controlistcontent##
+
+Go to Approval Page (##change.urlvalidation##)

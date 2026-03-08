@@ -1,0 +1,20 @@
+Subject: Resolved - ##ticket.title##
+
+Dear ##ticket.authors##,
+
+Your request has been successfully resolved.
+
+RESOLUTION DETAILS:
+
+##ticket.solution.description##
+
+• Resolution Date: ##ticket.solvedate##
+
+• Resolution Time: ##ticket.time##
+
+Please use the link below to approve or reject the resolution.
+
+View & Approve Ticket (##ticket.url##)
+
+Best Regards,
+Ultron Bilişim Service Desk

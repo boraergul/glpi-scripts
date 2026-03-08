@@ -1,0 +1,39 @@
+TALEP SİLİNDİ
+═════════════════════════════
+Talep No: ##ticket.id##
+═════════════════════════════
+
+KONU     : ##ticket.title##
+TARİH    : ##ticket.date##
+
+SİLEN KİŞİ
+═════════════════════════════
+
+##FOREACHauthors##
+AD SOYAD : ##author.name##
+##ENDFOREACHauthors##
+
+TALEP BİLGİLERİ
+═════════════════════════════
+
+MÜŞTERİ: ##ticket.shortentity##
+##IFticket.assigntogroups##
+ATANAN GRUP: ##ticket.assigntogroups##
+##ENDIFticket.assigntogroups##
+##IFticket.assigntousers##
+ATANAN TEKNİSYEN: ##ticket.assigntousers##
+##ENDIFticket.assigntousers##
+
+═════════════════════════════
+BİLGİLENDİRME
+═════════════════════════════
+Sözleşmeli müşterilerimiz için sözleşme kapsamındaki SLA sürelerine 
+uygun olarak dönüş sağlanmaktadır, sözleşme dışı talepleriniz ile 
+ilgili uzmanlarımız sizlerle müsait olduklarında iletişime geçecektir.
+
+Anlayışınız için teşekkür ederiz.
+
+──────────────────────────────
+Bu otomatik bir bildirimdir. Lütfen yanıtlamayın.
+GLPI ITSM Sistemi - ##ticket.shortentity##
+══════════════════════════════

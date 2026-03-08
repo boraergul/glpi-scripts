@@ -1,0 +1,5 @@
+Subject: [FINANCE] Infocom Alert: ##item.name##
+
+Financial alert triggered on asset.
+
+Asset: ##item.name##

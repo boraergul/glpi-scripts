@@ -1,0 +1,24 @@
+Subject: [EMERGENCY CHANGE] Emergency Change - ##ticket.title##
+
+EMERGENCY CHANGE NOTIFICATION
+
+Dear ##ticket.authors##,
+
+An emergency change will be implemented to resolve a critical situation.
+
+EMERGENCY CHANGE DETAILS:
+
+• Emergency Change ID: ##ticket.id##
+
+• Implementation Time: ##ticket.creationdate##
+
+• Affected Systems: ##ticket.item.name##
+
+REASON FOR URGENCY:
+
+##ticket.content##
+
+We appreciate your understanding.
+
+Best Regards,
+Ultron Bilişim Change Management

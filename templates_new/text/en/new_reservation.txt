@@ -1,0 +1,15 @@
+Subject: [RESERVATION] ##reservation.item##
+
+Dear ##user.realname##,
+
+Your reservation has been successfully recorded.
+
+RESERVATION DETAILS:
+
+• Item: ##reservation.item##
+
+• Start: ##reservation.begin##
+
+• End: ##reservation.end##
+
+##reservation.comment##

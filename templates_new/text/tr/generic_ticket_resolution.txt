@@ -1,0 +1,20 @@
+Subject: Çözüldü - ##ticket.title##
+
+Sayın ##ticket.authors##,
+
+Talebiniz başarıyla çözümlenmiştir.
+
+ÇÖZÜM BİLGİSİ:
+
+##ticket.solution.description##
+
+• Çözüm Tarihi: ##ticket.solvedate##
+
+• Çözüm Süresi: ##ticket.time##
+
+Çözümü onaylamak veya reddetmek için lütfen aşağıdaki bağlantıyı kullanınız.
+
+Ticket'ı Görüntüle ve Onayla (##ticket.url##)
+
+Saygılarımızla,
+Ultron Bilişim Service Desk

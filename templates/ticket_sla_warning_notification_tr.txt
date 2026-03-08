@@ -1,0 +1,46 @@
+SLA UYARISI
+═════════════════════════════
+Talep No: ##ticket.id##
+═════════════════════════════
+
+KONU     : ##ticket.title##
+DURUM    : ##ticket.status##
+ÖNCELİK  : ##ticket.priority##
+
+SLA BİLGİLERİ
+═════════════════════════════
+
+##IFticket.sla_tto##
+MÜDAHALE SÜRESİ: ##ticket.sla_tto##
+##ENDIFticket.sla_tto##
+##IFticket.sla_ttr##
+ÇÖZÜM SÜRESİ: ##ticket.sla_ttr##
+##ENDIFticket.sla_ttr##
+
+TALEP BİLGİLERİ
+═════════════════════════════
+
+MÜŞTERİ: ##ticket.shortentity##
+##IFticket.assigntogroups##
+ATANAN GRUP: ##ticket.assigntogroups##
+##ENDIFticket.assigntogroups##
+##IFticket.assigntousers##
+ATANAN TEKNİSYEN: ##ticket.assigntousers##
+##ENDIFticket.assigntousers##
+
+═════════════════════════════
+Talebi Görüntüle: ##ticket.url##
+Oluşturulma: ##ticket.creationdate##
+═════════════════════════════
+BİLGİLENDİRME
+═════════════════════════════
+Sözleşmeli müşterilerimiz için sözleşme kapsamındaki SLA sürelerine 
+uygun olarak dönüş sağlanmaktadır, sözleşme dışı talepleriniz ile 
+ilgili uzmanlarımız sizlerle müsait olduklarında iletişime geçecektir.
+
+Anlayışınız için teşekkür ederiz.
+
+──────────────────────────────
+Bu otomatik bir bildirimdir. Lütfen yanıtlamayın.
+GLPI ITSM Sistemi - ##ticket.shortentity##
+══════════════════════════════

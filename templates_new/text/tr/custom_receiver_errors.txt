@@ -1,0 +1,7 @@
+Subject: [MAIL] E-posta Alım Hatası
+
+⚠️ MAİL ALIM HATASI (RECEIVER)
+
+GLPI mail alıcısı (Receiver) bağlantı hatasıyla karşılaştı.
+
+##mailcollector.errors##

@@ -1,0 +1,14 @@
+Subject: Daily Operation Report - ##ticket.creationdate##
+
+Dear ##ticket.authors##,
+
+We would like to share the daily operation report for ##ticket.creationdate##.
+
+Report details are attached or in the description below.
+
+REPORT CONTENT:
+
+##ticket.content##
+
+Best Regards,
+Ultron Bilişim Operations Team

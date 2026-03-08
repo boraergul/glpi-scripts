@@ -1,0 +1,20 @@
+Subject: Eskalasyon - ##ticket.title##
+
+Sayın ##ticket.authors##,
+
+Ticket'ınız üst yönetime eskaleedilmiştir.
+
+ESKALASYON SEBEBİ VE DETAYLAR:
+
+##ticket.content##
+
+YENİ ATAMA:
+
+• Sorumlu: ##ticket.assigntousers##
+
+• Grup: ##ticket.assigntogroups##
+
+##ticket.assigntousers## en kısa sürede sizinle iletişime geçecektir.
+
+Saygılarımızla,
+Ultron Bilişim Management

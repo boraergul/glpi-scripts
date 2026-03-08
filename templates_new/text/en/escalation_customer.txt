@@ -1,0 +1,20 @@
+Subject: Escalation - ##ticket.title##
+
+Dear ##ticket.authors##,
+
+Your ticket has been escalated to upper management.
+
+REASON FOR ESCALATION AND DETAILS:
+
+##ticket.content##
+
+NEW ASSIGNMENT:
+
+• Owner: ##ticket.assigntousers##
+
+• Group: ##ticket.assigntogroups##
+
+##ticket.assigntousers## will contact you as soon as possible.
+
+Best Regards,
+Ultron Bilişim Management

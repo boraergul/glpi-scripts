@@ -1,0 +1,17 @@
+Subject: [REMINDER] ##ticket.id## - ##ticket.title##
+
+Hello,
+
+This is an automated reminder. The following ticket is still pending or requires action.
+
+TICKET INFO:
+
+• ID: ##ticket.id##
+
+• Title: ##ticket.title##
+
+• Status: ##ticket.status##
+
+• Last Update: ##ticket.updatedate##
+
+Go to Ticket (##ticket.url##)

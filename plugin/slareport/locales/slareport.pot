@@ -1,0 +1,106 @@
+# SLA Breach Report Plugin - Translation Template
+# Copyright (C) 2025 Bora Ergül
+# This file is distributed under the same license as the slareport plugin.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: slareport 1.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-03 00:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "SLA Breach Report"
+msgstr ""
+
+msgid "Start Date"
+msgstr ""
+
+msgid "End Date"
+msgstr ""
+
+msgid "Entity"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Export to CSV"
+msgstr ""
+
+msgid "Total Tickets"
+msgstr ""
+
+msgid "SLA Tickets"
+msgstr ""
+
+msgid "Non-SLA Tickets"
+msgstr ""
+
+msgid "SLA Compliant (Completed)"
+msgstr ""
+
+msgid "SLA Violated"
+msgstr ""
+
+msgid "SLA In Progress (Active)"
+msgstr ""
+
+msgid "SLA Compliance Rate"
+msgstr ""
+
+msgid "Overall SLA Status"
+msgstr ""
+
+msgid "Top Violating Entities (Top 10)"
+msgstr ""
+
+msgid "Subject"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "SLA Definition"
+msgstr ""
+
+msgid "Resolution Deadline"
+msgstr ""
+
+msgid "Resolution Date"
+msgstr ""
+
+msgid "Elapsed Time"
+msgstr ""
+
+msgid "Violated"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "Compliant"
+msgstr ""
+
+msgid "SLA Not Defined"
+msgstr ""
+
+msgid "No data found for the selected criteria."
+msgstr ""
+
+msgid "%1$d h %2$d m"
+msgstr ""
+
+msgid "%1$d m"
+msgstr ""

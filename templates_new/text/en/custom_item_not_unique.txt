@@ -1,0 +1,7 @@
+Subject: [DATA] Duplicate Record Warning
+
+A duplicate record has been detected for a field that must be unique.
+
+Item: ##item.type##
+
+Message: ##item.message##

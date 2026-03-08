@@ -1,0 +1,11 @@
+Subject: Problem Update: ##problem.title##
+
+Dear User,
+
+The problem record has been updated.
+
+UPDATE DETAIL:
+
+##problem.content##
+
+View Problem (##problem.url##)

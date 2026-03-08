@@ -1,0 +1,9 @@
+Subject: [RAPOR] Kayıtlı Arama Bildirimi: ##savedsearch.name##
+
+Sayın Kullanıcı,
+
+##savedsearch.name## adlı kayıtlı aramanız için yeni sonuçlar var.
+
+Sonuç Sayısı: ##savedsearch.count##
+
+Sonuçları Görüntüle (##savedsearch.url##)

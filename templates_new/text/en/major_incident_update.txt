@@ -1,0 +1,26 @@
+Subject: [MAJOR INCIDENT] Update - ##ticket.title##
+
+MAJOR INCIDENT UPDATE
+
+Dear ##ticket.authors##,
+
+Latest update regarding the ongoing major incident:
+
+CURRENT STATUS:
+
+##IFfollowup####followup.content####ENDIFfollowup##
+
+RECENT ACTIVITY:
+
+##FOREACHtimelineitems##
+
+•
+##timelineitems.date## - ##timelineitems.author##:
+
+##timelineitems.description##
+
+##ENDFOREACHtimelineitems##
+
+ESTIMATED RESOLUTION TIME: ##ticket.sla_ttr##
+
+Ultron Bilişim Major Incident Team

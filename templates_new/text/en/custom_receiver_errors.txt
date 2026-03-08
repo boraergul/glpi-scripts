@@ -1,0 +1,7 @@
+Subject: [MAIL] Email Receiver Error
+
+⚠️ EMAIL RECEIVER ERROR
+
+GLPI mail receiver encountered a connection error.
+
+##mailcollector.errors##

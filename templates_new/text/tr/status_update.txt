@@ -1,0 +1,34 @@
+Subject: Durum Güncellemesi - ##ticket.title##
+
+Merhaba ##ticket.authors##,
+
+Yeni etkinlik kaydı oluşturuldu ###ticket.id##
+
+Konu: 	 ##ticket.title##
+
+Oluşturma Tarihi: 	 ##ticket.creationdate##
+
+Destek Uzmanı: 	 ##ticket.assigntogroups##
+
+Durumu: 	 ##ticket.status##
+
+Müşteri: 	 ##ticket.shortentity##
+
+Cevap Yazan Temsilci: 	 ##ticket.lastupdater##
+
+GÜNCEL DURUM:
+
+##IFfollowup####followup.content####ENDIFfollowup##
+
+SON İŞLEMLER / RECENT ACTIVITY:
+
+##FOREACHtimelineitems##
+
+•
+##timelineitems.date## - ##timelineitems.author##:
+
+##timelineitems.description##
+
+##ENDFOREACHtimelineitems##
+
+Talebi Görüntüle (##ticket.url##)

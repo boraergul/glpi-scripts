@@ -1,0 +1,5 @@
+Subject: [FİNANS] Mali Bilgi Alarmı: ##item.name##
+
+Cihaz veya varlık üzerinde mali uyarı oluştu.
+
+Varlık: ##item.name##

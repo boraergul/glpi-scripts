@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Ticket Created</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .email-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .email-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .email-body {
+            padding: 20px 15px;
+        }
+
+        .info-section {
+            margin-bottom: 15px;
+        }
+
+        .info-section h2 {
+            color: #667eea;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .info-row {
+            display: flex;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            min-width: 140px;
+        }
+
+        .info-value {
+            color: #333;
+            flex: 1;
+        }
+
+        .ticket-content {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #667eea;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        .action-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .action-button:hover {
+            opacity: 0.9;
+        }
+
+        .email-footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .email-footer p {
+            margin: 5px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-priority {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-status {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .sla-info {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            color: #856404;
+            text-align: left;
+        }
+
+        .sla-info strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .sla-info ul {
+            margin: 8px 0;
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        /* Mobil Optimizasyon */
+        @media only screen and (max-width: 600px) {
+            .email-body {
+                padding: 15px 10px !important;
+            }
+
+            .info-section {
+                margin-bottom: 12px !important;
+            }
+
+            .action-button {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <h1>🎫 New Ticket Created</h1>
+            <p style="margin: 10px 0 0 0; opacity: 0.9;">Talep No: ###ticket.id##</p>
+        </div>
+
+        <!-- Body -->
+        <div class="email-body">
+            <!-- Ticket Information -->
+            <div class="info-section">
+                <h2>Ticket Information</h2>
+                <div class="info-row">
+                    <span class="info-label">Subject:</span>
+                    <span class="info-value"><strong>##ticket.title##</strong></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Status:</span>
+                    <span class="info-value">
+                        <span class="badge badge-status">##ticket.status##</span>
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Priority:</span>
+                    <span class="info-value">
+                        <span class="badge badge-priority">##ticket.priority##</span>
+                    </span>
+                </div>
+                ##IFticket.itilcategory##
+                <div class="info-row">
+                    <span class="info-label">Category:</span>
+                    <span class="info-value">##ticket.itilcategory##</span>
+                </div>
+                ##ENDIFticket.itilcategory##
+            </div>
+
+            <!-- Requester Information -->
+            <div class="info-section">
+                <h2>Requester Information</h2>
+                ##FOREACHauthors##
+                <div class="info-row">
+                    <span class="info-label">Name:</span>
+                    <span class="info-value">##author.name##</span>
+                </div>
+                ##IFauthor.email##
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">##author.email##</span>
+                </div>
+                ##ENDIFauthor.email##
+                ##IFauthor.phone##
+                <div class="info-row">
+                    <span class="info-label">Phone:</span>
+                    <span class="info-value">##author.phone##</span>
+                </div>
+                ##ENDIFauthor.phone##
+                ##ENDFOREACHauthors##
+            </div>
+
+            <!-- Assignment Information -->
+            <div class="info-section">
+                <h2>Assignment Information</h2>
+                <div class="info-row">
+                    <span class="info-label">Entity:</span>
+                    <span class="info-value">##ticket.shortentity##</span>
+                </div>
+                ##IFticket.assigntogroups##
+                <div class="info-row">
+                    <span class="info-label">Assigned Group:</span>
+                    <span class="info-value">##ticket.assigntogroups##</span>
+                </div>
+                ##ENDIFticket.assigntogroups##
+                ##IFticket.assigntousers##
+                <div class="info-row">
+                    <span class="info-label">Assigned To:</span>
+                    <span class="info-value">##ticket.assigntousers##</span>
+                </div>
+                ##ENDIFticket.assigntousers##
+            </div>
+
+            <!-- SLA Information -->
+            ##IFticket.sla_tto##
+            <div class="info-section">
+                <h2>SLA Information</h2>
+                <div class="info-row">
+                    <span class="info-label">Time to Own (TTO):</span>
+                    <span class="info-value">##ticket.sla_tto##</span>
+                </div>
+                ##ENDIFticket.sla_tto##
+                ##IFticket.sla_ttr##
+                <div class="info-row">
+                    <span class="info-label">Time to Resolve (TTR):</span>
+                    <span class="info-value">##ticket.sla_ttr##</span>
+                </div>
+            </div>
+            ##ENDIFticket.sla_ttr##
+
+            <!-- Description -->
+            <div class="info-section">
+                <h2>Description</h2>
+                <div class="ticket-content">
+                    ##ticket.content##
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            <div style="text-align: center;">
+                <a href="##ticket.url##" class="action-button">View Ticket</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="email-footer">
+            <div class="sla-info">
+                <strong>ℹ️ Notice</strong>
+                <p style="margin: 8px 0 0 0; line-height: 1.6;">
+                    For contracted customers, responses are provided according to SLA times within the contract scope.
+                    For non-contracted requests, our specialists will contact you when available.
+                </p>
+                <p style="margin: 8px 0 0 0;">
+                    <small>Thank you for your understanding.</small>
+                </p>
+            </div>
+            <p>This is an automated notification. Please do not reply.</p>
+            <p>GLPI ITSM System - ##ticket.shortentity##</p>
+            <p style="margin-top: 10px;">
+                <small>Created: ##ticket.creationdate##</small>
+                ##IFticket.lastupdate##
+                <br><small>Last Update: ##ticket.lastupdate##</small>
+                ##ENDIFticket.lastupdate##
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

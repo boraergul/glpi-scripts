@@ -1,0 +1,5 @@
+Subject: [DELETED] Change: ##change.name##
+
+⚠️ CHANGE DELETED
+
+Record ##change.id## - ##change.name## has been deleted.

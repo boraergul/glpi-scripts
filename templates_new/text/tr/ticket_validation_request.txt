@@ -1,0 +1,22 @@
+Subject: [ONAY GEREKİYOR] ##ticket.id## - ##ticket.title##
+
+⚠️ ONAYINIZ BEKLENİYOR
+
+Sayın ##ticket.authors##,
+
+Aşağıdaki talep için onayınıza ihtiyaç duyulmaktadır.
+
+TALEP DETAYLARI:
+
+• Talep Eden: ##ticket.authors##
+
+• Başlık: ##ticket.title##
+
+• Tarih: ##ticket.creationdate##
+
+Açıklama:
+##ticket.content##
+
+Lütfen onay durumunuzu belirtmek için sisteme giriş yapınız.
+
+Onay Ekranına Git (##ticket.urlvalidation##)

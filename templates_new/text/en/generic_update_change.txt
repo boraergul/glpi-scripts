@@ -1,0 +1,11 @@
+Subject: [CHANGE] ##change.id## - Update: ##change.name##
+
+Dear User,
+
+An update has been made to the change record.
+
+LATEST STATUS:
+
+##change.content##
+
+View Change (##change.url##)

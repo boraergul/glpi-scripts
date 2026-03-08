@@ -1,0 +1,20 @@
+Subject: [PROJECT] New Project: ##project.name##
+
+Hello,
+
+A new project has been added to the system.
+
+PROJECT CARD:
+
+• Code: ##project.code##
+
+• Name: ##project.name##
+
+• Priority: ##project.priority##
+
+• Manager: ##project.manager##
+
+Description:
+##project.content##
+
+View Project (##project.url##)
