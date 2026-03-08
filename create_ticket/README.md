@@ -169,5 +169,5 @@ Sorun yaşarsanız:
 ---
 
 **Versiyon**: 1.0  
-**Son Güncelleme**: 14 Ocak 2026  
+**Son Güncelleme**: 8 Mart 2026
 **Hazırlayan**: Bora Ergül

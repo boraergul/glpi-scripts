@@ -37,7 +37,7 @@ O ZAMAN:
 Önce değişiklik yapmadan ne yapılacağını görmek için:
 
 ```powershell
-cd "c:\Users\Super\Desktop\ITSM - GLPI\Script\Unknown domain"
+cd "d:\Google Drive\Projeler\Script\rules_unknowndomain"
 python rules_unknowndomain.py
 ```
 

@@ -50,7 +50,7 @@ GUI üç işlem sunar:
 
 **Export:**
 ```bash
-cd "\Projeler\Script\notifications_export_import"
+cd "d:\Google Drive\Projeler\Script\notifications_export_import"
 python export_notifications.py
 ```
 

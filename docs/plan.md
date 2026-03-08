@@ -1,18 +1,18 @@
-# Teknik Tasarım: Protokol Uyumu ve Dokümantasyon Kurulumu
+# Teknik Tasarım: Dokümantasyon Konsolidasyonu ve README Güncellemesi
 
-Bu plan, yeni tanımlanan `GEMINI DEVELOPMENT PROTOCOL` kurallarına projenin tam uyumunu sağlamayı amaçlar.
+Bu plan, `MEMORY[user_global]` protokolüne uyum sağlamak için dokümantasyon dosyalarını konsolide etmeyi ve ana `README.md` dosyasını eksik modüllerle güncellemeyi amaçlar.
 
 ## Etkilenecek Dosyalar
-- `docs/plan.md` [MODIFIED]: Güncel task için güncellenecek.
-- `docs/logbook.md` [MODIFIED]: Yapılan işlemler kaydedilecek.
-- `README.md`: "Storefront" olarak kontrol edilecek.
+- `docs/project_state.md` [NEW]: `project.md`, `memory.md` ve `logbook.md` dosyalarının birleşimi.
+- `README.md` [MODIFIED]: Modül listesi ve güncel durum bilgisi eklenecek.
+- `docs/plan.md` [MODIFIED]: Mevcut dokümantasyon görevine göre güncellenecek.
 
 ## Çözüm Adımları
-1. **Dosya Taşıma**: Kökteki yönetim dosyaları (`plan.md`, `logbook.md`, `project.md`, `memory.md`) `docs/` klasörüne taşındı.
-2. **Protokol Güncellemesi**: `docs/plan.md` ve `docs/logbook.md` dosyaları yeni yapıya göre güncellenecek.
-3. **Storefront Kontrolü**: `README.md` dosyasının bir "vitrin" olarak tüm projeyi doğru yansıtıp yansıtmadığı kontrol edilecek.
-4. **Onay**: Kullanıcıdan yapılan düzenlemeler için onay istenecek.
+1. **Konsolidasyon**: `project.md`, `memory.md` ve `logbook.md` içeriklerini `project_state.md` altında birleştir.
+2. **Temizlik**: Eski dokümantasyon dosyalarını sil.
+3. **README Güncellemesi**: Ana `README.md` dosyasına yeni eklenen veya eksik kalan modülleri (`create_ticket`, `glpi_backup`, `gui_customization`, `notifications`) ekle.
+4. **Doğrulama**: Tüm linkleri ve bilgilerin doğruluğunu kontrol et.
 
 ## İş Kuralları
-- Tüm teknik tasarım ve kayıt dosyaları `docs/` altında bulunmalıdır.
-- `README.md` kökte kalmalı ve projenin genel amacını anlatmalıdır.
+- `project_state.md` projenin "uzun vadeli hafızası" olarak işlev görmelidir.
+- `README.md` projenin vitrini olmaya devam etmelidir.

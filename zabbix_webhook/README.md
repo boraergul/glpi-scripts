@@ -135,7 +135,7 @@ Zabbix'ten "Recovery" (Resolve) sinyali geldiğinde:
 
 ---
 
-**Son Güncelleme:** 29 Aralık 2025  
+**Son Güncelleme:** 8 Mart 2026
 
 
 

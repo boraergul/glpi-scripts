@@ -39,13 +39,13 @@ Proje, işlevlerine göre ayrılmış modüllerden oluşur:
 * **Dizin:** `/entity_group_sync`
 * **Amaç:** GLPI içerisindeki Entity ve Grupların hiyerarşik yapısının korunması ve senkronize edilmesini sağlar.
 
-### 6. 🚀 Onboarding (Yeni Kurulum)
-* **Dizin:** `/onboarding`
-* **Amaç:** Yeni bir GLPI kurulumu veya yeni bir Entity eklendiğinde gerekli standart tanımların (Kurallar, Ayarlar) otomatik olarak yapılmasını sağlar.
+### 6. 🚀 Onboarding & Ticket Oluşturma
+* **Dizinler:** `/onboarding`, `/create_ticket`
+* **Amaç:** Yeni bir GLPI kurulumu veya yeni bir Entity eklendiğinde standart tanımların ve örnek biletlerin otomatik oluşturulmasını sağlar.
 
 ### 7. ❓ Bilinmeyen Domain Yönetimi
 * **Dizin:** `/rules_unknownDomain`
-* **Amaç:** Tanımsız domainlerden gelen mailler için özel kurallar işletir ve yöneticiye raporlar.
+* **Amaç:** Tanımsız domainlerden gelen mailler için özel kurallar işletir.
 
 ### 8. 📧 Notification Templates (Bildirim Şablonları)
 * **Dizinler:** `/templates_new`, `/templates_import` & `/templates_export_import`
@@ -59,9 +59,11 @@ Proje, işlevlerine göre ayrılmış modüllerden oluşur:
   * **Otomatik Dağıtım:** Tek komutla tüm sisteme şablon dağıtımı.
   * **Kapsamlı:** 50+ farklı bildirim senaryosu için hazır şablon.
   * **Modern Tasarım:** Ticket durumuna göre değişen renk kodları, net aksiyon butonları ve standardize edilmiş tablo yapısı.
-* **Son Güncelleme:** 2026-02-22
+* **Son Güncelleme:** 2026-03-08
 
-### 9. 📊 SLA Compliance & Dashboard (SLA Raporlama)
+### 9. 🎨 GUI Customization (Arayüz Geliştirme)
+* **Dizin:** `/gui_customization`
+* **Amaç:** GLPI arayüzü için modern CSS özelleştirmeleri ve dashboard geliştirmelerini içerir.
 * **Dizin:** `/reports_sla`
 * **Amaç:** GLPI verilerini analiz ederek detaylı SLA uyum raporları ve interaktif web dashboard sunar.
 * **Özellikler:**
@@ -90,15 +92,20 @@ Proje, işlevlerine göre ayrılmış modüllerden oluşur:
   * **%100+:** Priority = Major (6) atanır (cezai yaptırım).
 * **Cron:** Her 15 dakikada bir çalıştırılması önerilir.
 
-### 12. 📊 SLA Breach Report (GLPI Plugin)
+### 11. 📊 SLA Breach Report (GLPI Plugin)
 * **Dizin:** `/plugin/slareport`
 * **Amaç:** GLPI arayüzüne entegre, gerçek zamanlı SLA ihlal raporu sunan bir eklentidir.
 * **Özellikler:**
-  * **İstatistiksel Analiz**: TTR (Çözüm) ve TTO (Sahiplenme) sürelerini GLPI veritabanı istatistikleri üzerinden saniye hassasiyetinde analiz eder.
-  * **Dashboard**: İhlal dağılımını gösteren interaktif grafikler.
-  * **Detaylı Tablo**: Çözüm hedefi, gerçekleşen süre ve gecikme bilgilerini içeren detaylı liste.
-  * **Dışa Aktarma**: Tek tıkla CSV formatında rapor alma.
+  * **İstatistiksel Analiz**: TTR (Çözüm) ve TTO (Sahiplenme) sürelerini saniye hassasiyetinde analiz eder.
   * **PHP 8.1+ Uyumluluğu**: Modern PHP sürümleriyle tam uyumlu.
+
+### 12. 💾 Yedekleme ve Kurtarma (glpi_backup)
+* **Dizin:** `/glpi_backup`
+* **Amaç:** Entity, Grup, ITIL Kategori ve SLA tanımlarının JSON formatında yedeklenmesini ve farklı sistemlere aktarılmasını sağlar.
+
+### 13. 🔔 Bildirim Yönetimi (notifications)
+* **Dizin:** `/notifications`
+* **Amaç:** GLPI üzerindeki bildirimleri (Notifications) CSV olarak dışa aktarmak için geliştirilmiş yardımcı araçlar içerir.
 
 ---
 
