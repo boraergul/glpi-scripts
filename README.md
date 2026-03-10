@@ -10,8 +10,8 @@ Proje, işlevlerine göre ayrılmış modüllerden oluşur:
 
 ### 1. 🔧 Config (Yapılandırma)
 * **Dizin:** `/config`
-* **Amaç:** Tüm scriptlerin kullandığı ortak yapılandırma ayarlarını (API URL, Tokenlar, Veritabanı bilgileri) merkezi olarak yönetir.
-* **Önemli:** `config.json` dosyasını kendi ortamınıza göre düzenlemelisiniz.
+* **Amaç:** Tüm scriptlerin kullandığı ortak yapılandırma ayarlarını (API URL, Tokenlar, Sunucu Listeleri) merkezi olarak yönetir.
+* **Önemli:** `config.json` ve `servers.json` dosyalarını bu dizinde tutmalısınız. Bu dizin `.gitignore` ile korunmaktadır.
 
 ### 2. 🚨 Zabbix Webhook Entegrasyonu
 * **Dizin:** `/zabbix_webhook`

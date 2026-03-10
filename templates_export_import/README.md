@@ -14,7 +14,7 @@ Bir GLPI sistemindeki **Notification Template**'lerini dışa aktarır (CSV) ve 
 | `export_templates.py` | Kaynak GLPI'den template'leri CSV'ye aktarır |
 | `import_templates.py` | CSV'deki template'leri hedef GLPI'ye yükler |
 | `Gui_templates_export_v2.py` | Export + Import için grafik arayüz (güncel) |
-| `servers.json` | Kayıtlı sunucu profilleri (GUI tarafından kullanılır) |
+| `../config/servers.json` | Kayıtlı sunucu profilleri (GUI tarafından kullanılır) |
 | `export_templates.log` | Export çalışma logu (otomatik oluşturulur) |
 | `import_templates.log` | Import çalışma logu (otomatik oluşturulur) |
 | `templates_export_<tarih>.csv` | Export çıktısı (otomatik oluşturulur) |
@@ -106,19 +106,21 @@ Config dosyası şu sırayla aranır:
 3. `../config/config.json`
 4. `../../Config/config.json`
 
-### `servers.json` (GUI için — opsiyonel)
+### `servers.json` (GUI için — kök dizindeki `/config` altında)
 
 ```json
 {
-    "Kaynak": {
-        "url": "https://kaynak.example.com/apirest.php",
-        "app_token": "...",
-        "user_token": "..."
-    },
-    "Hedef": {
-        "url": "https://hedef.example.com/apirest.php",
-        "app_token": "...",
-        "user_token": "..."
+    "servers": {
+        "Kaynak": {
+            "url": "https://kaynak.example.com/apirest.php",
+            "app_token": "...",
+            "user_token": "..."
+        },
+        "Hedef": {
+            "url": "https://hedef.example.com/apirest.php",
+            "app_token": "...",
+            "user_token": "..."
+        }
     }
 }
 ```

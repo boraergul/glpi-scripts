@@ -23,7 +23,7 @@ from datetime import datetime
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SERVERS_CANDIDATES = [
     os.path.join(SCRIPT_DIR, "servers.json"),
-    os.path.join(SCRIPT_DIR, "..", "templates_export", "servers.json"),
+    os.path.join(SCRIPT_DIR, "..", "config", "servers.json"),
 ]
 SERVERS_FILE = next((p for p in SERVERS_CANDIDATES if os.path.exists(p)),
                     SERVERS_CANDIDATES[0])

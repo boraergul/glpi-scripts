@@ -21,8 +21,13 @@ import csv
 from datetime import datetime
 
 # ─── Paths ────────────────────────────────────────────────────────────────────
-SCRIPT_DIR   = os.path.dirname(os.path.abspath(__file__))
-SERVERS_FILE = os.path.join(SCRIPT_DIR, "servers.json")
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SERVERS_CANDIDATES = [
+    os.path.join(SCRIPT_DIR, "servers.json"),
+    os.path.join(SCRIPT_DIR, "..", "config", "servers.json"),
+]
+SERVERS_FILE = next((p for p in SERVERS_CANDIDATES if os.path.exists(p)),
+                    SERVERS_CANDIDATES[0])
 
 sys.path.insert(0, SCRIPT_DIR)
 import export_templates as exp

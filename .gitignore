@@ -28,3 +28,6 @@ templates_new/temp/
 # OS specific
 .DS_Store
 Thumbs.db
+
+# Config files
+servers.json
