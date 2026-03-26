@@ -341,15 +341,20 @@ def main():
             domains = []
             for entity in entities:
                 mail_domain = entity.get('mail_domain')
-                if mail_domain:  # Check if not None or empty
+                if mail_domain:
                     mail_domain = mail_domain.strip()
-                    if mail_domain and '@' in mail_domain:
-                        # Extract the domain part after @
+                    if not mail_domain:
+                        continue
+                        
+                    # Extract the domain part and normalize with @ prefix
+                    if '@' in mail_domain:
                         parts = mail_domain.split('@')
-                        if len(parts) > 1 and parts[1]:
-                            domains.append(parts[1])
-                        else:
-                            domains.append(mail_domain)
+                        domain_part = parts[-1].strip()
+                    else:
+                        domain_part = mail_domain
+                        
+                    if domain_part:
+                        domains.append(f"@{domain_part}")
             
             # Remove duplicates and sort
             domains = list(set(domains))
