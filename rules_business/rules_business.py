@@ -115,7 +115,8 @@ def fetch_all_entities(url, headers, verify=False):
             if not batch: break
             
             for e in batch:
-                entities[e['name']] = e['id']
+                # Store lowercase name as key for case-insensitive lookup
+                entities[e['name'].lower()] = e['id']
             
             if len(batch) < range_step: break
             range_start += range_step
@@ -453,12 +454,14 @@ def main():
             }
  
             for entity_name, service_level_name in entity_map.items():
-                if entity_name not in entities:
-                    logger.warning(f"SKIP: Entity '{entity_name}' not found in GLPI.")
+                # Case-insensitive lookup
+                entity_id = entities.get(entity_name.lower())
+                
+                if not entity_id:
+                    logger.warning(f"SKIP: Entity '{entity_name}' not found in GLPI (checked case-insensitively).")
                     report["MISSING_METADATA"].append(f"Entity: {entity_name}")
                     continue
                 
-                entity_id = entities[entity_name]
                 entity_name_clean = entity_name.replace(' ', '-')
                 rule_name = f"Auto-BR-{entity_name_clean}"
                 

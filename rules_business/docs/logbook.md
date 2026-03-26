@@ -8,3 +8,5 @@
 - **Fixed**: Resolved a syntax error introduced during implementation.
 - **Improved**: Dynamically resolving ITIL Category ID via name matching ("ITILCategory" search endpoint) instead of hardcoding.
 - **Verified**: Successful dry-run execution with detailed summary reporting (42 entries processed).
+- **Live Deployment**: Successfully executed with `--force`. Result: 19 CREATED, 1 UPDATED, 18 SKIPPED, 4 MISSING_METADATA. Confirmed Smart Sync and dynamic category resolution are working as intended.
+- **Maintenance**: Fixed case-sensitivity issue for entity matching. Verified that `Superart`, `Supercode`, `Enerjisa`, and `Trt` are now correctly identified (Case-Insensitive lookup).
