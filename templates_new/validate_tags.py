@@ -17,23 +17,32 @@ def get_core_tag(raw_content):
             break
     return core
 
-def load_valid_tags(csv_path):
+def load_valid_tags(file_path):
     valid_tags = set()
     try:
-        # Use utf-8-sig to handle potential BOM
-        with open(csv_path, mode='r', encoding='utf-8-sig') as f:
-            reader = csv.DictReader(f, delimiter=';')
-            for row in reader:
-                tag_entry = row.get('Tag', '')
-                if not tag_entry: continue
-                
-                parts = re.findall(r'##(.*?)##', tag_entry)
-                for p in parts:
-                    core = get_core_tag(p)
-                    if core:
-                        valid_tags.add(core.lower()) # Case insensitive
+        if file_path.endswith('.csv'):
+            with open(file_path, mode='r', encoding='utf-8-sig') as f:
+                reader = csv.DictReader(f, delimiter=';')
+                for row in reader:
+                    tag_entry = row.get('Tag', '')
+                    if not tag_entry: continue
+                    
+                    parts = re.findall(r'##(.*?)##', tag_entry)
+                    for p in parts:
+                        core = get_core_tag(p)
+                        if core:
+                            valid_tags.add(core.lower()) # Case insensitive
+        elif file_path.endswith('.md'):
+            with open(file_path, 'r', encoding='utf-8') as f:
+                for line in f:
+                    if '|' in line and '##' in line:
+                        parts = re.findall(r'##(.*?)##', line)
+                        for p in parts:
+                            core = get_core_tag(p)
+                            if core:
+                                valid_tags.add(core.lower())
     except Exception as e:
-        print(f"Error loading CSV: {e}")
+        print(f"Error loading tags from {file_path}: {e}")
     return valid_tags
 
 def extract_tags_from_file(file_path):
@@ -48,20 +57,41 @@ def extract_tags_from_file(file_path):
                     'line': content.count('\n', 0, m.start()) + 1
                 })
     except Exception as e:
-        print(f"Error reading file: {e}")
+        print(f"Error reading file {file_path}: {e}")
     return tags_found
 
 def validate():
+    md_path = 'glpi_notification_tags.md'
     csv_path = 'templatetags.csv'
     generator_path = 'generate_email_templates.py'
     
-    if not os.path.exists(csv_path):
-        print(f"CSV file not found: {csv_path}")
+    valid_tags = set()
+    if os.path.exists(md_path):
+        valid_tags.update(load_valid_tags(md_path))
+    if os.path.exists(csv_path):
+        valid_tags.update(load_valid_tags(csv_path))
+        
+    if not valid_tags:
+        print(f"No tag definition files found. Please ensure {md_path} or {csv_path} exist.")
         return
     
-    valid_tags = load_valid_tags(csv_path)
-    # Common GLPI internal tags that might be missing from documentation CSV
-    logic_keywords = {'else', 'glpi.url', 'glpi.name'} 
+    # Common GLPI internal tags that might be missing from documentation files
+    known_undocumented_tags = {
+        'else', 'glpi.url', 'glpi.name', 'lang.gmt', 'lang.ticket.url',
+        'change.name', 'crontask.description', 'crontask.name',
+        'followup', 'followup.content',
+        'item.alarm_threshold', 'item.message', 'item.ref', 'item.stock', 'item.type',
+        'knowbaseitem.category', 'knowbaseitem.name', 'knowbaseitem.url',
+        'mailcollector.errors', 'mysqlvalidator.text', 'plugin.updates',
+        'problem.creationdate', 'problem.name', 'problem.priority', 'problem.solution.description', 'problem.solution.type',
+        'project.code', 'project.content', 'project.manager', 'project.name', 'project.priority', 'project.url', 'project.users_id_lastupdater',
+        'projecttask.begin', 'projecttask.content', 'projecttask.end', 'projecttask.name', 'projecttask.url',
+        'reservation.begin', 'reservation.comment', 'reservation.end', 'reservation.item',
+        'savedsearch.count', 'savedsearch.name', 'savedsearch.url',
+        'task.state', 'task.tech',
+        'ticket.actiontime', 'ticket.internal_time_to_own', 'ticket.time_to_resolve', 'ticket.updatedate', 'ticket.urlapproval',
+        'user.realname', 'user.urlpasswordforgotten'
+    } 
     
     extracted = extract_tags_from_file(generator_path)
     invalid_tags = []
@@ -74,7 +104,7 @@ def validate():
         core_tag = get_core_tag(raw_tag).lower()
         if core_tag.startswith('#'): core_tag = core_tag[1:]
         
-        if not core_tag or core_tag in logic_keywords:
+        if not core_tag or core_tag in known_undocumented_tags:
             continue
             
         if core_tag not in valid_tags:

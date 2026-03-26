@@ -2,524 +2,388 @@
 # -*- coding: utf-8 -*-
 """
 GLPI Category-Based Group Assignment Rules Creator
-Creates business rules to automatically assign technician groups based on ITIL category selection.
+Modernization: v3.1 - Smart Sync, Professional Logging, Dynamic Group Fetching.
 
 Author: Bora Ergül
-Version: 1.0
-Date: 25 December 2024
+Date: 25 March 2026
 """
 
 import requests
 import json
 import os
 import sys
-import argparse
 import urllib3
-from typing import Dict, List, Optional, Tuple
+import logging
+import argparse
+from contextlib import contextmanager
 
-# Disable SSL warnings
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler('rules_business_itilcategory_assign.log', encoding='utf-8')
+    ]
+)
+logger = logging.getLogger(__name__)
+
+# Suppress insecure request warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# Category to Group mapping
+CONFIG_FILE = 'config.json'
+
+# Category to Group mapping (Source of Truth)
 CATEGORY_GROUP_MAP = {
     221: 3,   # Server & Storage → Sistem ve Yedekleme Ekibi
     222: 2,   # Security → Güvenlik Ekibi
     223: 1,   # Network & Firewall → Network & Firewall Ekibi
-    225: 18,  # Endpoint & End-User → Endpoint & Enduser Ekibi
     226: 17,  # Cloud → Bulut Ekibi
     227: 16,  # Genel Destek → Genel Destek Ekibi
     228: 7,   # Monitoring Alerts → İzleme Ekibi
     # 229 (Major Incident) handled by rules_business_incident_major.py
 }
 
-# Group names (hardcoded to avoid API timeout issues)
-GROUP_NAMES = {
-    1: "Network & Firewall Ekibi",
-    2: "Güvenlik Ekibi",
-    3: "Sistem ve Yedekleme Ekibi",
-    7: "İzleme Ekibi",
-    16: "Genel Destek Ekibi",
-    17: "Bulut Ekibi",
-    18: "Endpoint & Enduser Ekibi",
-    45: "Major Incident Ekibi"
-}
-
-def load_config() -> Dict:
-    """Load configuration from config.json file."""
-    config_paths = [
-        'config.json',
-        '../config/config.json',
-        '../Config/config.json',
-        '../../config/config.json',
-        '../../Config/config.json'
+def load_config():
+    """Load configuration from config.json with robust path searching"""
+    search_paths = [
+        os.path.join(os.path.dirname(__file__), CONFIG_FILE),
+        os.path.join(os.path.dirname(__file__), '..', 'Config', CONFIG_FILE),
+        os.path.join(os.path.dirname(__file__), '..', '..', 'Config', CONFIG_FILE),
+        CONFIG_FILE # Current working dir
     ]
     
-    for config_path in config_paths:
-        if os.path.exists(config_path):
-            with open(config_path, 'r', encoding='utf-8') as f:
-                return json.load(f)
-    
-    raise FileNotFoundError("config.json not found in any of the expected locations")
+    for path in search_paths:
+        if os.path.exists(path):
+            try:
+                with open(path, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            except Exception as e:
+                logger.error(f"Error reading config file {path}: {e}")
+                continue
+                
+    logger.error(f"File {CONFIG_FILE} not found!")
+    sys.exit(1)
 
-def init_session(config: Dict) -> Tuple[str, Dict]:
-    """Initialize GLPI API session."""
-    glpi_url = config['GLPI_URL']
-    headers = {
-        'Content-Type': 'application/json',
-        'App-Token': config['GLPI_APP_TOKEN'],
-        'Authorization': f"user_token {config['GLPI_USER_TOKEN']}"
-    }
-    
+def init_session(url, app_token, user_token, verify=False):
+    headers = {"App-Token": app_token, "Authorization": f"user_token {user_token}", "Content-Type": "application/json"}
     try:
-        response = requests.get(
-            f"{glpi_url}/initSession",
-            headers=headers,
-            verify=False,
-            timeout=30
-        )
-        response.raise_for_status()
-        session_token = response.json()['session_token']
-        headers['Session-Token'] = session_token
-        print(f"✓ Session initialized: {session_token[:20]}...")
-        return glpi_url, headers
+        resp = requests.get(f"{url}/initSession", headers=headers, verify=verify, timeout=30)
+        resp.raise_for_status()
+        return resp.json().get('session_token')
     except Exception as e:
-        print(f"✗ Failed to initialize session: {e}")
+        logger.error(f"Session init failed: {e}")
+        if hasattr(e, 'response') and e.response is not None:
+             logger.error(e.response.text)
         sys.exit(1)
 
-def kill_session(glpi_url: str, headers: Dict):
-    """Close GLPI API session."""
+def kill_session(url, app_token, session_token, verify=False):
+    headers = {"App-Token": app_token, "Session-Token": session_token}
     try:
-        requests.get(f"{glpi_url}/killSession", headers=headers, verify=False, timeout=30)
-        print("✓ Session closed")
-    except:
-        pass
+        requests.get(f"{url}/killSession", headers=headers, verify=verify, timeout=10)
+    except Exception as e:
+        logger.debug(f"Failed to kill session (silent ignore): {e}")
 
-def fetch_categories(glpi_url: str, headers: Dict) -> Dict[int, str]:
-    """Fetch all ITIL categories."""
-    categories = {}
-    range_start = 0
-    range_size = 100
-    
-    print("Fetching ITIL Categories...")
-    
-    while True:
-        try:
-            response = requests.get(
-                f"{glpi_url}/ITILCategory",
-                headers={**headers, 'Range': f'{range_start}-{range_start + range_size - 1}'},
-                verify=False,
-                timeout=30
-            )
-            
-            if response.status_code == 206 or response.status_code == 200:
-                batch = response.json()
-                if not batch:
-                    break
-                
-                for cat in batch:
-                    categories[cat['id']] = cat['completename']
-                
-                if response.status_code == 200:
-                    break
-                    
-                range_start += range_size
-            else:
-                break
-                
-        except Exception as e:
-            print(f"Warning: Error fetching categories: {e}")
-            break
-    
-    print(f"✓ Loaded {len(categories)} categories")
-    return categories
+@contextmanager
+def glpi_session(url, app_token, user_token, verify=False):
+    session_token = init_session(url, app_token, user_token, verify=verify)
+    try:
+        yield session_token
+    finally:
+        kill_session(url, app_token, session_token, verify=verify)
+        logger.info("Session closed.")
 
-def fetch_groups(glpi_url: str, headers: Dict) -> Dict[int, str]:
-    """Fetch all technician groups."""
-    groups = {}
-    range_start = 0
-    range_size = 100
-    
-    print("Fetching Groups...")
-    
-    while True:
-        try:
-            response = requests.get(
-                f"{glpi_url}/Group",
-                headers={**headers, 'Range': f'{range_start}-{range_start + range_size - 1}'},
-                verify=False,
-                timeout=30
-            )
-            
-            if response.status_code == 206 or response.status_code == 200:
-                batch = response.json()
-                if not batch:
-                    break
-                
-                for group in batch:
-                    groups[group['id']] = group.get('completename', group.get('name', 'Unknown'))
-                
-                if response.status_code == 200:
-                    break
-                    
-                range_start += range_size
-            else:
-                break
-                
-        except Exception as e:
-            print(f"Warning: Error fetching groups: {e}")
-            break
-    
-    print(f"✓ Loaded {len(groups)} groups")
-    return groups
-
-def fetch_existing_rules(glpi_url: str, headers: Dict) -> Dict[str, int]:
-    """Fetch existing category-based group assignment rules."""
-    existing_rules = {}
-    
-    print("Fetching existing rules...")
-    
+def fetch_categories(url, headers, verify=False):
+    """Fetch all ITIL categories for ID resolution"""
+    categories_id_to_name = {}
     range_start = 0
     range_step = 100
-    
+    logger.info("Fetching ITIL Categories...")
+    try:
+        while True:
+            params = {"range": f"{range_start}-{range_start+range_step-1}", "is_deleted": 0}
+            r = requests.get(f"{url}/ITILCategory", headers=headers, params=params, verify=verify, timeout=30)
+            if r.status_code not in [200, 206]: break
+            batch = r.json()
+            if not batch: break
+            for item in batch:
+                categories_id_to_name[str(item['id'])] = item.get('completename', item.get('name', 'Unknown'))
+            if len(batch) < range_step: break
+            range_start += range_step
+    except Exception as e:
+        logger.error(f"Error fetching categories: {e}")
+    return categories_id_to_name
+
+def fetch_groups(url, headers, verify=False):
+    """Fetch all technician groups dynamically from API"""
+    groups_id_to_name = {}
+    range_start = 0
+    range_step = 100
+    logger.info("Fetching Groups...")
+    try:
+        while True:
+            params = {"range": f"{range_start}-{range_start+range_step-1}", "is_deleted": 0}
+            r = requests.get(f"{url}/Group", headers=headers, params=params, verify=verify, timeout=30)
+            if r.status_code not in [200, 206]: break
+            batch = r.json()
+            if not batch: break
+            for item in batch:
+                groups_id_to_name[str(item['id'])] = item.get('completename', item.get('name', 'Unknown'))
+            if len(batch) < range_step: break
+            range_start += range_step
+    except Exception as e:
+        logger.error(f"Error fetching groups: {e}")
+    return groups_id_to_name
+
+def fetch_existing_rules(url, headers, verify=False):
+    existing_rules = {} # Name -> ID
+    logger.info("Fetching existing Category rules via Search...")
+    range_start = 0
+    range_step = 100
     try:
         while True:
             params = {
-                "criteria[0][field]": "1",  # Name field
+                "criteria[0][field]": "1", # Name
                 "criteria[0][searchtype]": "contains",
                 "criteria[0][value]": "Auto-Category-",
-                "forcedisplay[0]": "2",  # ID field
+                "forcedisplay[0]": "2", # ID
+                "range": f"{range_start}-{range_start+range_step-1}",
                 "is_deleted": 0
             }
-            
-            # Add Range header for pagination
-            search_headers = {**headers, 'Range': f'{range_start}-{range_start+range_step-1}'}
-            
-            response = requests.get(
-                f"{glpi_url}/search/RuleTicket",
-                headers=search_headers,
-                params=params,
-                verify=False,
-                timeout=30
-            )
-            
-            if response.status_code not in [200, 206]:
-                break
-            
-            data = response.json()
-            if 'data' not in data:
-                break
-            
+            r = requests.get(f"{url}/search/RuleTicket", headers=headers, params=params, verify=verify, timeout=30)
+            if r.status_code not in [200, 206]: break
+            data = r.json()
+            if 'data' not in data: break
             for item in data['data']:
-                # Field 1 is Name, Field 2 is ID
-                rule_name = item.get('1')
-                rule_id = item.get('2')
-                if rule_name and rule_id:
-                    existing_rules[rule_name] = int(rule_id)
-            
+                r_name = item.get('1')
+                r_id = item.get('2')
+                if r_name and r_id:
+                    existing_rules[r_name] = int(r_id)
             total_count = data.get('totalcount', 0)
-            if range_start + range_step >= total_count:
-                break
-                
+            if range_start + range_step >= total_count: break
             range_start += range_step
-        
-        print(f"✓ Found {len(existing_rules)} existing rules")
-        
     except Exception as e:
-        print(f"Warning: Could not fetch existing rules: {e}")
-    
+        logger.warning(f"Could not fetch existing rules: {e}")
     return existing_rules
 
-def clear_rule_details(url, headers, rule_id):
-    """Safely clear existing criteria and actions for a rule (Wipe and Rebuild)."""
-    # Clear Actions
-    try:
-        r = requests.get(f"{url}/RuleTicket/{rule_id}/RuleAction", headers=headers, params={"range": "0-5000"}, verify=False, timeout=30)
-        if r.status_code in [200, 206]:
-            for item in r.json():
-                if str(item.get('rules_id')) == str(rule_id):
-                    requests.delete(f"{url}/RuleTicket/{rule_id}/RuleAction/{item['id']}", headers=headers, verify=False, timeout=30)
-    except Exception as e:
-         print(f"Warning: Failed to clear actions for rule {rule_id}: {e}")
+def get_rule_details(url, headers, rule_id, verify=False):
+    """Fetch criteria and actions for Smart Sync"""
+    criteria = []
+    actions = []
+    # Criteria
+    resp = requests.get(f"{url}/RuleTicket/{rule_id}/RuleCriteria", headers=headers, params={"range": "0-1000"}, verify=verify, timeout=30)
+    if resp.status_code in [200, 206]:
+        criteria = [item for item in resp.json() if str(item.get('rules_id')) == str(rule_id)]
+    # Actions
+    resp = requests.get(f"{url}/RuleTicket/{rule_id}/RuleAction", headers=headers, params={"range": "0-1000"}, verify=verify, timeout=30)
+    if resp.status_code in [200, 206]:
+        actions = [item for item in resp.json() if str(item.get('rules_id')) == str(rule_id)]
+    return criteria, actions
 
-    # Clear Criteria
-    try:
-        r = requests.get(f"{url}/RuleTicket/{rule_id}/RuleCriteria", headers=headers, params={"range": "0-5000"}, verify=False, timeout=30)
-        if r.status_code in [200, 206]:
-            for item in r.json():
-                if str(item.get('rules_id')) == str(rule_id):
-                    requests.delete(f"{url}/RuleTicket/{rule_id}/RuleCriteria/{item['id']}", headers=headers, verify=False, timeout=30)
-    except Exception as e:
-         print(f"Warning: Failed to clear criteria for rule {rule_id}: {e}")
+def clear_rule_details(url, headers, rule_id, verify=False):
+    """Clear all criteria and actions from a rule"""
+    criteria, actions = get_rule_details(url, headers, rule_id, verify=verify)
+    for item in actions:
+        try:
+            requests.delete(f"{url}/RuleTicket/{rule_id}/RuleAction/{item['id']}", headers=headers, verify=verify, timeout=30)
+        except Exception as e:
+            logger.error(f"Failed to delete action {item['id']}: {e}")
+    for item in criteria:
+        try:
+            requests.delete(f"{url}/RuleTicket/{rule_id}/RuleCriteria/{item['id']}", headers=headers, verify=verify, timeout=30)
+        except Exception as e:
+            logger.error(f"Failed to delete criteria {item['id']}: {e}")
 
+def resolve_id(field, value, maps):
+    """Helper to resolve ID to human-readable name for logging"""
+    val_str = str(value)
+    if field == "itilcategories_id":
+        return f"{val_str} ({maps['categories'].get(val_str, 'Unknown')})"
+    elif field in ["_groups_id_assign"]:
+        return f"{val_str} ({maps['groups'].get(val_str, 'Unknown')})"
+    elif field == "_users_id_assign" and val_str == "1":
+        return f"{val_str} (Is Empty)"
+    elif field == "_groups_id_assign" and val_str == "1":
+         return f"{val_str} (Is Empty)"
+    return val_str
 
-def create_or_update_rule(
-    glpi_url: str,
-    headers: Dict,
-    rule_name: str,
-    category_id: int,
-    category_name: str,
-    group_id: int,
-    group_name: str,
-    existing_rules: Dict[str, int],
-    dry_run: bool = True
-) -> bool:
-    """Create or update a category-based group assignment rule."""
+def create_or_update_rule(url, headers, rule_name, criteria_list, action_list, existing_rules_map, res_maps, dry_run=True, verify=False):
+    """
+    Creates or updates a rule using Smart Sync logic.
+    """
+    rule_input = {
+        "name": rule_name,
+        "match": "AND",
+        "is_active": 1,
+        "sub_type": "RuleTicket",
+        "entities_id": 0, # Root
+        "is_recursive": 1,
+        "condition": 3, # Add/Update
+        "ranking": 20
+    }
+
+    rule_id = existing_rules_map.get(rule_name)
     
-    print(f"\n{'='*70}")
-    print(f"PROPOSE: {'UPDATE' if rule_name in existing_rules else 'CREATE'} rule '{rule_name}'")
-    print(f"  Category: {category_name} (ID: {category_id})")
-    print(f"  Assign Group: {group_name} (ID: {group_id})")
-    print(f"  Criteria:")
-    print(f"    - ITIL Category = {category_name} (ID: {category_id})")
-    print(f"    - Technician does not exist")
-    print(f"    - Technician group does not exist")
-    print(f"  Actions:")
-    print(f"    - Assign Technician Group → {group_name} (ID: {group_id})")
-    
-    if dry_run:
-        print(f"  [DRY RUN] No changes made")
-        return True
-    
-    try:
-        # Check if rule exists
-        rule_id = existing_rules.get(rule_name)
+    if rule_id:
+        # Smart Sync: Check if update is actually needed
+        curr_criteria, curr_actions = get_rule_details(url, headers, rule_id, verify=verify)
+        diffs = []
         
-        if rule_id:
-            # Update existing rule - delete old criteria/actions
-            print(f"  Updating existing rule (ID: {rule_id})...")
-            
-            # Update rule properties to ensure condition is set to 3 (Add/Update)
-            rule_data = {
-                "id": rule_id,
-                "name": rule_name,
-                "is_active": 1,
-                "is_recursive": 1,
-                "match": "AND",
-                "condition": 3,  # 3 = Add/Update
-                "ranking": 20
-            }
-            try:
-                requests.put(f"{glpi_url}/RuleTicket/{rule_id}", headers=headers, json={"input": rule_data}, verify=False, timeout=30)
-            except Exception as e:
-                print(f"  Warning: Failed to update rule properties: {e}")
-
-            # Safe Purge
-            clear_rule_details(glpi_url, headers, rule_id)
-        else:
-            # Create new rule
-            rule_data = {
-                "name": rule_name,
-                "is_active": 1,
-                "is_recursive": 1,
-                "match": "AND",
-                "condition": 3,  # 3 = Add/Update
-                "ranking": 20  # After SLA rules (15) but before other rules
-            }
-            
-            response = requests.post(
-                f"{glpi_url}/RuleTicket",
-                headers=headers,
-                json={"input": rule_data},
-                verify=False,
-                timeout=30
+        # Compare criteria lists
+        if len(curr_criteria) != len(criteria_list):
+            diffs.append(f"Criteria count mismatch: current={len(curr_criteria)}, proposed={len(criteria_list)}")
+        
+        for proposed in criteria_list:
+            found = any(
+                c.get('criteria') == proposed['criteria'] and 
+                int(c.get('condition')) == int(proposed['condition']) and 
+                str(c.get('pattern')) == str(proposed['pattern'])
+                for c in curr_criteria
             )
+            if not found:
+                field = proposed['criteria']
+                val = proposed['pattern']
+                diffs.append(f"Missing or changed criterion: {field} (Value: {resolve_id(field, val, res_maps)})")
+        
+        # Compare actions lists
+        if len(curr_actions) != len(action_list):
+            diffs.append(f"Action count mismatch: current={len(curr_actions)}, proposed={len(action_list)}")
             
-            if response.status_code in [200, 201]:
-                rule_id = response.json()['id']
-                print(f"  ✓ Created rule (ID: {rule_id})")
-            else:
-                print(f"  ✗ Failed to create rule: {response.status_code}")
-                return False
-        
-        # Add criterion 1: Category = category_id
-        criterion_data = {
-            "rules_id": rule_id,
-            "criteria": "itilcategories_id",
-            "condition": 0,  # is / equals
-            "pattern": category_id
-        }
-        
-        response = requests.post(
-            f"{glpi_url}/RuleTicket/{rule_id}/RuleCriteria",
-            headers=headers,
-            json={"input": criterion_data},
-            verify=False,
-            timeout=30
-        )
-        
-        if response.status_code not in [200, 201]:
-            print(f"  ✗ Failed to add category criterion: {response.status_code}")
-            return False
-        
-        # Add criterion 2: Technician is empty
-        criterion_data = {
-            "rules_id": rule_id,
-            "criteria": "_users_id_assign",
-            "condition": 9,  # is empty
-            "pattern": "1"
-        }
-        
-        response = requests.post(
-            f"{glpi_url}/RuleTicket/{rule_id}/RuleCriteria",
-            headers=headers,
-            json={"input": criterion_data},
-            verify=False,
-            timeout=30
-        )
-        
-        if response.status_code not in [200, 201]:
-            print(f"  ✗ Failed to add technician criterion: {response.status_code}")
-            return False
-        
-        # Add criterion 3: Technician group is empty
-        criterion_data = {
-            "rules_id": rule_id,
-            "criteria": "_groups_id_assign",
-            "condition": 9,  # is empty
-            "pattern": "1"
-        }
-        
-        response = requests.post(
-            f"{glpi_url}/RuleTicket/{rule_id}/RuleCriteria",
-            headers=headers,
-            json={"input": criterion_data},
-            verify=False,
-            timeout=30
-        )
-        
-        if response.status_code not in [200, 201]:
-            print(f"  ✗ Failed to add group criterion: {response.status_code}")
-            return False
-        
-        # Add action: Assign group
-        action_data = {
-            "rules_id": rule_id,
-            "action_type": "assign",
-            "field": "_groups_id_assign",
-            "value": group_id
-        }
-        
-        response = requests.post(
-            f"{glpi_url}/RuleTicket/{rule_id}/RuleAction",
-            headers=headers,
-            json={"input": action_data},
-            verify=False,
-            timeout=30
-        )
-        
-        if response.status_code not in [200, 201]:
-            print(f"  ✗ Failed to add action: {response.status_code}")
-            return False
-        
-        print(f"  ✓ {'UPDATED' if rule_name in existing_rules else 'CREATED'} Rule ID: {rule_id}")
-        return True
-        
-    except Exception as e:
-        print(f"  ✗ Error: {e}")
-        import traceback
-        traceback.print_exc()
-        return False
+        for proposed in action_list:
+            found = any(
+                a.get('field') == proposed['field'] and 
+                a.get('action_type') == proposed['action_type'] and 
+                str(a.get('value')) == str(proposed['value'])
+                for a in curr_actions
+            )
+            if not found:
+                field = proposed['field']
+                val = proposed['value']
+                diffs.append(f"Missing or changed action: {field} (Value: {resolve_id(field, val, res_maps)})")
+                    
+        if not diffs:
+            logger.info(f"SKIP: Rule '{rule_name}' already up to date.")
+            return "SKIPPED"
 
-def clean_category_name(name: str) -> str:
-    """Clean category name for use in rule name (replace spaces with hyphens)."""
-    # Remove "Root entity > " prefix if present
-    if ' > ' in name:
-        name = name.split(' > ')[-1]
-    
-    # Replace HTML entities
-    name = name.replace('&#38;', 'And')
-    name = name.replace('&amp;', 'And')
-    
-    # Replace & with And
-    name = name.replace('&', 'And')
-    
-    # Replace spaces with hyphens
-    name = name.replace(' ', '-')
-    
-    return name
+        action_verb = "UPDATE"
+        if dry_run:
+            logger.info(f"[DRY RUN] Would UPDATE '{rule_name}' (ID: {rule_id})")
+            for d in diffs: logger.info(f"  - Change: {d}")
+            return action_verb
+
+        logger.info(f"Updating Rule '{rule_name}' (ID: {rule_id})")
+        for d in diffs: logger.info(f"  - Change detected: {d}")
+            
+        try:
+             requests.put(f"{url}/RuleTicket/{rule_id}", headers=headers, json={"input": {"id": rule_id, **rule_input}}, verify=verify, timeout=30)
+             clear_rule_details(url, headers, rule_id, verify=verify)
+             for crit in criteria_list:
+                requests.post(f"{url}/RuleTicket/{rule_id}/RuleCriteria", headers=headers, json={"input": {"rules_id": rule_id, **crit}}, verify=verify, timeout=30)
+             for act in action_list:
+                 requests.post(f"{url}/RuleTicket/{rule_id}/RuleAction", headers=headers, json={"input": {"rules_id": rule_id, **act}}, verify=verify, timeout=30)
+             logger.info(f"  ✓ UPDATED '{rule_name}'.")
+             return action_verb
+        except Exception as e:
+            logger.error(f"Failed to update rule '{rule_name}': {e}")
+            return "FAILED"
+    else:
+        action_verb = "CREATE"
+        if dry_run:
+            logger.info(f"[DRY RUN] Would CREATE Rule: '{rule_name}'")
+            return action_verb
+
+        try:
+            r = requests.post(f"{url}/RuleTicket", headers=headers, json={"input": rule_input}, verify=verify, timeout=30)
+            r.raise_for_status()
+            rule_id = r.json().get('id')
+            logger.info(f"Created Rule '{rule_name}' (ID: {rule_id})")
+            for crit in criteria_list:
+                requests.post(f"{url}/RuleTicket/{rule_id}/RuleCriteria", headers=headers, json={"input": {"rules_id": rule_id, **crit}}, verify=verify, timeout=30)
+            for act in action_list:
+                 requests.post(f"{url}/RuleTicket/{rule_id}/RuleAction", headers=headers, json={"input": {"rules_id": rule_id, **act}}, verify=verify, timeout=30)
+            existing_rules_map[rule_name] = rule_id
+            logger.info(f"  ✓ CREATED '{rule_name}'.")
+            return action_verb
+        except Exception as e:
+            logger.error(f"Failed to create rule '{rule_name}': {e}")
+            return "FAILED"
+
+def clean_category_name(name):
+    """Clean category name for use in rule name"""
+    if ' > ' in name: name = name.split(' > ')[-1]
+    name = name.replace('&#38;', 'And').replace('&amp;', 'And').replace('&', 'And')
+    return name.replace(' ', '-')
 
 def main():
-    """Main execution function."""
-    parser = argparse.ArgumentParser(
-        description='Create GLPI category-based group assignment rules'
-    )
-    parser.add_argument(
-        '--force',
-        action='store_true',
-        help='Actually create/update rules (default is dry-run)'
-    )
+    parser = argparse.ArgumentParser(description="GLPI Category-Based Group Assignment Rule Creator (v3.1)")
+    parser.add_argument('--force', action='store_true', help="Execute changes (default is dry-run)")
     args = parser.parse_args()
     
     dry_run = not args.force
-    
-    print("\n" + "="*70)
-    print("GLPI Category-Based Group Assignment Rule Creator")
-    print("="*70)
-    print(f"Mode: {'LIVE' if not dry_run else 'DRY-RUN (simulation only)'}")
-    print("="*70 + "\n")
-    
-    # Load config and initialize session
+    if dry_run: logger.info("Running in DRY-RUN mode. No changes will be applied.")
+    else: logger.info("Running in FORCE mode. Changes will be applied.")
+
     config = load_config()
-    glpi_url, headers = init_session(config)
+    glpi_url = config.get('GLPI_URL').rstrip('/')
+    app_token = config.get('GLPI_APP_TOKEN')
+    user_token = config.get('GLPI_USER_TOKEN')
+    verify_ssl = config.get('verify_ssl', False)
+
+    report = {"CREATE": [], "UPDATE": [], "SKIPPED": [], "FAILED": []}
     
     try:
-        # Fetch data
-        categories = fetch_categories(glpi_url, headers)
-        # Skip group fetching - use hardcoded GROUP_NAMES instead (API timeout issue)
-        existing_rules = fetch_existing_rules(glpi_url, headers)
-        
-        print(f"\n{'='*70}")
-        print("SUMMARY")
-        print(f"{'='*70}")
-        print(f"Categories: {len(categories)}")
-        print(f"Groups: {len(GROUP_NAMES)} (hardcoded)")
-        print(f"Existing Rules: {len(existing_rules)}")
-        print(f"Rules to Create/Update: {len(CATEGORY_GROUP_MAP)}")
-        print(f"{'='*70}\n")
-        
-        # Create rules
-        success_count = 0
-        skip_count = 0
-        
-        for category_id, group_id in CATEGORY_GROUP_MAP.items():
-            category_name = categories.get(category_id, f"Unknown ({category_id})")
-            group_name = GROUP_NAMES.get(group_id, f"Unknown ({group_id})")
+        with glpi_session(glpi_url, app_token, user_token, verify=verify_ssl) as session_token:
+            headers = {"App-Token": app_token, "Session-Token": session_token, "Content-Type": "application/json"}
             
-            # Generate rule name with category name (hyphen-only format)
-            category_name_clean = clean_category_name(category_name)
-            rule_name = f"Auto-Category-{category_name_clean}"
+            categories_map = fetch_categories(glpi_url, headers, verify=verify_ssl)
+            groups_map = fetch_groups(glpi_url, headers, verify=verify_ssl)
+            existing_rules_map = fetch_existing_rules(glpi_url, headers, verify=verify_ssl)
             
-            # Create or update rule
-            if create_or_update_rule(
-                glpi_url,
-                headers,
-                rule_name,
-                category_id,
-                category_name,
-                group_id,
-                group_name,
-                existing_rules,
-                dry_run
-            ):
-                success_count += 1
-            else:
-                skip_count += 1
-        
-        # Final summary
-        print(f"\n{'='*70}")
-        print("RESULTS")
-        print(f"{'='*70}")
-        print(f"Rules created/updated: {success_count}")
-        print(f"Rules skipped/failed: {skip_count}")
-        
-        if dry_run:
-            print(f"\n⚠️  DRY-RUN MODE: No changes were made")
-            print(f"Run with --force to actually create/update rules")
-        
-        print(f"{'='*70}\n")
-        
-    finally:
-        kill_session(glpi_url, headers)
+            res_maps = {"categories": categories_map, "groups": groups_map}
+
+            logger.info("\n--- Processing Rules ---")
+            
+            for category_id, group_id in CATEGORY_GROUP_MAP.items():
+                cat_id_str = str(category_id)
+                if cat_id_str not in categories_map:
+                    logger.warning(f"SKIP: Category ID {category_id} not found in GLPI.")
+                    continue
+                
+                cat_name = categories_map[cat_id_str]
+                group_name = groups_map.get(str(group_id), f"Unknown ({group_id})")
+                rule_name = f"Auto-Category-{clean_category_name(cat_name)}"
+                
+                logger.info(f"Processing Category: '{cat_name}' -> Assign Group: '{group_name}'")
+
+                # Criteria: Category = X, Technician empty, Group empty
+                criteria = [
+                    {"criteria": "itilcategories_id", "condition": 0, "pattern": category_id},
+                    {"criteria": "_users_id_assign", "condition": 9, "pattern": "1"}, # 9 = is empty
+                    {"criteria": "_groups_id_assign", "condition": 9, "pattern": "1"}  # 9 = is empty
+                ]
+                
+                # Action: Assign Group Y
+                actions = [{"field": "_groups_id_assign", "action_type": "assign", "value": group_id}]
+                
+                result = create_or_update_rule(glpi_url, headers, rule_name, criteria, actions, existing_rules_map, res_maps, dry_run=dry_run, verify=verify_ssl)
+                if result in report: report[result].append(rule_name)
+
+            # Final Report
+            logger.info("-" * 60)
+            logger.info("DETAILED EXECUTION SUMMARY REPORT")
+            logger.info("-" * 60)
+            for key, val in report.items():
+                if val:
+                    logger.info(f"{key} ({len(val)}):")
+                    for name in val: logger.info(f"  {'*' if key=='UPDATE' else '+' if key=='CREATE' else '-'} {name}")
+            logger.info("-" * 60)
+            logger.info(f"Total Processed: {len(CATEGORY_GROUP_MAP)} mapping definitions.")
+            logger.info("-" * 60)
+            
+    except Exception as e:
+        logger.critical(f"CRITICAL ERROR: {e}")
+        import traceback
+        logger.debug(traceback.format_exc())
 
 if __name__ == "__main__":
     main()

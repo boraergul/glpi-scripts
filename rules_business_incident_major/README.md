@@ -1,52 +1,42 @@
-# Major Incident Rules
+# GLPI Major Incident Rule Automation (v3.1)
 
-Bu modül, Major Incident (Öncelikli Olay) biletleri için özel iş kurallarını yönetir.
+This script automates the creation and synchronization of Major Incident business rules in GLPI based on an entity-to-SLA mapping.
 
-## Amaç
-Kritik seviyedeki (Priority: Major) biletlerin:
-1.  Hemen ilgili özel ekibe (**Major Incident Ekibi**) atanmasını,
-2.  En sıkı SLA sürelerinin (**P1: Fastest**) otomatik tanımlanmasını sağlar.
+## Key Features
 
-## Çalışma Mantığı
-Script (`rules_business_incident_major.py`), `entity_sla_map.json` dosyasındaki her Entity için GLPI üzerinde bir "Business Rule Ticket" oluşturur veya günceller.
+- **Smart Sync**: Automatically compares current GLPI rules with the local configuration. It skips redundant API calls if the rule is already up-to-date.
+- **Detailed Logging**: Provides granular logs of every action, including specific field differences (e.g., missing criteria or changed SLA values).
+- **Human-Readable Logs**: Resolves GLPI internal IDs (SLA, Group, Entity, Priority) to their human-readable names in the logs for easier debugging.
+- **Case-Insensitive Matching**: Matches GLPI entities regardless of case differences between the config file and the API response.
+- **Safe Execution (Dry Run)**: Defaults to dry-run mode. Use the `--force` flag to apply changes to the live system.
+- **Professional Session Management**: Uses a secure context manager for session initialization and cleanup.
 
-### Kural Kriterleri:
-*   **Kategori:** Major Incident (ID: 229)
-*   **Öncelik:** Major (ID: 6)
-*   **Entity:** İlgili Entity (Örn: Çiftay)
+## Installation & Requirements
 
-### Kural Aksiyonları:
-*   **Gruba Ata (Teknisyen Grubu):** Ultron Bilişim > Teknik Ekipler > Major Incident Ekibi (ID: 45)
-*   **SLA TTO Ata:** Entity'nin hizmet seviyesine (SLA-GOLD vb.) ait **P1** TTO süresi.
-*   **SLA TTR Ata:** Entity'nin hizmet seviyesine (SLA-GOLD vb.) ait **P1** TTR süresi.
+- Python 3.x
+- `requests` library
 
-### Önemli Özellikler
-*   **Duplicate Check (Tekrar Kontrolü):** Script, GLPI Search API kullanarak "Auto-Major-Incident" adıyla başlayan kuralları tarar. Eğer kural zaten varsa **yeni oluşturmak yerine günceller**.
-*   **Grup Ataması:** Atama işlemi `groups_id_assign` (Technician Group) alanı üzerinden yapılır. "Observer" veya "Requester" grubu etkilenmez.
+```bash
+pip install requests
+```
 
-## Kullanım
+## Configuration
 
-**Kuru Çalıştırma (Dry Run):** Değişiklik yapmadan simülasyon yapar.
+The script depends on two main configuration files:
+1. `config/config.json`: Contains GLPI API URL, tokens, and SSL verification settings.
+2. `config/entity_sla_map.json`: Defines the mapping between Entity names and the desired Service Level (e.g., "SLA-BRONZE-5X9").
+
+## Usage
+
+### Dry Run (Recommended first)
 ```bash
 python rules_business_incident_major.py
 ```
 
-**Canlı Çalıştırma:** Kuralları GLPI'da oluşturur/günceller.
+### Apply Changes
 ```bash
 python rules_business_incident_major.py --force
 ```
 
-## Özellikler (v2.4)
-- ✅ **Timeout Koruması:** Tüm API çağrılarında 30sn timeout
-- ✅ **Duplicate Prevention:** Range parametresi (0-5000) ile güvenli silme
-- ✅ **Search API:** Geliştirilmiş duplicate detection
-- ✅ **Güncelleme Modu:** Mevcut kuralları güvenli şekilde günceller
-- ✅ **Standardize Naming:** Hyphen-only format (`Auto-Major-Incident-Entity-Name`)
-- ✅ **Space Handling:** Entity adlarındaki boşluklar otomatik olarak tire ile değiştirilir
-
----
-**Versiyon:** 2.5  
-**Son Güncelleme:** 26 Aralık 2024
-
-**Değişiklikler (v2.5):**
-- ✅ **Add/Update Trigger:** Condition 3 ile hem oluşturma hem güncelleme anında tetiklenir
+## Logs
+Logs are written to both the console and `rules_business_incident_major.log` in the application directory.

@@ -30,7 +30,13 @@ A centralized repository for GLPI maintenance, automation, and reporting scripts
 - **CSV Encoding**: Use UTF-8 BOM (`chr(0xEF).chr(0xBB).chr(0xBF)`) for Excel compatibility with Turkish characters.
 - **JS Scoping**: Use `addEventListener` and `window` assignments instead of inline scripts.
 - **Chart.js**: Currently using CDN for loading.
-- **Business Logic**: Tickets exceeding 100% TTR are automatically set to Major (6) priority.
+### Business Logic & Rules
+- **Rule Ordering**: 
+    1. **Mail Collector Rules**: `rules_email.py` (Rank 1), `rules_unknowndomain.py` (Rank 2).
+    2. **Business Rules**: `rules_business_incident_major.py` (Rank 10), `rules_business_sla.py` (Rank 15), `rules_business_itilcategory_assign.py` (Rank 20).
+- **Naming Convention**: All rules follow standard `Auto-[Type]-[Entity]-[Priority]` kebab-case naming.
+- **SLA Calculation**: Tickets exceeding 100% TTR are automatically set to Major (6) priority.
+- **Detailed Flow**: See [GLPI Rule Execution Flow](file:///d:/Google%20Drive/Projeler/Script/docs/rule_execution_flow.md) for a full breakdown.
 
 ---
 
@@ -44,6 +50,8 @@ A centralized repository for GLPI maintenance, automation, and reporting scripts
 | 2026-02-26 | Update | Updated version to 1.0.1 and author to Bora Ergül. |
 | 2026-03-03 | Protocol | Documentation moved to `docs/` and aligned with protocol. |
 | 2026-03-08 | Consolidation| Merged `project.md`, `memory.md`, and `logbook.md` into `project_state.md`. |
+| 2026-03-10 | Maintenance | Reverted "target name resolution" in `notifications_export_import` to standardize CSV structure. |
+| 2026-03-10 | Export      | Successfully exported 278 notifications from ITSM-PROD to CSV. |
 
 ---
 

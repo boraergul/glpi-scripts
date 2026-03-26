@@ -86,43 +86,35 @@ Script, TTO/TTR sürelerini **kendi içinde saklamaz**. Bu verileri her çalış
     *   **Ne Yapılmalı:** Sadece GLPI arayüzünden ilgili SLA'nın süresini değiştirin.
     *   **Script:** Scripti çalıştırmaya **GEREK YOKTUR**. Kural zaten o SLA ID'sine bağlıdır, süre değişince otomatik uyum sağlar.
 
-*   **Senaryo 2: SLA Silinip Yeniden Oluşturuldu veya Yeni Kural Eklendi**
+*   **Senario 2: SLA Silinip Yeniden Oluşturuldu veya Yeni Kural Eklendi**
     *   **Ne Yapılmalı:** Script çalıştırılmalıdır.
-    *   **Script:** Mevcut kuralları bulursa **GÜNCELLER (UPDATE)**. Kriterleri ve aksiyonları silip en baştan doğrusunu yazar. Kural ID'si değişmez.
+    *   **Script (Smart Sync):** Mevcut kuralları bulursa detaylarını (Criteria/Actions) API'den çeker. Eğer önerilen yapı ile mevcut yapı arasında fark yoksa işlemi atlar (**LOG: SKIP**). Sadece fark tespit edilirse kuralı günceller. Kural ID'si değişmez.
 
 ---
 
-## 4. Kurulum ve Konfigürasyon (Yeni)
+## 4. Modernizasyon Özellikleri (v3.1)
 
-Script artık merkezi bir yapılandırma sistemi kullanmaktadır.
+Script, **v3.1** standartlarına göre aşağıdaki gelişmiş özelliklerle donatılmıştır:
 
-### 4.1. Config Dosyası (`config.json`)
-Script, GLPI bağlantı bilgilerini içeren `config.json` dosyasını sırasıyla şu lokasyonlarda arar:
-1. Script ile aynı dizin
-2. `../Config/` (Bir üst dizindeki Config klasörü)
-3. `../../Config/` (İki üst dizindeki Config klasörü)
+### 4.1. Akıllı Senkronizasyon (Smart Sync)
+Kullanıcıyı ve sistemi gereksiz API çağrılarından kurtarmak için:
+- Mevcut kural ayarları ile yeni ayarlar karşılaştırılır.
+- Hiçbir değişiklik yoksa işlem atlanır (LOG: SKIP).
+- Değişiklik varsa, loglarda hangi alanın değiştiği (eski vs yeni değer) gösterilir.
 
-Bu sayede config dosyalarınızı merkezi bir yerde yönetebilirsiniz.
+### 4.2. Profesyonel Loglama ve ID Çözümleme
+- **Dual Logging:** Loglar hem konsola hem de `rules_business_sla.log` dosyasına yazılır.
+- **Human-Readable IDs:** Loglarda ham ID'ler yerine parantez içinde isimleri gösterilir.
+  - Örnek: `entities_id (Value: 12 (Bakpiliç))`
+  - Örnek: `slas_id_tto (Value: 51 (BRNZ-5x9-P1-TTO-1h))`
 
-### 4.2. Ölçeklenebilirlik (Pagination)
-Script, **1000'den fazla** Entity veya SLA olması durumunda verileri otomatik olarak sayfalayarak (batch fetch) çeker. Büyük GLPI ortamlarında sorunsuz çalışır.
+### 4.3. Argparse CLI ve Güvenlik
+- **Dry-Run by Default:** Script `--force` parametresi olmadan çalıştırılırsa hiçbir değişiklik yapmaz (Salt okunur).
+- **Vaka Duyarsız Eşleşme:** Entity adları büyük/küçük harf duyarsız şekilde eşleştirilir.
+- **Zaman Aşımı:** Tüm API çağrılarında 30 saniyelik güvenlik zaman aşımı uygulanır.
 
-### 4.3. Entity Haritası (`entity_sla_map.json`)
-Müşteri - SLA eşleştirmeleri bu dosyada tutulur. Script ile aynı dizinde veya config arama yollarında bulunmalıdır.
-
-Format:
-```json
-{
-    "Müşteri Adı": "SLA-PAKET-ADI",
-    "Prime Sistem": "SLA-PLATINUM-7X24"
-}
-```
-
-### 4.4. Güvenlik ve Stabilite (v2.2 Özellikleri)
-Script aşağıdaki güvenlik mekanizmalarıyla güçlendirilmiştir:
-*   **Duplicate Detection (Kopya Kontrolü):** GLPI Search API kullanılarak mevcut kurallar "Auto-SLA" ismiyle taranır. Aynı isimli kural varsa **ID değişmeden güncellenir**. Asla duplicate kural oluşturmaz.
-*   **Safe Updates (Güvenli Güncelleme):** Güncelleme sırasında, kuralın detayları (Criteria/Actions) silinirken **ID kontrolü** yapılır. Bu sayede script, yanlışlıkla başka kuralların (Business Rules, vb.) aksiyonlarını silme riskine karşı (GLPI API buglarına karşı) korumalıdır.
-*   **Timeouts (Zaman Aşımı):** Tüm GLPI API sorgularına **30 saniyelik** zaman aşımı (timeout) eklenmiştir. Network takılmalarında scriptin asılı kalması (hang) engellenir.
+### 4.4. Detaylı Özet Raporu (Execution Summary)
+İşlem sonunda script, yapılan tüm işlemlerin (CREATE, UPDATE, SKIP, FAILED) sayısını ve listesini içeren profesyonel bir rapor sunar.
 
 ---
 
@@ -173,8 +165,16 @@ Kuralları yeniden oluşturmak veya güncellemek gerekirse:
    Sadece `python rules_business_sla.py` şeklinde çalıştırırsanız, yapılacak değişiklikleri ekrana yazar ancak GLPI'da değişiklik yapmaz.
 
 ---
-**Son Güncelleme:** 7 Ocak 2026  
-**Script Versiyonu:** v2.6 (Request SLA Support)
+---
+**Son Güncelleme:** 25 Mart 2026  
+**Script Versiyonu:** v3.1 (Smart Sync Modernization)
+
+**Değişiklikler (v3.1):**
+- ✅ **Smart Sync:** Mevcut kural detaylarını API'den çekip karşılaştırma ve gereksiz güncellemeleri atlama özelliği eklendi.
+- ✅ **Argparse CLI:** `--force` parametresi eklendi, varsayılan mod DRY-RUN olarak değiştirildi.
+- ✅ **Professional Logging:** Konsol ve dosya çıktıları, human-readable ID çözümleme ile zenginleştirildi.
+- ✅ **Case-insensitive Entity Matching:** Entity name eşleşmeleri vaka duyarsız hale getirildi.
+- ✅ **Detailed Summary Report:** İşlem sonu istatistiksel raporlama eklendi.
 
 **Değişiklikler (v2.6):**
 - ✅ **Request SLA Support:** Request tipindeki ticketlar için P3 SLA ataması eklendi

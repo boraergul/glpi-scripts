@@ -51,20 +51,23 @@ def main():
     # Ordered list of scripts to execute
     # Paths are relative to this script (Script/onboarding/)
     scripts = [
-        # 1. Entity Group Sync (Create Group for Entity)
-        "../entity_group_sync/sync_entity_groups.py",
+        # 1. Email Rules (Setup Email Receiver Rules) - Rank: 1
+        "../rules_email/rules_email.py",
         
-        # 2. Email Rules (Setup Email Receiver Rules)
-        "../rules_email/email_rules.py",
+        # 2. Undefined Domain Rule (Update Catch-all Rule) - Rank: 2
+        "../rules_unknowndomain/rules_unknowndomain.py",
         
-        # 3. Undefined Domain Rule (Update Catch-all Rule)
-        "../rules_unknownDomain/create_undefined_domain_rule.py",
+        # 3. Major Incident Rules (Priority 6) - Rank: 10
+        "../rules_business_incident_major/rules_business_incident_major.py",
         
-        # 4. SLA Rules (Create SLA Assignment Rules for Incidents)
-        "../rules_business_sla/create_sla_rules.py",
+        # 4. SLA Rules (Incident/Request SLAs) - Rank: 15
+        "../rules_business_sla/rules_business_sla.py",
         
-        # 5. Business Rules (Create Ticket Assignment Rules for Requests)
-        "../rules_business/create_business_rules.py"
+        # 5. ITIL Category Rules (Group Assignment) - Rank: 20
+        "../rules_business_itilcategory_assign/rules_business_itilcategory_assign.py",
+        
+        # 6. Business Rules (Default Request Assignments) - Rank: 1 (BR)
+        "../rules_business/rules_business.py"
     ]
     
     total = len(scripts)

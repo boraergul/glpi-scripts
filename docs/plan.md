@@ -1,18 +1,10 @@
-# Teknik Tasarım: Dokümantasyon Konsolidasyonu ve README Güncellemesi
+# Teknik Tasarım: Etiket Doğrulama Düzeltmesi
 
-Bu plan, `MEMORY[user_global]` protokolüne uyum sağlamak için dokümantasyon dosyalarını konsolide etmeyi ve ana `README.md` dosyasını eksik modüllerle güncellemeyi amaçlar.
+Bu plan, `validate_tags.py` betiğindeki hatalı geçersiz etiket raporlarını düzeltmeyi amaçlar.
 
 ## Etkilenecek Dosyalar
-- `docs/project_state.md` [NEW]: `project.md`, `memory.md` ve `logbook.md` dosyalarının birleşimi.
-- `README.md` [MODIFIED]: Modül listesi ve güncel durum bilgisi eklenecek.
-- `docs/plan.md` [MODIFIED]: Mevcut dokümantasyon görevine göre güncellenecek.
+- `templates_new/validate_tags.py` [MODIFIED]: Tag yükleme mantığı geliştirilecek.
 
 ## Çözüm Adımları
-1. **Konsolidasyon**: `project.md`, `memory.md` ve `logbook.md` içeriklerini `project_state.md` altında birleştir.
-2. **Temizlik**: Eski dokümantasyon dosyalarını sil.
-3. **README Güncellemesi**: Ana `README.md` dosyasına yeni eklenen veya eksik kalan modülleri (`create_ticket`, `glpi_backup`, `gui_customization`, `notifications`) ekle.
-4. **Doğrulama**: Tüm linkleri ve bilgilerin doğruluğunu kontrol et.
-
-## İş Kuralları
-- `project_state.md` projenin "uzun vadeli hafızası" olarak işlev görmelidir.
-- `README.md` projenin vitrini olmaya devam etmelidir.
+1. `validate_tags.py` içindeki `load_valid_tags` fonksiyonunu, CSV'deki tum etiketleri eksiksiz yukleyecek şekilde güncelle.
+2. Hatalı pozitif raporları doğrula ve temizle.
