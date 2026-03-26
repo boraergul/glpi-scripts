@@ -132,7 +132,8 @@ def fetch_existing_rules(url, headers, verify=False):
                 rule_id = item.get('2')
                 name = item.get('1')
                 if name:
-                    rules_map[name] = rule_id
+                    # Store lowercase name as key for case-insensitive lookup
+                    rules_map[name.lower()] = rule_id
             
             if len(data) < range_step: break
             range_start += range_step
@@ -172,7 +173,8 @@ def create_or_update_rule(url, headers, entity_name, entity_id, mail_domain, exi
     # Replace spaces in entity name with hyphens for consistent naming
     entity_name_clean = entity_name.replace(' ', '-')
     rule_name = f"Auto-Email-{entity_name_clean}"
-    rule_id = existing_rules.get(rule_name)
+    # Case-insensitive lookup
+    rule_id = existing_rules.get(rule_name.lower())
     
     # Prepare Regex Pattern: /@domain\.com$/i (Match end of string)
     escaped_domain = re.escape(clean_domain)
