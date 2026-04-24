@@ -6,15 +6,31 @@ Session::checkLoginUser();
 
 $report = new PluginSlareportReport();
 
-$start_date = isset($_POST['start_date']) ? $_POST['start_date'] : (isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-m-01'));
-$end_date = isset($_POST['end_date']) ? $_POST['end_date'] : (isset($_GET['end_date']) ? $_GET['end_date'] : date('Y-m-d'));
-$entity_id = isset($_POST['entity_id']) ? (int)$_POST['entity_id'] : (isset($_GET['entity_id']) ? (int)$_GET['entity_id'] : 0);
+$start_date = $_GET['start_date'] ?? $_POST['start_date'] ?? date('Y-m-01');
+$end_date   = $_GET['end_date'] ?? $_POST['end_date'] ?? date('Y-m-d');
+$entity_id  = (int)($_GET['entity_id'] ?? $_POST['entity_id'] ?? 0);
 
-$sort = isset($_GET['sort']) ? $_GET['sort'] : 'glpi_tickets.date';
-$order = isset($_GET['order']) ? $_GET['order'] : 'DESC';
+$allowed_sorts = [
+    'glpi_tickets.id',
+    'glpi_tickets.name',
+    'glpi_entities.completename',
+    'glpi_tickets.date'
+];
+
+if (isset($_GET['sort']) && in_array($_GET['sort'], $allowed_sorts)) {
+    $sort = $_GET['sort'];
+} else {
+    $sort = 'glpi_tickets.date';
+}
+
+if (isset($_GET['order']) && strtoupper($_GET['order']) === 'ASC') {
+    $order = 'ASC';
+} else {
+    $order = 'DESC';
+}
 
 // CSV Export Logic
-if (isset($_POST['export_csv'])) {
+if (isset($_POST['export_csv']) || isset($_GET['export_csv'])) {
     $data = PluginSlareportReport::getSlaComplianceData($start_date, $end_date, $entity_id, $sort, $order);
     $tickets = $data['tickets'];
 
@@ -31,6 +47,8 @@ if (isset($_POST['export_csv'])) {
         __('Status', 'slareport'),
         __('Violation Type', 'slareport'),
         __('SLA Definition', 'slareport'),
+        __('Pending Time', 'slareport'),
+        __('Pending Ratio', 'slareport'),
         __('TTO Deadline', 'slareport'),
         __('TTR Deadline', 'slareport'),
         __('Resolution Date', 'slareport'),
@@ -47,6 +65,8 @@ if (isset($_POST['export_csv'])) {
             $ticket['status_label'],
             $ticket['violation_type'] ?: '-',
             $ticket['sla_name'] ?: '-',
+            $ticket['pending_formatted'] ?: '-',
+            $ticket['breach_probability'] . '%',
             ($ticket['status'] == 'none' ? '-' : $ticket['tto_deadline']),
             ($ticket['status'] == 'none' ? '-' : $ticket['ttr_deadline']),
             $ticket['solvedate'],
@@ -72,7 +92,6 @@ function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
     $new_order = ($current_sort == $col && $current_order == 'ASC') ? 'DESC' : 'ASC';
     return "?sort=$col&order=$new_order&start_date=$start&end_date=$end&entity_id=$ent";
 }
-
 ?>
 
 <style>
@@ -94,27 +113,111 @@ function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
         font-family: 'Inter', system-ui, sans-serif;
     }
 
+    .dashboard-header {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .dashboard-header h2 {
+        margin: 0;
+        font-size: 20px;
+        color: var(--text);
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .version-badge {
+        background: #f1f5f9;
+        color: var(--text-muted);
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 10px;
+        font-weight: 600;
+        border: 1px solid #e2e8f0;
+    }
+
+    .filter-form {
+        background: var(--card-bg);
+        padding: 15px 20px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        border: 1px solid #e2e8f0;
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 12px;
+        align-items: flex-end;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 140px;
+    }
+
+    .filter-group label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-muted);
+    }
+
+    .submit-btn {
+        background: var(--primary);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        font-size: 13px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
     .kpi-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
-        margin-bottom: 30px;
+        display: flex;
+        gap: 10px;
+        margin-bottom: 24px;
     }
 
     .kpi-card {
+        flex: 1;
         background: var(--card-bg);
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
         border: 1px solid #e2e8f0;
         text-align: center;
-        transition: transform 0.2s;
     }
 
-    .kpi-card:hover { transform: translateY(-4px); }
+    .kpi-value {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text);
+    }
 
-    .kpi-value { font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-    .kpi-label { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+    .kpi-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+    }
+
+    .badge {
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        color: white;
+        text-transform: uppercase;
+    }
 
     .chart-grid {
         display: grid;
@@ -127,68 +230,23 @@ function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
         background: var(--card-bg);
         padding: 24px;
         border-radius: 12px;
-        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
         border: 1px solid #e2e8f0;
-        height: 350px;
+        height: 300px;
     }
 
-    .chart-card h3 { font-size: 16px; margin-bottom: 20px; color: var(--text); }
-
-    .badge {
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 11px;
-        font-weight: 700;
-        color: white;
-        text-transform: uppercase;
+    .tab_cadre_fixehov {
+        width: 100% !important;
+        background: white;
     }
-    .badge-violated { background: var(--danger); }
-    .badge-compliant { background: var(--success); }
-    .badge-active { background: var(--info); }
-
-    .filter-form {
-        background: var(--card-bg);
-        padding: 20px;
-        border-radius: 12px;
-        margin-bottom: 30px;
-        border: 1px solid #e2e8f0;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        align-items: flex-end;
-    }
-
-    .filter-group { display: flex; flex-direction: column; gap: 6px; }
-    .filter-group label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
-
-    .submit-btn {
-        background: var(--primary);
-        color: white;
-        padding: 10px 24px;
-        border-radius: 8px;
-        font-weight: 600;
-        border: none;
-        cursor: pointer;
-        transition: opacity 0.2s;
-    }
-    .submit-btn:hover { opacity: 0.9; }
-
-    .sort-icon { font-size: 10px; margin-left: 4px; opacity: 0.5; }
-    th a { color: inherit; text-decoration: none; display: flex; align-items: center; }
-    th a:hover { color: var(--primary); }
-
 </style>
 
 <div class='dashboard-container'>
-    <form method='post' action='' class='filter-form'>
-        <?php
-if (method_exists('Html', 'printCSRFToken')) {
-    Html::printCSRFToken();
-}
-else {
-    echo "<input type='hidden' name='_glpi_csrf_token' value='" . Session::getNewCSRFToken() . "'>";
-}
-?>
+    <div class='dashboard-header'>
+        <h2><?php echo __('SLA Breach Report', 'slareport'); ?> <span class='version-badge'>v<?php echo PLUGIN_SLAREPORT_VERSION; ?> [Stable]</span></h2>
+    </div>
+
+    <form method='get' action='' class='filter-form'>
         <div class='filter-group'>
             <label><?php echo __('Start Date', 'slareport'); ?></label>
             <?php Html::showDateField('start_date', ['value' => $start_date]); ?>
@@ -199,19 +257,24 @@ else {
         </div>
         <div class='filter-group'>
             <label><?php echo __('Entity', 'slareport'); ?></label>
-            <select name='entity_id' class='select'>
-                <option value='0'>--- <?php echo __('All', 'slareport'); ?> ---</option>
-                <?php
-$entities = PluginSlareportReport::getEntities();
-foreach ($entities as $id => $name) {
-    $selected = ($entity_id == $id) ? "selected" : "";
-    echo "<option value='$id' $selected>$name</option>";
-}
-?>
-            </select>
+            <?php
+            Entity::dropdown([
+                'name'                => 'entity_id',
+                'value'               => $entity_id,
+                'is_recursive'        => true,
+                'display_emptychoice' => true,
+                'emptylabel'          => __('All', 'slareport'),
+                'width'               => '100%'
+            ]);
+            ?>
         </div>
-        <input type='submit' name='submit' value="<?php echo __s('Search', 'slareport'); ?>" class='submit-btn'>
-        <input type='submit' name='export_csv' value="<?php echo __s('Export to CSV', 'slareport'); ?>" class='submit-btn' style='background: var(--success)'>
+        <div class='btn-group' style='display: flex; gap: 8px; margin-left: auto;'>
+            <input type='submit' value="<?php echo __s('Search', 'slareport'); ?>" class='submit-btn'>
+            <input type='submit' name='export_csv' value="<?php echo __s('CSV', 'slareport'); ?>" class='submit-btn' style='background: var(--success)'>
+            <button type='button' class='submit-btn' style='background: var(--danger)' onclick="window.open('export_pdf.php?start_date=' + encodeURIComponent(document.getElementsByName('start_date')[0].value) + '&end_date=' + encodeURIComponent(document.getElementsByName('end_date')[0].value) + '&entity_id=' + document.getElementsByName('entity_id')[0].value, '_blank')">
+                <i class='fas fa-file-pdf'></i> <?php echo __s('PDF', 'slareport'); ?>
+            </button>
+        </div>
     </form>
 
     <div class='kpi-container'>
@@ -220,105 +283,91 @@ foreach ($entities as $id => $name) {
             <div class='kpi-label'><?php echo __('Total Tickets', 'slareport'); ?></div>
         </div>
         <div class='kpi-card'>
-            <div class='kpi-value'><?php echo $summary['sla_total']; ?></div>
+            <div class='kpi-value' style='color: var(--primary)'><?php echo $summary['sla_total']; ?></div>
             <div class='kpi-label'><?php echo __('SLA Tickets', 'slareport'); ?></div>
         </div>
         <div class='kpi-card'>
-            <div class='kpi-value' style='color: var(--success)'><?php echo $summary['sla_ok']; ?></div>
-            <div class='kpi-label'><?php echo __('SLA Compliant', 'slareport'); ?></div>
+            <div class='kpi-value' style='color: var(--success)'><?php echo $compliance_rate; ?>%</div>
+            <div class='kpi-label'><?php echo __('SLA Compliance', 'slareport'); ?></div>
         </div>
         <div class='kpi-card'>
-            <div class='kpi-value' style='color: var(--danger)'><?php echo $summary['sla_tto_violated']; ?></div>
-            <div class='kpi-label'><?php echo __('TTO Violated', 'slareport'); ?></div>
-        </div>
-        <div class='kpi-card'>
-            <div class='kpi-value' style='color: var(--danger)'><?php echo $summary['sla_ttr_violated']; ?></div>
-            <div class='kpi-label'><?php echo __('TTR Violated', 'slareport'); ?></div>
+            <div class='kpi-value' style='color: var(--danger)'><?php echo $summary['sla_violated']; ?></div>
+            <div class='kpi-label'><?php echo __('Breaches', 'slareport'); ?></div>
         </div>
         <div class='kpi-card'>
             <div class='kpi-value' style='color: var(--info)'><?php echo $summary['sla_active']; ?></div>
-            <div class='kpi-label'><?php echo __('SLA Active', 'slareport'); ?></div>
-        </div>
-        <div class='kpi-card' style='background: var(--primary);'>
-            <div class='kpi-value' style='color: white'><?php echo $compliance_rate; ?>%</div>
-            <div class='kpi-label' style='color: rgba(255,255,255,0.7)'><?php echo __('SLA Compliance Rate', 'slareport'); ?></div>
+            <div class='kpi-label'><?php echo __('Active SLAs', 'slareport'); ?></div>
         </div>
     </div>
 
     <div class='chart-grid'>
         <div class='chart-card'>
-            <h3><?php echo __('Overall SLA Status', 'slareport'); ?></h3>
+            <h3><?php echo __('SLA Status Distribution', 'slareport'); ?></h3>
             <canvas id='complianceChart'></canvas>
         </div>
         <div class='chart-card'>
-            <h3><?php echo __('Top Violating Entities (Top 10)', 'slareport'); ?></h3>
+            <h3><?php echo __('Top Violating Entities', 'slareport'); ?></h3>
             <canvas id='violationsChart'></canvas>
         </div>
     </div>
 
     <table class='tab_cadre_fixehov'>
         <tr>
-            <th><a href="<?php echo getSortLink('glpi_tickets.id', $sort, $order, $start_date, $end_date, $entity_id); ?>">ID <?php echo $sort == 'glpi_tickets.id' ? ($order == 'ASC' ? '↑' : '↓') : '↕'; ?></a></th>
-            <th style='width: 35%'><a href="<?php echo getSortLink('glpi_tickets.name', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo __('Subject', 'slareport'); ?> <?php echo $sort == 'glpi_tickets.name' ? ($order == 'ASC' ? '↑' : '↓') : '↕'; ?></a></th>
-            <th><a href="<?php echo getSortLink('glpi_entities.completename', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo __('Entity', 'slareport'); ?> <?php echo $sort == 'glpi_entities.completename' ? ($order == 'ASC' ? '↑' : '↓') : '↕'; ?></a></th>
-            <th><a href="<?php echo getSortLink('glpi_tickets.date', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo __('Date', 'slareport'); ?> <?php echo $sort == 'glpi_tickets.date' ? ($order == 'ASC' ? '↑' : '↓') : '↕'; ?></a></th>
+            <th><a href="<?php echo getSortLink('glpi_tickets.id', $sort, $order, $start_date, $end_date, $entity_id); ?>">ID</a></th>
+            <th style='width: 30%'><a href="<?php echo getSortLink('glpi_tickets.name', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo __('Subject', 'slareport'); ?></a></th>
+            <th><a href="<?php echo getSortLink('glpi_entities.completename', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo __('Entity', 'slareport'); ?></a></th>
+            <th><a href="<?php echo getSortLink('glpi_tickets.date', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo __('Date', 'slareport'); ?></a></th>
             <th><?php echo __('Status', 'slareport'); ?></th>
             <th><?php echo __('Violation', 'slareport'); ?></th>
             <th><?php echo __('SLA Definition', 'slareport'); ?></th>
+            <th><?php echo __('Pending Time', 'slareport'); ?></th>
+            <th><?php echo __('Pending Ratio', 'slareport'); ?></th>
             <th><?php echo __('Deadline', 'slareport'); ?></th>
-            <th><?php echo __('Resolved', 'slareport'); ?></th>
-            <th><?php echo __('Delay (TTO/TTR)', 'slareport'); ?></th>
         </tr>
-        <?php if (empty($tickets)): ?>
-            <tr><td colspan='10' class='center'><strong><?php echo __('No data found for the selected criteria.', 'slareport'); ?></strong></td></tr>
-        <?php
-else: ?>
-            <?php foreach ($tickets as $ticket): ?>
-                <tr class='tab_bg_1'>
-                    <td><a href='/front/ticket.form.php?id=<?php echo $ticket['id']; ?>' target='_blank'><strong>#<?php echo $ticket['id']; ?></strong></a></td>
-                    <td><?php echo $ticket['name']; ?></td>
-                    <td><?php echo $ticket['entity']; ?></td>
-                    <td><?php echo $ticket['date']; ?></td>
-                    <td>
-                        <?php
-        if ($ticket['status'] == 'none') {
-            echo "<span class='badge' style='background: #94a3b8'>" . $ticket['status_label'] . "</span>";
-        }
-        else {
-            echo "<span class='badge' style='background: " . ($ticket['status'] == 'violated' ? 'var(--danger)' : ($ticket['status'] == 'active' ? 'var(--info)' : 'var(--success)')) . "'>" . $ticket['status_label'] . "</span>";
-        }
-?>
-            </td>
-            <td><strong><?php echo $ticket['violation_type'] ?: '-'; ?></strong></td>
-            <td><?php echo $ticket['sla_name'] ?: '-'; ?></td>
-            <td>
-                <?php
-        if ($ticket['status'] == 'none') {
-            echo '-';
-        }
-        else {
-            echo "TTO: " . Html::convDateTime($ticket['tto_deadline']) . "<br>";
-            echo "TTR: " . Html::convDateTime($ticket['ttr_deadline']);
-        }
-?>
-            </td>
-            <td><?php echo Html::convDateTime($ticket['solvedate']); ?></td>
-            <td>
-                <?php
-        if ($ticket['status'] == 'none') {
-            echo '-';
-        }
-        else {
-            echo "TTO: " . $ticket['tto_delay_formatted'] . "<br>";
-            echo "TTR: " . $ticket['solve_delay_formatted'];
-        }
-?>
-            </td>
-        </tr>
-            <?php
-    endforeach; ?>
-        <?php
-endif; ?>
+        <?php foreach ($tickets as $ticket):
+            // Calculate styles for pending metrics
+            $pending_bg = 'transparent';
+            if ($ticket['pending_ratio'] > 0.7) {
+                $pending_bg = 'var(--warning)';
+            } elseif ($ticket['pending_ratio'] > 0.3) {
+                $pending_bg = '#fef3c7';
+            }
+
+            $pending_color = 'var(--text)';
+            if ($ticket['pending_ratio'] > 1) {
+                $pending_color = 'var(--danger)';
+            } elseif ($ticket['pending_ratio'] > 0.7) {
+                $pending_color = 'var(--warning)';
+            }
+        ?>
+            <tr class='tab_bg_1'>
+                <td><a href='/front/ticket.form.php?id=<?php echo $ticket['id']; ?>' target='_blank'><strong>#<?php echo $ticket['id']; ?></strong></a></td>
+                <td><?php echo $ticket['name']; ?></td>
+                <td><?php echo $ticket['entity']; ?></td>
+                <td><?php echo $ticket['date']; ?></td>
+                <td>
+                    <span class='badge' style='background: <?php echo ($ticket['status'] == 'violated' ? 'var(--danger)' : ($ticket['status'] == 'active' ? 'var(--info)' : 'var(--success)')); ?>'>
+                        <?php echo $ticket['status_label']; ?>
+                    </span>
+                </td>
+                <td><strong><?php echo $ticket['violation_type'] ?: '-'; ?></strong></td>
+                <td><?php echo $ticket['sla_name'] ?: '-'; ?></td>
+                <td style='text-align: center; background: <?php echo $pending_bg; ?>'>
+                    <strong><?php echo $ticket['pending_formatted']; ?></strong>
+                </td>
+                <td style='text-align: center; color: <?php echo $pending_color; ?>'>
+                    <strong><?php echo $ticket['breach_probability']; ?>%</strong>
+                </td>
+                <td>
+                    <?php if ($ticket['status'] != 'none'): ?>
+                        TTO: <?php echo Html::convDateTime($ticket['tto_deadline']); ?><br>
+                        TTR: <?php echo Html::convDateTime($ticket['ttr_deadline']); ?>
+                    <?php else: ?>
+                        -
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
     </table>
 </div>
 
@@ -329,8 +378,8 @@ endif; ?>
         type: 'doughnut',
         data: {
             labels: [
-                "<?php echo __s('Compliant', 'slareport'); ?>", 
-                "<?php echo __s('Violated', 'slareport'); ?>", 
+                "<?php echo __s('Compliant', 'slareport'); ?>",
+                "<?php echo __s('Violated', 'slareport'); ?>",
                 "<?php echo __s('Active', 'slareport'); ?>"
             ],
             datasets: [{
@@ -342,42 +391,37 @@ endif; ?>
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'bottom' }
-            }
+            plugins: { legend: { position: 'bottom' } }
         }
     });
 
     // Violations Chart
     <?php
-$entity_violations = [];
-foreach ($summary['entities'] as $name => $stats) {
-    if ($stats['sla_violated'] > 0) {
-        $entity_violations[$name] = $stats['sla_violated'];
+    $violations_by_entity = [];
+    foreach ($summary['entities'] as $name => $stats) {
+        if ($stats['sla_violated'] > 0) {
+            $violations_by_entity[$name] = $stats['sla_violated'];
+        }
     }
-}
-arsort($entity_violations);
-$top_violations = array_slice($entity_violations, 0, 10);
-?>
-    
+    arsort($violations_by_entity);
+    $top_violations = array_slice($violations_by_entity, 0, 10);
+    ?>
     new Chart(document.getElementById('violationsChart'), {
         type: 'bar',
         data: {
             labels: <?php echo json_encode(array_keys($top_violations)); ?>,
             datasets: [{
-                label: "<?php echo __s('SLA Violated', 'slareport'); ?>",
+                label: "<?php echo __s('Breaches', 'slareport'); ?>",
                 data: <?php echo json_encode(array_values($top_violations)); ?>,
-                backgroundColor: '#ef4444',
-                borderRadius: 8
+                backgroundColor: '#ef4444'
             }]
         },
         options: {
+            indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
+            plugins: { legend: { display: false } }
         }
     });
 </script>
-
 <?php Html::footer(); ?>

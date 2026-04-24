@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Plugin definition and initialization
- */
-
 define('PLUGIN_SLAREPORT_VERSION', '1.0.1');
 
 /**
@@ -11,25 +7,22 @@ define('PLUGIN_SLAREPORT_VERSION', '1.0.1');
  */
 function plugin_init_slareport()
 {
-   global $PLUGIN_HOOKS;
+    global $PLUGIN_HOOKS;
 
-   $PLUGIN_HOOKS['csrf_compliant']['slareport'] = true;
+    $PLUGIN_HOOKS['csrf_compliant']['slareport'] = true;
 
-   $PLUGIN_HOOKS['menu_toadd']['slareport'] = [
-      'tools' => 'PluginSlareportReport'
-   ];
+    $PLUGIN_HOOKS['menu_toadd']['slareport'] = [
+        'tools' => 'PluginSlareportReport'
+    ];
 
-   if (Session::haveRight("config", 1)) {
-      $PLUGIN_HOOKS['config_page']['slareport'] = 'front/index.php';
-   }
+    if (Session::haveRight("config", 1)) {
+        $PLUGIN_HOOKS['config_page']['slareport'] = 'front/index.php';
+    }
 
-   // Localization Ayarı
-   // GLPI eklenti sisteminde 'languages' hook'u gettext veya php tabanlı çeviriyi tetikler
-   $PLUGIN_HOOKS['languages']['slareport'] = [
-      'type' => 'php', // .php dosyaları kullandığın için 'php' olmalı
-      'domain' => 'slareport'
-   ];
-
+    $PLUGIN_HOOKS['languages']['slareport'] = [
+        'type' => 'php',
+        'domain' => 'slareport'
+    ];
 }
 
 /**
@@ -37,19 +30,14 @@ function plugin_init_slareport()
  */
 function plugin_version_slareport()
 {
-   return [
-      'name' => __('SLA Breach Report', 'slareport'),
-      'version' => PLUGIN_SLAREPORT_VERSION,
-      'author' => 'Bora Ergül',
-      'license' => 'GPLv2+',
-      'homepage' => '',
-      'requirements' => [
-         'glpi' => [
-            'min' => '10.0',
-            'max' => '12.0',
-         ]
-      ]
-   ];
+    return [
+        'name'           => 'SLA Breach Report',
+        'version'        => PLUGIN_SLAREPORT_VERSION,
+        'author'         => 'Bora Ergül',
+        'license'        => 'GPLv2+',
+        'homepage'       => '',
+        'minGlpiVersion' => '10.0'
+    ];
 }
 
 /**
@@ -57,7 +45,7 @@ function plugin_version_slareport()
  */
 function plugin_slareport_check_prerequisites()
 {
-   return true;
+    return true;
 }
 
 /**
@@ -65,5 +53,5 @@ function plugin_slareport_check_prerequisites()
  */
 function plugin_slareport_check_config()
 {
-   return true;
+    return true;
 }

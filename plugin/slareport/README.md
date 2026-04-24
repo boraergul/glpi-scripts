@@ -1,53 +1,51 @@
 # SLA Breach Report Plugin
 
 ## Overview
-A GLPI plugin providing visual and tabular reporting for SLA breaches. Designed to work with GLPI 10.x and 11.x, it specifically addresses schema changes in newer versions to ensure accurate TTR (Time To Resolve) and TTO (Time To Own) monitoring.
+A GLPI plugin providing high-fidelity visual and tabular reporting for SLA breaches. Fully compatible with GLPI 10.x and 11.x, it specifically addresses the architectural changes in the GLPI 11 Database Abstraction Layer (DBAL) to ensure accurate real-time monitoring of TTR (Time To Resolve) and TTO (Time To Own).
 
-## Features
-- **Visual Dashboard**: Pie charts showing the distribution of TTR vs TTO breaches.
-- **Date Filtering**: analyze performance across specific time periods.
-- **Drill-down Table**: Detailed list of breached tickets with direct links to GLPI ticket forms.
-- **Entity Awareness**: Breaks down breaches by GLPI entities.
+## Key Features
+- **Recursive Entity Filtering**: Native GLPI entity dropdown supporting hierarchical (recursive) selection to filter data across entire entity branches.
+- **Enhanced Visual Dashboard**: Modern, responsive dashboard featuring interactive status distribution charts (Doughnut) and entity breach analysis (Bar).
+- **Comprehensive Exporting**:
+  - **PDF Export**: Professional multi-page report with cover page, executive summary, and detailed ticket list (using TCPDF).
+  - **CSV Export**: Standardized data export for external spreadsheet analysis with full UTF-8 BOM support.
+- **Real-time SLA Calculation**: Dynamic status determination (Compliant, Violated, Active) based on live ticket deadline data.
+- **Secure Architecture**: CSRF-compliant query handling via GET-parameter state management.
 - **Localization**: Full support for Turkish (TR) and English (EN).
 
 ## Requirements
-- GLPI >= 10.0
-- PHP >= 8.0
-- Chart.js (Loaded via CDN)
+- GLPI >= 10.0 (Fully tested on 11.0)
+- PHP >= 8.1
+- Chart.js (CDN)
+- TCPDF (Core GLPI dependency)
 
 ## Installation
-1. Clone or copy the `slareport` directory into your GLPI `plugins/` folder.
-2. Log in to GLPI as a super-admin.
+1. Copy the `slareport` directory into your GLPI `plugins/` folder.
+2. Log in as super-admin.
 3. Navigate to **Setup > Plugins**.
 4. Find **SLA Breach Report** and click **Install**.
-5. Click **Enable** (the power icon).
+5. Click **Enable**.
 
 ## Usage
-Once installed, the report can be accessed via:
-- **Tools > SLA Breach Report** (or from the top menu entries depending on your profile).
-- Select your desired **Start Date** and **End Date**.
-- Click **Search** to generate the report and charts.
+Access the report via **Tools > SLA Breach Report**.
+1. Select appropriate **Start** and **End** dates.
+2. Choose an **Entity** (Recursive selection enabled).
+3. Click **Search** to regenerate metrics and charts.
+4. Use **CSV** or **PDF** buttons for reporting.
 
-## Technical Notes
-- **GLPI 11 Compliance**: In GLPI 11, `ttr_is_exceeded` is no longer a persistent database column. This plugin performs real-time calculations to determine breach status accurately.
-- **Performance**: Optimized for large ticket volumes using indexed SQL queries.
+## GLPI 11 Compatibility Notes
+- **Database Iterator**: Uses strict associative array structures for WHERE clauses to comply with GLPI 11's `DBmysqlIterator` type-checking.
+- **SLA State Monitoring**: Automatically adapts to GLPI 11's removal of certain persistent breach flags by calculating TTR/TTO status against dynamic deadlines.
 
 ## Calculation Logic
-The plugin determines the status (Compliant, Violated, Active) based on GLPI's internal statistical data:
+- **TTR (Time To Resolve)**:
+  - Validates `solve_delay_stat` for solved tickets.
+  - Compares `time_to_resolve` with `now()` for open tickets.
+- **TTO (Time To Own)**:
+  - Compares `takeintoaccount_delay_stat` against SLA definitions for owned tickets.
+  - Compares `time_to_own` with `now()` for new tickets.
 
-1.  **TTR (Time To Resolve)**:
-    - **Closed Tickets**: Checks if `solve_delay_stat` (actual time to solve in seconds) exceeds the SLA definition.
-    - **Open Tickets**: Checks if the current time has passed the `time_to_resolve` deadline.
-2.  **TTO (Time To Own)**:
-    - **Owned Tickets**: Checks if `takeintoaccount_delay_stat` (actual time to take into account) exceeds the SLA definition.
-    - **New Tickets**: Checks if the current time has passed the `time_to_own` deadline.
-
-**Violation Rule**: If *either* TTR or TTO is exceeded, the ticket is marked as **İHLAL** (Violated).
-
-## Localization
-- **Turkish (TR)**: Default display and PDF/CSV labels.
-- **English (EN)**: Supported via GLPI's standard translation files (`locales/`).
-
-## Author
-- Bora Ergül
-- Version: 1.0.1
+---
+**Author**: Bora Ergül  
+**Version**: 1.0.1  
+**License**: GPLv2+
