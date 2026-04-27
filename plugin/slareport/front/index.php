@@ -3,6 +3,9 @@ include("../../../inc/includes.php");
 
 Session::checkLoginUser();
 
+// Robust class include
+include_once(GLPI_ROOT . "/plugins/slareport/inc/report.class.php");
+
 $report = new PluginSlareportReport();
 
 $start_date = $_GET['start_date'] ?? $_POST['start_date'] ?? date('Y-m-01');
@@ -19,7 +22,7 @@ $allowed_sorts = [
 if (isset($_GET['sort']) && in_array($_GET['sort'], $allowed_sorts)) {
     $sort = $_GET['sort'];
 } else {
-    $sort = 'glpi_tickets.date';
+    $sort = 'glpi_tickets.id';
 }
 
 if (isset($_GET['order']) && strtoupper($_GET['order']) === 'ASC') {
@@ -28,8 +31,22 @@ if (isset($_GET['order']) && strtoupper($_GET['order']) === 'ASC') {
     $order = 'DESC';
 }
 
+// Helper for sort links
+if (!function_exists('getSortLink')) {
+    function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
+    {
+        $new_order = ($current_sort == $col && $current_order == 'ASC') ? 'DESC' : 'ASC';
+        return "?sort=$col&order=$new_order&start_date=$start&end_date=$end&entity_id=$ent";
+    }
+}
+
 // CSV Export Logic
 if (isset($_POST['export_csv']) || isset($_GET['export_csv'])) {
+    // Clear any previous output to prevent corrupting CSV
+    if (ob_get_length()) {
+        ob_end_clean();
+    }
+    
     $data = PluginSlareportReport::getSlaComplianceData($start_date, $end_date, $entity_id, $sort, $order);
     $tickets = $data['tickets'];
 
@@ -39,22 +56,22 @@ if (isset($_POST['export_csv']) || isset($_GET['export_csv'])) {
     $output = fopen('php://output', 'w');
     fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF)); // UTF-8 BOM
     fputcsv($output, [
-        __('ID', 'slareport'),
-        __('Subject', 'slareport'),
-        __('Entity', 'slareport'),
-        __('Opening Date', 'slareport'),
-        __('Status', 'slareport'),
-        __('Violation Type', 'slareport'),
-        __('SLA Definition', 'slareport'),
-        __('Pending Time', 'slareport'),
-        __('Pending Reason', 'slareport'),
-        __('Risk Level', 'slareport'),
-        __('Audit Flags', 'slareport'),
-        __('TTO Deadline', 'slareport'),
-        __('TTR Deadline', 'slareport'),
-        __('Resolution Date', 'slareport'),
-        __('TTO Delay', 'slareport'),
-        __('TTR Delay', 'slareport')
+        PluginSlareportReport::trans('SLA_ID'),
+        PluginSlareportReport::trans('SLA_Subject'),
+        PluginSlareportReport::trans('SLA_Entity'),
+        PluginSlareportReport::trans('SLA_Opening_Date'),
+        PluginSlareportReport::trans('SLA_Status'),
+        PluginSlareportReport::trans('SLA_Violation_Type'),
+        PluginSlareportReport::trans('SLA_Definition'),
+        PluginSlareportReport::trans('SLA_Pending_Time'),
+        PluginSlareportReport::trans('SLA_Pending_Reason'),
+        PluginSlareportReport::trans('SLA_Risk_Level'),
+        PluginSlareportReport::trans('SLA_Audit_Flags'),
+        PluginSlareportReport::trans('SLA_TTO_Deadline'),
+        PluginSlareportReport::trans('SLA_TTR_Deadline'),
+        PluginSlareportReport::trans('SLA_Resolution_Date'),
+        PluginSlareportReport::trans('SLA_TTO_Delay'),
+        PluginSlareportReport::trans('SLA_TTR_Delay')
     ]);
 
     foreach ($tickets as $ticket) {
@@ -78,36 +95,28 @@ if (isset($_POST['export_csv']) || isset($_GET['export_csv'])) {
         ]);
     }
     
-    // Add Legend rows at the end of CSV
-    fputcsv($output, []); // Empty row
-    fputcsv($output, ['SLA Audit Legend / Denetim Sözlüğü']);
-    fputcsv($output, ['HIGH RISK', 'SLA manipülasyonu belirtileri (Yüksek Risk)']);
-    fputcsv($output, ['SUSPICIOUS', 'Olağandışı kullanım örüntüleri (Şüpheli)']);
-    fputcsv($output, ['NORMAL', 'Kurallara uygun yönetim']);
     fputcsv($output, []);
-    fputcsv($output, ['Risk Flags / Risk Bayrakları']);
-    fputcsv($output, ['stagnant', 'Bekleme süresi SLA süresini aşmış (Durağan)']);
-    fputcsv($output, ['last_minute', 'SLA bitimine %10 kala beklemeye alınmış (Son Dakika)']);
-    fputcsv($output, ['excessive_toggling', '3 kereden fazla beklemeye al/çıkar yapılmış (Aşırı Git-Gel)']);
+    fputcsv($output, [PluginSlareportReport::trans('SLA_Audit_Legend')]);
+    fputcsv($output, [PluginSlareportReport::trans('SLA_HIGH_RISK'), PluginSlareportReport::trans('SLA_HIGH_DESC')]);
+    fputcsv($output, [PluginSlareportReport::trans('SLA_SUSPICIOUS'), PluginSlareportReport::trans('SLA_SUSP_DESC')]);
+    fputcsv($output, [PluginSlareportReport::trans('SLA_NORMAL'), PluginSlareportReport::trans('SLA_NORM_DESC')]);
+    fputcsv($output, []);
+    fputcsv($output, [PluginSlareportReport::trans('SLA_Risk_Flags')]);
+    fputcsv($output, ['stagnant', PluginSlareportReport::trans('SLA_Flag_Stagnant')]);
+    fputcsv($output, ['last_minute', PluginSlareportReport::trans('SLA_Flag_LastMinute')]);
+    fputcsv($output, ['excessive_toggling', PluginSlareportReport::trans('SLA_Flag_Toggling')]);
 
     fclose($output);
     exit;
 }
 
-Html::header(__('SLA Breach Report', 'slareport'), $_SERVER['PHP_SELF'], "tools", "plugins");
+Html::header(PluginSlareportReport::trans('SLA_Report_Title'), $_SERVER['PHP_SELF'], "tools", "plugins");
 
 $data = PluginSlareportReport::getSlaComplianceData($start_date, $end_date, $entity_id, $sort, $order);
 $summary = $data['summary'];
 $tickets = $data['tickets'];
 
 $compliance_rate = ($summary['sla_total'] > 0) ? round(($summary['sla_ok'] / $summary['sla_total']) * 100, 1) : 0;
-
-// Helper for sort links
-function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
-{
-    $new_order = ($current_sort == $col && $current_order == 'ASC') ? 'DESC' : 'ASC';
-    return "?sort=$col&order=$new_order&start_date=$start&end_date=$end&entity_id=$ent";
-}
 ?>
 
 <style>
@@ -277,36 +286,36 @@ function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
 
 <div class='dashboard-container'>
     <div class='dashboard-header'>
-        <h2><?php echo __('SLA Breach Report', 'slareport'); ?> <span class='version-badge'>v<?php echo PLUGIN_SLAREPORT_VERSION; ?> [Stable]</span></h2>
+        <h2><?php echo PluginSlareportReport::trans('SLA_Report_Title'); ?> <span class='version-badge'>v<?php echo PLUGIN_SLAREPORT_VERSION; ?> [Stable]</span></h2>
     </div>
 
     <form method='get' action='' class='filter-form'>
         <div class='filter-group'>
-            <label><?php echo __('Start Date', 'slareport'); ?></label>
+            <label><?php echo PluginSlareportReport::trans('SLA_Start_Date'); ?></label>
             <?php Html::showDateField('start_date', ['value' => $start_date]); ?>
         </div>
         <div class='filter-group'>
-            <label><?php echo __('End Date', 'slareport'); ?></label>
+            <label><?php echo PluginSlareportReport::trans('SLA_End_Date'); ?></label>
             <?php Html::showDateField('end_date', ['value' => $end_date]); ?>
         </div>
         <div class='filter-group'>
-            <label><?php echo __('Entity', 'slareport'); ?></label>
+            <label><?php echo PluginSlareportReport::trans('SLA_Entity'); ?></label>
             <?php
             Entity::dropdown([
                 'name'                => 'entity_id',
                 'value'               => $entity_id,
                 'is_recursive'        => true,
                 'display_emptychoice' => true,
-                'emptylabel'          => __('All', 'slareport'),
+                'emptylabel'          => PluginSlareportReport::trans('SLA_All'),
                 'width'               => '100%'
             ]);
             ?>
         </div>
         <div class='btn-group' style='display: flex; gap: 8px; margin-left: auto;'>
-            <input type='submit' value="<?php echo __s('Search', 'slareport'); ?>" class='submit-btn'>
-            <input type='submit' name='export_csv' value="<?php echo __s('CSV', 'slareport'); ?>" class='submit-btn' style='background: var(--success)'>
+            <input type='submit' value="<?php echo PluginSlareportReport::trans('SLA_Search'); ?>" class='submit-btn'>
+            <input type='submit' name='export_csv' value="<?php echo PluginSlareportReport::trans('SLA_CSV'); ?>" class='submit-btn' style='background: var(--success)'>
             <button type='button' class='submit-btn' style='background: var(--danger)' onclick="window.open('export_pdf.php?start_date=' + encodeURIComponent(document.getElementsByName('start_date')[0].value) + '&end_date=' + encodeURIComponent(document.getElementsByName('end_date')[0].value) + '&entity_id=' + document.getElementsByName('entity_id')[0].value, '_blank')">
-                <i class='fas fa-file-pdf'></i> <?php echo __s('PDF', 'slareport'); ?>
+                <i class='fas fa-file-pdf'></i> <?php echo PluginSlareportReport::trans('SLA_PDF'); ?>
             </button>
         </div>
     </form>
@@ -314,70 +323,59 @@ function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
     <div class='kpi-container'>
         <div class='kpi-card'>
             <div class='kpi-value'><?php echo $summary['total_tickets']; ?></div>
-            <div class='kpi-label'><?php echo __('Total Tickets', 'slareport'); ?></div>
+            <div class='kpi-label'><?php echo PluginSlareportReport::trans('SLA_Total_Tickets'); ?></div>
         </div>
         <div class='kpi-card'>
             <div class='kpi-value' style='color: var(--primary)'><?php echo $summary['sla_total']; ?></div>
-            <div class='kpi-label'><?php echo __('SLA Tickets', 'slareport'); ?></div>
+            <div class='kpi-label'><?php echo PluginSlareportReport::trans('SLA_SLA_Tickets'); ?></div>
         </div>
         <div class='kpi-card'>
             <div class='kpi-value' style='color: var(--success)'><?php echo $compliance_rate; ?>%</div>
-            <div class='kpi-label'><?php echo __('SLA Compliance', 'slareport'); ?></div>
+            <div class='kpi-label'><?php echo PluginSlareportReport::trans('SLA_Compliance'); ?></div>
         </div>
         <div class='kpi-card'>
             <div class='kpi-value' style='color: var(--danger)'><?php echo $summary['sla_violated']; ?></div>
-            <div class='kpi-label'><?php echo __('Breaches', 'slareport'); ?></div>
+            <div class='kpi-label'><?php echo PluginSlareportReport::trans('SLA_Breaches'); ?></div>
         </div>
         <div class='kpi-card'>
             <div class='kpi-value' style='color: var(--warning)'><?php echo $summary['sla_waiting']; ?></div>
-            <div class='kpi-label'><?php echo __('Pending', 'slareport'); ?></div>
+            <div class='kpi-label'><?php echo PluginSlareportReport::trans('SLA_Pending_Label'); ?></div>
         </div>
         <div class='kpi-card'>
             <div class='kpi-value' style='color: var(--info)'><?php echo $summary['sla_active']; ?></div>
-            <div class='kpi-label'><?php echo __('Active SLAs', 'slareport'); ?></div>
+            <div class='kpi-label'><?php echo PluginSlareportReport::trans('SLA_Active_SLAs'); ?></div>
         </div>
     </div>
 
     <div class='chart-grid'>
         <div class='chart-card'>
-            <h3><?php echo __('SLA Status Distribution', 'slareport'); ?></h3>
+            <h3><?php echo PluginSlareportReport::trans('SLA_Status_Distribution'); ?></h3>
             <canvas id='complianceChart'></canvas>
         </div>
         <div class='chart-card'>
-            <h3><?php echo __('Top Violating Entities', 'slareport'); ?></h3>
+            <h3><?php echo PluginSlareportReport::trans('SLA_Top_Entities'); ?></h3>
             <canvas id='violationsChart'></canvas>
         </div>
     </div>
 
     <table class='tab_cadre_fixehov'>
         <tr>
-            <th><a href="<?php echo getSortLink('glpi_tickets.id', $sort, $order, $start_date, $end_date, $entity_id); ?>">ID</a></th>
-            <th style='width: 30%'><a href="<?php echo getSortLink('glpi_tickets.name', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo __('Subject', 'slareport'); ?></a></th>
-            <th><a href="<?php echo getSortLink('glpi_entities.completename', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo __('Entity', 'slareport'); ?></a></th>
-            <th><a href="<?php echo getSortLink('glpi_tickets.date', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo __('Opening Date', 'slareport'); ?></a></th>
-            <th><?php echo __('Status', 'slareport'); ?></th>
-            <th><?php echo __('Violation', 'slareport'); ?></th>
-            <th><?php echo __('SLA Definition', 'slareport'); ?></th>
-            <th><?php echo __('Pending Time', 'slareport'); ?></th>
-            <th><?php echo __('Reason', 'slareport'); ?></th>
-            <th><?php echo __('Audit / Risk', 'slareport'); ?></th>
-            <th><?php echo __('Deadline', 'slareport'); ?></th>
+            <th><a href="<?php echo getSortLink('glpi_tickets.id', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo PluginSlareportReport::trans('SLA_ID'); ?></a></th>
+            <th style='width: 30%'><a href="<?php echo getSortLink('glpi_tickets.name', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo PluginSlareportReport::trans('SLA_Subject'); ?></a></th>
+            <th><a href="<?php echo getSortLink('glpi_entities.completename', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo PluginSlareportReport::trans('SLA_Entity'); ?></a></th>
+            <th><a href="<?php echo getSortLink('glpi_tickets.date', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo PluginSlareportReport::trans('SLA_Opening_Date'); ?></a></th>
+            <th><?php echo PluginSlareportReport::trans('SLA_Status'); ?></th>
+            <th><?php echo PluginSlareportReport::trans('SLA_Violation'); ?></th>
+            <th><?php echo PluginSlareportReport::trans('SLA_Definition'); ?></th>
+            <th><?php echo PluginSlareportReport::trans('SLA_Pending_Time'); ?></th>
+            <th><?php echo PluginSlareportReport::trans('SLA_Reason'); ?></th>
+            <th><?php echo PluginSlareportReport::trans('SLA_Audit_Risk'); ?></th>
+            <th><?php echo PluginSlareportReport::trans('SLA_Deadline'); ?></th>
         </tr>
         <?php foreach ($tickets as $ticket):
-            // Calculate styles for pending metrics
             $pending_bg = 'transparent';
-            if ($ticket['pending_ratio'] > 0.7) {
-                $pending_bg = 'var(--warning)';
-            } elseif ($ticket['pending_ratio'] > 0.3) {
-                $pending_bg = '#fef3c7';
-            }
-
-            $pending_color = 'var(--text)';
-            if ($ticket['pending_ratio'] > 1) {
-                $pending_color = 'var(--danger)';
-            } elseif ($ticket['pending_ratio'] > 0.7) {
-                $pending_color = 'var(--warning)';
-            }
+            if ($ticket['pending_ratio'] > 0.7) { $pending_bg = 'var(--warning)'; }
+            elseif ($ticket['pending_ratio'] > 0.3) { $pending_bg = '#fef3c7'; }
         ?>
             <tr class='tab_bg_1'>
                 <td><a href='/front/ticket.form.php?id=<?php echo $ticket['id']; ?>' target='_blank'><strong>#<?php echo $ticket['id']; ?></strong></a></td>
@@ -398,18 +396,18 @@ function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
                 <td>
                     <span class="audit-badge audit-<?php echo $ticket['audit']['risk_level']; ?>">
                         <?php 
-                        if ($ticket['audit']['risk_level'] == 'high') echo '⚠️ ' . __('HIGH RISK', 'slareport');
-                        elseif ($ticket['audit']['risk_level'] == 'suspicious') echo '🧐 ' . __('SUSPICIOUS', 'slareport');
-                        else echo '✅ ' . __('NORMAL', 'slareport');
+                        if ($ticket['audit']['risk_level'] == 'high') echo '⚠️ ' . PluginSlareportReport::trans('SLA_HIGH_RISK');
+                        elseif ($ticket['audit']['risk_level'] == 'suspicious') echo '🧐 ' . PluginSlareportReport::trans('SLA_SUSPICIOUS');
+                        else echo '✅ ' . PluginSlareportReport::trans('SLA_NORMAL');
                         ?>
                     </span>
                     <div style="margin-top: 4px;">
                         <?php foreach ($ticket['audit']['flags'] as $flag): ?>
                             <span class="flag-icon" title="<?php 
                                 switch($flag) {
-                                    case 'stagnant': echo __('Pending time exceeds TTR limit', 'slareport'); break;
-                                    case 'last_minute': echo __('Moved to pending at the last minute of SLA', 'slareport'); break;
-                                    case 'excessive_toggling': echo __('Frequent status changes to/from Pending', 'slareport'); break;
+                                    case 'stagnant': echo PluginSlareportReport::trans('SLA_Flag_Stagnant'); break;
+                                    case 'last_minute': echo PluginSlareportReport::trans('SLA_Flag_LastMinute'); break;
+                                    case 'excessive_toggling': echo PluginSlareportReport::trans('SLA_Flag_Toggling'); break;
                                 }
                             ?>">
                                 <?php 
@@ -438,15 +436,14 @@ function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
 
 <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
 <script>
-    // Compliance Chart
     new Chart(document.getElementById('complianceChart'), {
         type: 'doughnut',
         data: {
             labels: [
-                "<?php echo __s('Compliant', 'slareport'); ?>",
-                "<?php echo __s('Violated', 'slareport'); ?>",
-                "<?php echo __s('Active', 'slareport'); ?>",
-                "<?php echo __s('Pending', 'slareport'); ?>"
+                "<?php echo PluginSlareportReport::trans('SLA_Compliant_Label'); ?>",
+                "<?php echo PluginSlareportReport::trans('SLA_Violated_Label'); ?>",
+                "<?php echo PluginSlareportReport::trans('SLA_Active_Label'); ?>",
+                "<?php echo PluginSlareportReport::trans('SLA_Pending_Label'); ?>"
             ],
             datasets: [{
                 data: [
@@ -466,11 +463,10 @@ function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
         }
     });
 
-    // Violations Chart
     <?php
     $violations_by_entity = [];
     foreach ($summary['entities'] as $name => $stats) {
-        if ($stats['sla_violated'] > 0) {
+        if (isset($stats['sla_violated']) && $stats['sla_violated'] > 0) {
             $violations_by_entity[$name] = $stats['sla_violated'];
         }
     }
@@ -482,7 +478,7 @@ function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
         data: {
             labels: <?php echo json_encode(array_keys($top_violations)); ?>,
             datasets: [{
-                label: "<?php echo __s('Breaches', 'slareport'); ?>",
+                label: "<?php echo PluginSlareportReport::trans('SLA_Breaches'); ?>",
                 data: <?php echo json_encode(array_values($top_violations)); ?>,
                 backgroundColor: '#ef4444'
             }]

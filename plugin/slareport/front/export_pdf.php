@@ -1,27 +1,31 @@
 <?php
 include("../../../inc/includes.php");
 Session::checkLoginUser();
+
+// Robust class include
+include_once(GLPI_ROOT . "/plugins/slareport/inc/report.class.php");
+
 global $DB;
 
 $start_date  = $_GET['start_date'] ?? date('Y-m-01');
 $end_date    = $_GET['end_date'] ?? date('Y-m-d');
-$entities_id = isset($_GET['entity_id']) ? (int)$_GET['entity_id'] : 0;
+$entities_id = (int)($_GET['entity_id'] ?? 0);
 
-$report = new PluginSlareportReport();
 $data = PluginSlareportReport::getSlaComplianceData($start_date, $end_date, $entities_id);
-
 $summary = $data['summary'];
 $tickets = $data['tickets'];
 
 $compliance_rate = ($summary['sla_total'] > 0) 
     ? round(($summary['sla_ok'] / $summary['sla_total']) * 100, 1) 
-    : 100;
+    : 0;
 
-// Load TCPDF from GLPI Vendor
-if (file_exists(GLPI_ROOT . '/vendor/autoload.php')) {
-    require_once(GLPI_ROOT . '/vendor/autoload.php');
-} elseif (file_exists(GLPI_ROOT . '/vendor/tecnickcom/tcpdf/tcpdf.php')) {
-    require_once(GLPI_ROOT . '/vendor/tecnickcom/tcpdf/tcpdf.php');
+// Load TCPDF correctly for GLPI 10/11
+if (!class_exists('TCPDF')) {
+    if (defined('GLPI_TCPDF_DIR')) {
+        require_once(GLPI_TCPDF_DIR . '/tcpdf.php');
+    } elseif (file_exists(GLPI_ROOT . '/vendor/tecnickcom/tcpdf/tcpdf.php')) {
+        require_once(GLPI_ROOT . '/vendor/tecnickcom/tcpdf/tcpdf.php');
+    }
 }
 
 class SlareportPDF extends \TCPDF {
@@ -30,7 +34,7 @@ class SlareportPDF extends \TCPDF {
             $this->SetY(8);
             $this->SetFont('dejavusans', 'I', 8);
             $this->SetTextColor(120, 120, 120);
-            $this->Cell(0, 10, 'SLA Breach Report - ' . date('d.m.Y'), 0, 0, 'R');
+            $this->Cell(0, 10, PluginSlareportReport::trans('SLA_Report_Title') . ' - ' . date('d.m.Y'), 0, 0, 'R');
             $this->Line(10, 16, $this->getPageWidth()-10, 16);
         }
     }
@@ -43,7 +47,7 @@ class SlareportPDF extends \TCPDF {
 
 $pdf = new SlareportPDF('L', 'mm', 'A4', true, 'UTF-8', false);
 $pdf->SetCreator('GLPI Slareport Plugin');
-$pdf->SetTitle('SLA Breach Report');
+$pdf->SetTitle(PluginSlareportReport::trans('SLA_Report_Title'));
 $pdf->SetMargins(10, 20, 10);
 $pdf->SetAutoPageBreak(true, 20);
 
@@ -55,36 +59,36 @@ $pdf->Rect(0, 0, $pdf->getPageWidth(), $pdf->getPageHeight(), 'F');
 $pdf->SetTextColor(255, 255, 255);
 $pdf->SetY(60);
 $pdf->SetFont('dejavusans', 'B', 32);
-$pdf->Cell(0, 20, 'SLA BREACH REPORT', 0, 1, 'C');
+$pdf->Cell(0, 20, strtoupper(PluginSlareportReport::trans('SLA_Report_Title')), 0, 1, 'C');
 
 $pdf->SetFont('dejavusans', '', 16);
 $pdf->Cell(0, 15, $start_date . ' / ' . $end_date, 0, 1, 'C');
 
 $pdf->SetY(120);
 $pdf->SetFont('dejavusans', 'B', 14);
-$pdf->Cell(0, 10, 'COMPLIANCE RATE: ' . $compliance_rate . '%', 0, 1, 'C');
+$pdf->Cell(0, 10, strtoupper(PluginSlareportReport::trans('SLA_Compliance_Rate')) . ': ' . $compliance_rate . '%', 0, 1, 'C');
 
 $pdf->SetY(160);
 $pdf->SetFont('dejavusans', '', 10);
-$pdf->Cell(0, 10, 'Generated on: ' . date('d.m.Y H:i'), 0, 1, 'C');
+$pdf->Cell(0, 10, PluginSlareportReport::trans('SLA_Generated_On') . ': ' . date('d.m.Y H:i'), 0, 1, 'C');
 
 // --- SUMMARY & CHARTS PAGE ---
 $pdf->AddPage();
 $pdf->SetTextColor(30, 41, 59);
 $pdf->SetFont('dejavusans', 'B', 16);
-$pdf->Cell(0, 15, '1. Executive Summary', 0, 1, 'L');
+$pdf->Cell(0, 15, PluginSlareportReport::trans('SLA_Executive_Summary'), 0, 1, 'L');
 
 // KPI Table
 $html_kpi = '
 <table cellpadding="6" border="1" style="border-collapse:collapse; width:100%; background-color:#f8fafc;">
     <tr style="background-color:#1e293b; color:#ffffff; font-weight:bold;">
-        <th align="center">Total Tickets</th>
-        <th align="center">SLA Tickets</th>
-        <th align="center">Compliant</th>
-        <th align="center">Violated</th>
-        <th align="center">Pending</th>
-        <th align="center">Active</th>
-        <th align="center">Compliance Rate</th>
+        <th align="center">' . PluginSlareportReport::trans('SLA_Total_Tickets') . '</th>
+        <th align="center">' . PluginSlareportReport::trans('SLA_SLA_Tickets') . '</th>
+        <th align="center">' . PluginSlareportReport::trans('SLA_Compliant') . '</th>
+        <th align="center">' . PluginSlareportReport::trans('SLA_Violated') . '</th>
+        <th align="center">' . PluginSlareportReport::trans('SLA_Pending') . '</th>
+        <th align="center">' . PluginSlareportReport::trans('SLA_Active') . '</th>
+        <th align="center">' . PluginSlareportReport::trans('SLA_Compliance_Rate') . '</th>
     </tr>
     <tr>
         <td align="center">'.$summary['total_tickets'].'</td>
@@ -100,11 +104,11 @@ $pdf->writeHTML($html_kpi, true, false, false, false, '');
 
 $pdf->Ln(10);
 $pdf->SetFont('dejavusans', 'B', 14);
-$pdf->Cell(0, 15, '2. Violations by Entity (Top 10)', 0, 1, 'L');
+$pdf->Cell(0, 15, PluginSlareportReport::trans('SLA_Violations_By_Entity'), 0, 1, 'L');
 
 $entity_violations = [];
 foreach ($summary['entities'] as $name => $stats) {
-    if ($stats['sla_violated'] > 0) {
+    if (isset($stats['sla_violated']) && $stats['sla_violated'] > 0) {
         $entity_violations[$name] = $stats['sla_violated'];
     }
 }
@@ -112,7 +116,7 @@ arsort($entity_violations);
 $top_violations = array_slice($entity_violations, 0, 10);
 
 if (empty($top_violations)) {
-    $pdf->Cell(0, 10, 'No violations found.', 0, 1, 'L');
+    $pdf->Cell(0, 10, PluginSlareportReport::trans('SLA_No_Violations'), 0, 1, 'L');
 } else {
     $max_v = max($top_violations);
     $chart_html = '<table cellpadding="4" cellspacing="0" width="100%">';
@@ -131,7 +135,7 @@ if (empty($top_violations)) {
 // --- DETAILED TABLE ---
 $pdf->AddPage();
 $pdf->SetFont('dejavusans', 'B', 16);
-$pdf->Cell(0, 15, '3. Detailed SLA Breach List', 0, 1, 'L');
+$pdf->Cell(0, 15, PluginSlareportReport::trans('SLA_Detailed_List'), 0, 1, 'L');
 
 $widths = [
     'id'        => '4%',
@@ -151,17 +155,17 @@ $tbl_header = '
 <table border="1" cellpadding="4" style="border-collapse:collapse; width:100%; font-size:7px;">
     <thead>
         <tr style="background-color:#334155; color:#ffffff; font-weight:bold;">
-            <th width="'.$widths['id'].'" align="center">ID</th>
-            <th width="'.$widths['entity'].'">Entity</th>
-            <th width="'.$widths['date'].'" align="center">Opening Date</th>
-            <th width="'.$widths['title'].'">Title</th>
-            <th width="'.$widths['status'].'" align="center">Status</th>
-            <th width="'.$widths['sla'].'" align="center">SLA / Violation</th>
-            <th width="'.$widths['pending'].'" align="center">Pending (Time/Reason)</th>
-            <th width="'.$widths['audit'].'" align="center">Audit</th>
-            <th width="'.$widths['deadlines'].'" align="center">Deadlines</th>
-            <th width="'.$widths['solvedate'].'" align="center">Solved</th>
-            <th width="'.$widths['delay'].'" align="center">Delay (TTO/TTR)</th>
+            <th width="'.$widths['id'].'" align="center">' . PluginSlareportReport::trans('SLA_ID') . '</th>
+            <th width="'.$widths['entity'].'">' . PluginSlareportReport::trans('SLA_Entity') . '</th>
+            <th width="'.$widths['date'].'" align="center">' . PluginSlareportReport::trans('SLA_Opening_Date') . '</th>
+            <th width="'.$widths['title'].'">' . PluginSlareportReport::trans('SLA_Subject') . '</th>
+            <th width="'.$widths['status'].'" align="center">' . PluginSlareportReport::trans('SLA_Status') . '</th>
+            <th width="'.$widths['sla'].'" align="center">' . PluginSlareportReport::trans('SLA_Violation') . '</th>
+            <th width="'.$widths['pending'].'" align="center">' . PluginSlareportReport::trans('SLA_Pending_Time') . ' / ' . PluginSlareportReport::trans('SLA_Reason') . '</th>
+            <th width="'.$widths['audit'].'" align="center">' . PluginSlareportReport::trans('SLA_Audit_Risk') . '</th>
+            <th width="'.$widths['deadlines'].'" align="center">' . PluginSlareportReport::trans('SLA_Deadline') . '</th>
+            <th width="'.$widths['solvedate'].'" align="center">' . PluginSlareportReport::trans('SLA_Solved') . '</th>
+            <th width="'.$widths['delay'].'" align="center">' . PluginSlareportReport::trans('SLA_Delay_TTO_TTR') . '</th>
         </tr>
     </thead>
     <tbody>';
@@ -204,16 +208,16 @@ $legend_html = '
 <table cellpadding="4" style="background-color:#f1f5f9; border: 1px solid #cbd5e1; width:100%;">
     <tr>
         <td>
-            <b>SLA Audit Legend / Denetim Sözlüğü:</b><br>
-            <b>HIGH RISK:</b> SLA manipülasyonu belirtileri (Yüksek Risk).<br>
-            <b>SUSPICIOUS:</b> Olağandışı kullanım örüntüleri (Şüpheli).<br>
-            <b>NORMAL:</b> Kurallara uygun yönetim.
+            <b>' . PluginSlareportReport::trans('SLA_Audit_Legend') . ':</b><br>
+            <b>' . PluginSlareportReport::trans('SLA_HIGH_RISK') . ':</b> ' . PluginSlareportReport::trans('SLA_HIGH_DESC') . '<br>
+            <b>' . PluginSlareportReport::trans('SLA_SUSPICIOUS') . ':</b> ' . PluginSlareportReport::trans('SLA_SUSP_DESC') . '<br>
+            <b>' . PluginSlareportReport::trans('SLA_NORMAL') . ':</b> ' . PluginSlareportReport::trans('SLA_NORM_DESC') . '
         </td>
         <td>
-            <b>Risk Flags / Risk Bayrakları:</b><br>
-            <b>stagnant:</b> Bekleme süresi SLA süresini aşmış (Durağan).<br>
-            <b>last_minute:</b> SLA bitimine %10 kala beklemeye alınmış (Son Dakika).<br>
-            <b>excessive_toggling:</b> 3 kereden fazla beklemeye al/çıkar yapılmış (Aşırı Git-Gel).
+            <b>' . PluginSlareportReport::trans('SLA_Risk_Flags') . ':</b><br>
+            <b>stagnant:</b> ' . PluginSlareportReport::trans('SLA_Flag_Stagnant') . '<br>
+            <b>last_minute:</b> ' . PluginSlareportReport::trans('SLA_Flag_LastMinute') . '<br>
+            <b>excessive_toggling:</b> ' . PluginSlareportReport::trans('SLA_Flag_Toggling') . '
         </td>
     </tr>
 </table>';

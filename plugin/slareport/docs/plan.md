@@ -1,32 +1,25 @@
-# SLA Raporu - Bekleme ve Risk Analizi Geliştirme Planı
+# Plan: SLA Translation & Deployment Optimization
 
-Eklentiye "SLA Manipülasyon Analizi" ve gelişmiş bekleme takibi özelliklerini eklemek için aşağıdaki adımlar izlenecektir.
+## Goal
+Fix persistent translation issues, enhance PDF report aesthetics, and establish a reliable production deployment workflow.
 
-## Yapılacak Değişiklikler
+## Steps (Completed)
+- [x] **Custom Translation Engine**: Implement `PluginSlareportReport::trans()` to bypass GLPI cache issues.
+- [x] **Locale Conversion**: Migrate `.mo/.po` files to direct PHP return arrays for TR/EN.
+- [x] **UI Integration**: Update `index.php`, `report.class.php`, and `export_pdf.php` to use the new engine.
+- [x] **Premium PDF Restoration**: Re-implement cover page, charts, and executive summary with multi-language support.
+- [x] **PROD Deployment**: Create `deploy_prod.sh` targeting `10.42.2.149` with correct paths and users.
+- [x] **Bug Fixes**: 
+    - Resolved 500 error in `setup.php`.
+    - Fixed TCPDF inclusion for GLPI 10/11.
+    - Fixed CSV output buffering issues.
 
-### 1. `inc/report.class.php` (Mantık Katmanı)
-- **Veri Toplama**: `glpi_pendingreasons` ve `glpi_pendingreasons_items` tabloları bilet sorgusuna (LEFT JOIN) eklenecek.
-- **İstatistik Hesaplama**: `calculateTotalPendingTime` metodu `calculatePendingStats` olarak genişletilecek:
-    - Toplam bekleme süresi hesaplanacak.
-    - Bekleme (Pending) statüsüne kaç kez geçildiği sayılacak (`status_toggles`).
-    - İlk bekleme başlangıç zamanı kaydedilecek.
-- **Risk Analizi**: Her bilet için bir `risk_score` ve `risk_flags` hesaplanacak:
-    - **Stagnant**: Bekleme Süresi > TTR Süresi.
-    - **Last Minute**: SLA'in son %10'luk diliminde beklemete alınma.
-    - **Excessive Toggling**: 3 kereden fazla beklemete alınma.
+## Verification
+- [x] Dashboard fully translated in itsm-dev.
+- [x] PDF export generated with cover page and Turkish characters.
+- [x] CSV export working without errors.
+- [x] deploy_prod.sh tested and verified.
 
-### 2. `front/index.php` (Sunum Katmanı)
-- **KPI Kartları**: "Pending Tickets" kartı eklenecek.
-- **Bilet Listesi**:
-    - "Pending Reason" (Bekleme Nedeni) sütunu eklenecek.
-    - "SLA Audit" (Risk Analizi) sütunu eklenecek.
-    - Risk durumuna göre ikonlar ve renkli uyarılar (Badge) eklenecek:
-        - 🔴 **Yüksek Risk**: Manipülasyon belirtileri (Son dakika, aşırı git-gel).
-        - 🟡 **Şüpheli**: Çok uzun süreli bekleme (Stagnant).
-        - 🟢 **Normal**: Kurallara uygun bekleme.
-- **Grafik**: "SLA Status Distribution" pasta grafiğine "Pending" dilimi eklenecek.
-
-## Doğrulama Planı
-- Bekleme nedenlerinin doğru çekildiği kontrol edilecek.
-- Manipülasyon tespit kriterlerinin (Son dakika, git-gel sayısı) bilet loglarıyla tutarlılığı test edilecek.
-- Arayüzde risk durumlarının görsel olarak netliği kontrol edilecek.
+## Next Steps (Future)
+- Monitor memory usage for extremely large PDF exports.
+- Implement background processing for very large date ranges.

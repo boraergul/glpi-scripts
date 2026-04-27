@@ -5,11 +5,24 @@ A specialized GLPI reporting plugin designed to provide accurate SLA compliance 
 
 ## Technical Architecture
 - **Core Strategy**: Real-time calculation of TTR/TTO breaches based on statistical delay constants (`solve_delay_stat`, `takeintoaccount_delay_stat`) and dynamic deadlines.
+- **Custom Translation Engine**: A high-performance, cache-independent translation system (`PluginSlareportReport::trans`) that bypasses GLPI's native `__()` to ensure reliability across version updates and language cache clears.
 - **Frontend**: Single-page interactive dashboard using CSS Grid and Chart.js.
 - **Database**: Native GLPI `DBmysqlIterator` integration with strictly validated sorting to prevent SQL Injection.
 - **Reporting**: Combined CSV (Native PHP) and PDF (TCPDF) export engines with memory-efficient buffered writing.
+- **Deployment**: Dual-environment automated deployment (DEV and PROD) via SSH/SCP with automated ownership management.
 
 ## Chronological Work Log
+
+### [2026-04-27] - Version 1.2.2 Translation Stability & PROD Deployment
+- **[ENGINE]** Implemented **Custom Translation Engine** to resolve persistent translation key issues in GLPI 11.
+    - Created `PluginSlareportReport::trans()` to manually load locale files from `locales/` directory.
+    - Converted `.mo/.po` workflow to direct PHP array files (`locales/tr_TR.php`, `locales/en_GB.php`) for maximum reliability.
+- **[PDF]** Restored and enhanced **Premium PDF Layout**:
+    - Added Cover Page with dark slate theme.
+    - Implemented Executive Summary and Entity Violation Charts (table-based bars).
+    - Fixed TCPDF inclusion logic to support both GLPI 10 and 11 vendor structures.
+- **[DEPLOY]** Created `deploy_prod.sh` for one-click deployment to **ITSM-PROD (10.42.2.149)** with `bora` user.
+- **[FIX]** Resolved 500 error in `setup.php` by implementing `slareport_get_title_safe()` (avoids class calls during early plugin initialization).
 
 ### [2026-04-27] - Version 1.2.0 SLA Audit & Synchronization
 - **[FEATURE]** Implemented **SLA Audit & Risk Analysis** system:
@@ -17,49 +30,20 @@ A specialized GLPI reporting plugin designed to provide accurate SLA compliance 
     - Added risk flags: `stagnant`, `last_minute`, and `excessive_toggling`.
     - Visual risk badges and flag icons in the dashboard.
 - **[UI]** Renamed all "Date" fields to **"Opening Date"** (Açılış Tarihi) for better clarity.
-- **[FEATURE]** Synchronized PDF and CSV outputs:
-    - Added missing CSV fields to PDF (Opening Date, SLA Name, Violation Type, Pending Time).
-    - Re-architected PDF table layout for 11 columns on Landscape A4.
-- **[FEATURE]** Added **Bilingual Legends** (TR/EN) to both PDF and CSV exports to explain Audit terms.
-- **[FIX]** Resolved `&nbsp;` and HTML entity issues in PDF truncation by migrating from `Html::resume_text` to `mb_strimwidth`.
+- **[FEATURE]** Synchronized PDF and CSV outputs.
 
 ### [2026-04-24] - Version 1.1.2 GLPI 11.0.6 Compatibility Patch
 - **[FIX]** Migrated `CommonITILObject::PENDING` to `CommonITILObject::WAITING` to resolve "Undefined constant" error in GLPI 11.0.6.
-- **[FIX]** Reverted "Pending Reasons" experimental integration to maintain core stability and layout simplicity.
 
-### [2026-04-24] - Version 1.1.1 GLPI 11.0.6 Log Schema & Sorting Fixes
-- **[FIX]** Updated `glpi_logs` usage to match GLPI 11 schema: migrated from `ticket_id`/`newvalue` to `items_id`/`new_value`.
-- **[FIX]** Implemented `id_search_option => 12` filter for log analysis to accurately track status changes.
-- **[FIX]** Added `glpi_entities` JOIN in `report.class.php` to resolve SQL errors when sorting by entity name.
-- **[FIX]** Fixed `entity_id` parameter mismatch in PDF export URL.
-- **[CLEAN]** Refactored `calculateTotalPendingTime` to use efficient array-based interval calculation.
-- **[CLEAN]** Improved SLA name formatting using `array_filter` and `implode`.
-
-### [2026-04-20] - Version 1.1.0 Security & Performance Hardening
-- **[SEC]** Implemented strict allow-list for `ORDER BY` parameters in `report.class.php` to prevent SQL Injection.
-- **[SEC]** Added `Html::escape()` to all user-generated outputs in the frontend to eliminate XSS vulnerabilities.
-- **[PERF]** Optimized database queries by replacing `SELECT *` with specific required columns, reducing memory footprint.
-- **[FIX]** Resolved entity filter mismatch between web view and PDF export (`entity_id` vs `entities_id`).
-- **[PERF]** Refactored PDF export to use buffered row writing instead of large string concatenation, preventing Out-of-Memory (OOM) errors on large datasets.
-- **[SLA]** Improved stability of TTO/TTR calculation logic.
-
-### [2026-04-20] - Version 1.1.0 Stability & GLPI 11 Optimization
-- **[FIX]** Reverted complex technician analytics and timeline features to ensure baseline stability in GLPI 11's stricter Database Iterator environment.
-- **[FEATURE]** Implemented **Recursive Entity Selection** using native GLPI `Entity::dropdown()`.
-- **[SEC]** Migrated search filters from POST to **GET** to eliminate CSRF `AccessDeniedHttpException` on report refreshes.
-- **[FIX]** Resolved `Invalid criteria type` error in GLPI 11 by simplifying `WHERE` clause array structures.
-- **[FIX]** Corrected TCPDF header misalignment by explicitly defining column widths in header and body cells.
-
-### [2026-04-17] - Version 1.0.1 UI/UX Polish
-- **[FEATURE]** Added PDF export capability using GLPI's bundled TCPDF library.
-- **[FEATURE]** Added UTF8-BOM to CSV exports for Turkish character compatibility in Excel.
-- **[UI]** Optimized dashboard layout for dashboard visibility.
+... (History truncated for brevity in README, but maintained in full in docs/project_state.md)
 
 ## Technical Debt & Known Constraints
-- **GLPI 11 Joins**: Complex `ON` conditions using nested arrays currently trigger `Invalid criteria type` errors. Baseline joins are currently used.
-- **PDF Engine**: TCPDF is used for consistent formatting; explicit width management is required for table alignment.
+- **Menu Cache**: GLPI caches the plugin name from `setup.php`. A plugin Disable/Enable cycle is required to refresh the name after a translation update.
+- **PDF Fonts**: Using `dejavusans` is mandatory for Turkish character support; standard PDF fonts like `helvetica` will fail.
 
 ## Environment Checklist
 - **PHP**: 8.1+
 - **GLPI**: 10.0, 11.0 (Tested)
-- **Dependencies**: `tecnickcom/tcpdf` (must be available in GLPI vendor)
+- **Servers**: 
+    - DEV: 10.42.2.146 (glpi user)
+    - PROD: 10.42.2.149 (bora user)

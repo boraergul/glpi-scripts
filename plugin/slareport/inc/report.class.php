@@ -2,20 +2,42 @@
 
 class PluginSlareportReport extends CommonGLPI
 {
+    private static $translations = null;
+
+    /**
+     * Custom translation helper to bypass GLPI locale issues
+     */
+    static function trans($key)
+    {
+        if (self::$translations === null) {
+            $current_lang = $_SESSION['glpilanguage'] ?? 'en_GB';
+            $loc_file = GLPI_ROOT . "/plugins/slareport/locales/" . $current_lang . ".php";
+            if (!file_exists($loc_file)) {
+                $loc_file = GLPI_ROOT . "/plugins/slareport/locales/en_GB.php";
+            }
+            if (file_exists($loc_file)) {
+                self::$translations = include($loc_file);
+            } else {
+                self::$translations = [];
+            }
+        }
+        return self::$translations[$key] ?? $key;
+    }
+
     static function getTypeName($nb = 0)
     {
-        return __('SLA Breach Report', 'slareport');
+        return self::trans('SLA_Report_Title');
     }
 
     static function getMenuName()
     {
-        return __('SLA Breach Report', 'slareport');
+        return self::trans('SLA_Report_Title');
     }
 
     static function getMenuContent()
     {
         return [
-            'title' => __('SLA Breach Report', 'slareport'),
+            'title' => self::trans('SLA_Report_Title'),
             'page' => "/plugins/slareport/front/index.php",
             'icon' => 'fas fa-chart-pie'
         ];
@@ -53,7 +75,7 @@ class PluginSlareportReport extends CommonGLPI
     /**
      * Main data calculation method
      */
-    static function getSlaComplianceData($start_date, $end_date, $entity_id = 0, $sort = 'glpi_tickets.date', $order = 'DESC')
+    static function getSlaComplianceData($start_date, $end_date, $entity_id = 0, $sort = 'glpi_tickets.id', $order = 'DESC')
     {
         global $DB;
 
@@ -65,7 +87,7 @@ class PluginSlareportReport extends CommonGLPI
             'glpi_tickets.date'
         ];
         if (!in_array($sort, $allowed_sorts)) {
-            $sort = 'glpi_tickets.date';
+            $sort = 'glpi_tickets.id';
         }
 
         $allowed_orders = ['ASC', 'DESC'];
@@ -144,7 +166,6 @@ class PluginSlareportReport extends CommonGLPI
         $tickets = [];
         $current_time = date('Y-m-d H:i:s');
 
-        // Collect ticket IDs for batch pending time calculation
         $ticket_ids = [];
         $ticket_records = [];
         foreach ($iterator as $ticket) {
@@ -180,19 +201,16 @@ class PluginSlareportReport extends CommonGLPI
             $sla_tto_id = (int) $ticket['slas_id_tto'];
 
             if ($sla_ttr_id == 0 && $sla_tto_id == 0) {
-                // Non-SLA Ticket
                 $summary['sla_none']++;
                 $summary['entities'][$entity_name]['sla_none']++;
                 $status = 'none';
-                $status_label = __('SLA Not Defined', 'slareport');
+                $status_label = self::trans('SLA_Not_Defined');
                 $violation_type = '';
             } else {
-                // SLA Ticket
                 $summary['sla_total']++;
                 $summary['entities'][$entity_name]['sla_total']++;
 
                 $status = 'compliant';
-                $is_violated = false;
                 $violation_type = '';
 
                 // TTR Calculation
@@ -234,21 +252,16 @@ class PluginSlareportReport extends CommonGLPI
 
                 if ($tto_violated || $ttr_violated) {
                     $status = 'violated';
-                    $is_violated = true;
                     if ($tto_violated && $ttr_violated) {
                         $violation_type = 'TTO + TTR';
                         $summary['sla_tto_violated']++;
                         $summary['sla_ttr_violated']++;
-                        $summary['entities'][$entity_name]['sla_tto_violated']++;
-                        $summary['entities'][$entity_name]['sla_ttr_violated']++;
                     } elseif ($tto_violated) {
                         $violation_type = 'TTO';
                         $summary['sla_tto_violated']++;
-                        $summary['entities'][$entity_name]['sla_tto_violated']++;
                     } else {
                         $violation_type = 'TTR';
                         $summary['sla_ttr_violated']++;
-                        $summary['entities'][$entity_name]['sla_ttr_violated']++;
                     }
                 }
 
@@ -260,7 +273,7 @@ class PluginSlareportReport extends CommonGLPI
                 $summary['sla_' . $status_key]++;
                 $summary['entities'][$entity_name]['sla_' . $status_key]++;
 
-                $status_label = ($status == 'violated' ? __('Violated', 'slareport') : ($status == 'active' ? __('Active', 'slareport') : ($status == 'waiting' ? __('Pending', 'slareport') : __('Compliant', 'slareport'))));
+                $status_label = ($status == 'violated' ? self::trans('SLA_Violated_Label') : ($status == 'active' ? self::trans('SLA_Active_Label') : ($status == 'waiting' ? self::trans('SLA_Pending_Label') : self::trans('SLA_Compliant_Label'))));
             }
 
             $tickets[] = [
@@ -293,7 +306,6 @@ class PluginSlareportReport extends CommonGLPI
                 ]
             ];
 
-            // Calculate Pending Ratio and Breach Probability
             $ttr_seconds = 0;
             if ($sla_ttr_id > 0 && isset($slas[$sla_ttr_id])) {
                 $sla_ttr = $slas[$sla_ttr_id];
@@ -305,16 +317,13 @@ class PluginSlareportReport extends CommonGLPI
                 $ratio = $p_seconds / $ttr_seconds;
                 $prob = min(100, round($ratio * 100, 1));
 
-                // Update the last added ticket in the array
                 $idx = count($tickets) - 1;
                 $tickets[$idx]['pending_ratio'] = $ratio;
                 $tickets[$idx]['breach_probability'] = $prob;
 
-                // Risk Analysis Logic
                 $flags = [];
                 $risk_score = 0;
 
-                // 1. Stagnant Risk
                 if ($ratio > 1.0) {
                     $flags[] = 'stagnant';
                     $risk_score += 2;
@@ -323,7 +332,6 @@ class PluginSlareportReport extends CommonGLPI
                     $risk_score += 1;
                 }
 
-                // 2. Last Minute Risk
                 if ($pending_stats[$tid]['first_pending_start']) {
                     $ttr_limit_date = $ticket['time_to_resolve'];
                     $opening_date = $ticket['date'];
@@ -337,7 +345,6 @@ class PluginSlareportReport extends CommonGLPI
                     }
                 }
 
-                // 3. Toggling Risk
                 if ($pending_stats[$tid]['toggles'] > 3) {
                     $flags[] = 'excessive_toggling';
                     $risk_score += 2;
@@ -354,9 +361,6 @@ class PluginSlareportReport extends CommonGLPI
         ];
     }
 
-    /**
-     * Calculate total time spent in Pending status and other audit metrics
-     */
     static function calculatePendingStats(array $ticket_ids)
     {
         global $DB;
@@ -374,21 +378,19 @@ class PluginSlareportReport extends CommonGLPI
             ];
         }
         
-        // GLPI 11 uses itemtype, items_id, new_value, old_value, date_mod in glpi_logs
         $logs = $DB->request([
             'SELECT' => ['id', 'items_id', 'date_mod', 'new_value', 'old_value'],
             'FROM'   => 'glpi_logs',
             'WHERE'  => [
                 'itemtype'         => 'Ticket',
                 'items_id'         => $ticket_ids,
-                'id_search_option' => 12 // Status field for Tickets
+                'id_search_option' => 12 
             ],
             'ORDER'  => 'date_mod ASC'
         ]);
 
         foreach ($logs as $log) {
             $tid = $log['items_id'];
-
             if ($log['new_value'] == CommonITILObject::WAITING) {
                 $pending_data[$tid]['toggles']++;
                 $pending_data[$tid]['last_start'] = $log['date_mod'];
@@ -405,7 +407,6 @@ class PluginSlareportReport extends CommonGLPI
             }
         }
 
-        // Add current pending time for tickets still in pending
         $current_tickets = $DB->request([
             'SELECT' => ['id', 'status'],
             'FROM'   => 'glpi_tickets',
@@ -429,37 +430,24 @@ class PluginSlareportReport extends CommonGLPI
         return $pending_data;
     }
 
-    /**
-     * Convert SLA time to seconds
-     */
     static function convertToSeconds($number, $definition)
     {
         switch ($definition) {
-            case 'minute':
-                return $number * 60;
-            case 'hour':
-                return $number * 3600;
-            case 'day':
-                return $number * 86400;
-            default:
-                return $number * 3600;
+            case 'minute': return $number * 60;
+            case 'hour': return $number * 3600;
+            case 'day': return $number * 86400;
+            default: return $number * 3600;
         }
     }
 
-    /**
-     * Format seconds to human readable string (e.g. 2s 15d)
-     */
     static function formatInterval($seconds)
     {
-        if ($seconds <= 0)
-            return "-";
-
+        if ($seconds <= 0) return "-";
         $h = floor($seconds / 3600);
         $m = floor(($seconds % 3600) / 60);
-
         if ($h > 0) {
-            return sprintf(__('%1$d h %2$d m', 'slareport'), $h, $m);
+            return sprintf(self::trans('SLA_Time_HM'), $h, $m);
         }
-        return sprintf(__('%1$d m', 'slareport'), $m);
+        return sprintf(self::trans('SLA_Time_M'), $m);
     }
 }
