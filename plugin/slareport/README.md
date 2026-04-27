@@ -7,11 +7,12 @@ A GLPI plugin providing high-fidelity visual and tabular reporting for SLA breac
 - **Recursive Entity Filtering**: Native GLPI entity dropdown supporting hierarchical (recursive) selection to filter data across entire entity branches.
 - **Enhanced Visual Dashboard**: Modern, responsive dashboard featuring interactive status distribution charts (Doughnut) and entity breach analysis (Bar).
 - **Comprehensive Exporting**:
-  - **PDF Export**: Professional multi-page report with cover page, executive summary, and detailed ticket list (using TCPDF).
-  - **CSV Export**: Standardized data export for external spreadsheet analysis with full UTF-8 BOM support.
-- **Real-time SLA Calculation**: Dynamic status determination (Compliant, Violated, Active) based on live ticket deadline data.
-- **Secure Architecture**: CSRF-compliant query handling via GET-parameter state management.
-- **Localization**: Full support for Turkish (TR) and English (EN).
+  - **PDF Export**: Professional multi-page report with cover page, executive summary, and synchronized detailed ticket list including risk analysis and bilingual legends.
+  - **CSV Export**: Standardized data export for external spreadsheet analysis with full UTF-8 BOM support and audit legend.
+- **SLA Audit & Risk Analysis**: Advanced monitoring for SLA manipulation with risk scoring and flags (Stagnant, Last Minute, Excessive Toggling).
+- **Opening Date Tracking**: Explicit tracking and labeling of ticket opening dates across all report formats.
+- **Bilingual Legends**: Built-in support for Turkish (TR) and English (EN) terminology explanations in exported reports.
+- **Real-time SLA Calculation**: Dynamic status determination (Compliant, Violated, Active, Pending) based on live ticket deadline data.
 
 ## Requirements
 - GLPI >= 10.0 (Fully tested on 11.0)
@@ -47,5 +48,5 @@ Access the report via **Tools > SLA Breach Report**.
 
 ---
 **Author**: Bora Ergül  
-**Version**: 1.0.1  
+**Version**: 1.2.0  
 **License**: GPLv2+

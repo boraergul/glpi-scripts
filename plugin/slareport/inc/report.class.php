@@ -100,7 +100,8 @@ class PluginSlareportReport extends CommonGLPI
                 'glpi_tickets.time_to_own',
                 'glpi_tickets.solve_delay_stat',
                 'glpi_tickets.takeintoaccount_delay_stat',
-                'glpi_entities.completename AS entity_completename'
+                'glpi_entities.completename AS entity_completename',
+                'glpi_pendingreasons.name AS pending_reason'
             ],
             'FROM'   => 'glpi_tickets',
             'LEFT JOIN' => [
@@ -108,6 +109,18 @@ class PluginSlareportReport extends CommonGLPI
                     'ON' => [
                         'glpi_tickets' => 'entities_id',
                         'glpi_entities' => 'id'
+                    ]
+                ],
+                'glpi_pendingreasons_items' => [
+                    'ON' => [
+                        'glpi_pendingreasons_items' => 'items_id',
+                        'glpi_tickets'              => 'id'
+                    ]
+                ],
+                'glpi_pendingreasons' => [
+                    'ON' => [
+                        'glpi_pendingreasons_items' => 'pendingreasons_id',
+                        'glpi_pendingreasons' => 'id'
                     ]
                 ]
             ],
@@ -123,6 +136,7 @@ class PluginSlareportReport extends CommonGLPI
             'sla_tto_violated' => 0,
             'sla_ttr_violated' => 0,
             'sla_active' => 0,
+            'sla_waiting' => 0,
             'sla_none' => 0,
             'entities' => []
         ];
@@ -138,9 +152,10 @@ class PluginSlareportReport extends CommonGLPI
             $ticket_records[] = $ticket;
         }
 
-        $pending_times = self::calculateTotalPendingTime($ticket_ids);
+        $pending_stats = self::calculatePendingStats($ticket_ids);
 
         foreach ($ticket_records as $ticket) {
+            $tid = (int)$ticket['id'];
             $summary['total_tickets']++;
 
             $entity_id_ticket = (int) $ticket['entities_id'];
@@ -155,6 +170,7 @@ class PluginSlareportReport extends CommonGLPI
                     'sla_tto_violated' => 0,
                     'sla_ttr_violated' => 0,
                     'sla_active' => 0,
+                    'sla_waiting' => 0,
                     'sla_none' => 0
                 ];
             }
@@ -236,11 +252,15 @@ class PluginSlareportReport extends CommonGLPI
                     }
                 }
 
-                $status_key = ($status == 'violated' ? 'violated' : ($status == 'active' ? 'active' : 'ok'));
+                if ($ticket['status'] == CommonITILObject::WAITING) {
+                    $status = 'waiting';
+                }
+
+                $status_key = ($status == 'violated' ? 'violated' : ($status == 'active' ? 'active' : ($status == 'waiting' ? 'waiting' : 'ok')));
                 $summary['sla_' . $status_key]++;
                 $summary['entities'][$entity_name]['sla_' . $status_key]++;
 
-                $status_label = ($status == 'violated' ? __('Violated', 'slareport') : ($status == 'active' ? __('Active', 'slareport') : __('Compliant', 'slareport')));
+                $status_label = ($status == 'violated' ? __('Violated', 'slareport') : ($status == 'active' ? __('Active', 'slareport') : ($status == 'waiting' ? __('Pending', 'slareport') : __('Compliant', 'slareport'))));
             }
 
             $tickets[] = [
@@ -262,10 +282,15 @@ class PluginSlareportReport extends CommonGLPI
                     isset($slas[$ticket['slas_id_ttr']]) ? $slas[$ticket['slas_id_ttr']]['name'] : null,
                     isset($slas[$ticket['slas_id_tto']]) ? $slas[$ticket['slas_id_tto']]['name'] : null
                 ])),
-                'pending_seconds' => $pending_times[$ticket['id']] ?? 0,
-                'pending_formatted' => self::formatInterval($pending_times[$ticket['id']] ?? 0),
+                'pending_seconds' => $pending_stats[$tid]['total_time'] ?? 0,
+                'pending_formatted' => self::formatInterval($pending_stats[$tid]['total_time'] ?? 0),
+                'pending_reason' => $ticket['pending_reason'] ?: '',
                 'pending_ratio' => 0,
-                'breach_probability' => 0
+                'breach_probability' => 0,
+                'audit' => [
+                    'risk_level' => 'normal',
+                    'flags'      => []
+                ]
             ];
 
             // Calculate Pending Ratio and Breach Probability
@@ -276,7 +301,7 @@ class PluginSlareportReport extends CommonGLPI
             }
 
             if ($ttr_seconds > 0) {
-                $p_seconds = $pending_times[$ticket['id']] ?? 0;
+                $p_seconds = $pending_stats[$tid]['total_time'] ?? 0;
                 $ratio = $p_seconds / $ttr_seconds;
                 $prob = min(100, round($ratio * 100, 1));
 
@@ -284,6 +309,42 @@ class PluginSlareportReport extends CommonGLPI
                 $idx = count($tickets) - 1;
                 $tickets[$idx]['pending_ratio'] = $ratio;
                 $tickets[$idx]['breach_probability'] = $prob;
+
+                // Risk Analysis Logic
+                $flags = [];
+                $risk_score = 0;
+
+                // 1. Stagnant Risk
+                if ($ratio > 1.0) {
+                    $flags[] = 'stagnant';
+                    $risk_score += 2;
+                } elseif ($ratio > 0.7) {
+                    $flags[] = 'high_pending';
+                    $risk_score += 1;
+                }
+
+                // 2. Last Minute Risk
+                if ($pending_stats[$tid]['first_pending_start']) {
+                    $ttr_limit_date = $ticket['time_to_resolve'];
+                    $opening_date = $ticket['date'];
+                    if ($ttr_limit_date && $opening_date) {
+                        $total_sla_time = strtotime($ttr_limit_date) - strtotime($opening_date);
+                        $elapsed_at_pending = strtotime($pending_stats[$tid]['first_pending_start']) - strtotime($opening_date);
+                        if ($total_sla_time > 0 && ($elapsed_at_pending / $total_sla_time) > 0.9) {
+                            $flags[] = 'last_minute';
+                            $risk_score += 3;
+                        }
+                    }
+                }
+
+                // 3. Toggling Risk
+                if ($pending_stats[$tid]['toggles'] > 3) {
+                    $flags[] = 'excessive_toggling';
+                    $risk_score += 2;
+                }
+
+                $tickets[$idx]['audit']['flags'] = $flags;
+                $tickets[$idx]['audit']['risk_level'] = ($risk_score >= 3 ? 'high' : ($risk_score >= 1 ? 'suspicious' : 'normal'));
             }
         }
 
@@ -294,9 +355,9 @@ class PluginSlareportReport extends CommonGLPI
     }
 
     /**
-     * Calculate total time spent in Pending status for a batch of tickets
+     * Calculate total time spent in Pending status and other audit metrics
      */
-    static function calculateTotalPendingTime(array $ticket_ids)
+    static function calculatePendingStats(array $ticket_ids)
     {
         global $DB;
         if (empty($ticket_ids)) {
@@ -304,6 +365,14 @@ class PluginSlareportReport extends CommonGLPI
         }
 
         $pending_data = [];
+        foreach ($ticket_ids as $id) {
+            $pending_data[$id] = [
+                'total_time' => 0,
+                'toggles' => 0,
+                'first_pending_start' => null,
+                'last_start' => null
+            ];
+        }
         
         // GLPI 11 uses itemtype, items_id, new_value, old_value, date_mod in glpi_logs
         $logs = $DB->request([
@@ -317,22 +386,22 @@ class PluginSlareportReport extends CommonGLPI
             'ORDER'  => 'date_mod ASC'
         ]);
 
-        $ticket_intervals = [];
         foreach ($logs as $log) {
             $tid = $log['items_id'];
-            if (!isset($ticket_intervals[$tid])) {
-                $ticket_intervals[$tid] = ['total' => 0, 'last_start' => null];
-            }
 
             if ($log['new_value'] == CommonITILObject::WAITING) {
-                $ticket_intervals[$tid]['last_start'] = $log['date_mod'];
-            } elseif ($log['old_value'] == CommonITILObject::WAITING && $ticket_intervals[$tid]['last_start']) {
-                $start = strtotime($ticket_intervals[$tid]['last_start']);
+                $pending_data[$tid]['toggles']++;
+                $pending_data[$tid]['last_start'] = $log['date_mod'];
+                if (!$pending_data[$tid]['first_pending_start']) {
+                    $pending_data[$tid]['first_pending_start'] = $log['date_mod'];
+                }
+            } elseif ($log['old_value'] == CommonITILObject::WAITING && $pending_data[$tid]['last_start']) {
+                $start = strtotime($pending_data[$tid]['last_start']);
                 $end = strtotime($log['date_mod']);
                 if ($end > $start) {
-                    $ticket_intervals[$tid]['total'] += ($end - $start);
+                    $pending_data[$tid]['total_time'] += ($end - $start);
                 }
-                $ticket_intervals[$tid]['last_start'] = null;
+                $pending_data[$tid]['last_start'] = null;
             }
         }
 
@@ -349,16 +418,12 @@ class PluginSlareportReport extends CommonGLPI
         $now = time();
         foreach ($current_tickets as $ticket) {
             $tid = $ticket['id'];
-            if (isset($ticket_intervals[$tid]) && $ticket_intervals[$tid]['last_start']) {
-                $start = strtotime($ticket_intervals[$tid]['last_start']);
+            if (isset($pending_data[$tid]) && $pending_data[$tid]['last_start']) {
+                $start = strtotime($pending_data[$tid]['last_start']);
                 if ($now > $start) {
-                    $ticket_intervals[$tid]['total'] += ($now - $start);
+                    $pending_data[$tid]['total_time'] += ($now - $start);
                 }
             }
-        }
-
-        foreach ($ticket_ids as $id) {
-            $pending_data[$id] = $ticket_intervals[$id]['total'] ?? 0;
         }
 
         return $pending_data;

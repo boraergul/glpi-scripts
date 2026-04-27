@@ -11,6 +11,18 @@ A specialized GLPI reporting plugin designed to provide accurate SLA compliance 
 
 ## Chronological Work Log
 
+### [2026-04-27] - Version 1.2.0 SLA Audit & Synchronization
+- **[FEATURE]** Implemented **SLA Audit & Risk Analysis** system:
+    - Added risk scoring logic in `report.class.php`.
+    - Added risk flags: `stagnant`, `last_minute`, and `excessive_toggling`.
+    - Visual risk badges and flag icons in the dashboard.
+- **[UI]** Renamed all "Date" fields to **"Opening Date"** (Açılış Tarihi) for better clarity.
+- **[FEATURE]** Synchronized PDF and CSV outputs:
+    - Added missing CSV fields to PDF (Opening Date, SLA Name, Violation Type, Pending Time).
+    - Re-architected PDF table layout for 11 columns on Landscape A4.
+- **[FEATURE]** Added **Bilingual Legends** (TR/EN) to both PDF and CSV exports to explain Audit terms.
+- **[FIX]** Resolved `&nbsp;` and HTML entity issues in PDF truncation by migrating from `Html::resume_text` to `mb_strimwidth`.
+
 ### [2026-04-24] - Version 1.1.2 GLPI 11.0.6 Compatibility Patch
 - **[FIX]** Migrated `CommonITILObject::PENDING` to `CommonITILObject::WAITING` to resolve "Undefined constant" error in GLPI 11.0.6.
 - **[FIX]** Reverted "Pending Reasons" experimental integration to maintain core stability and layout simplicity.

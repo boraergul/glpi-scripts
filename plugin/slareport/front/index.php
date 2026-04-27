@@ -1,5 +1,4 @@
 <?php
-
 include("../../../inc/includes.php");
 
 Session::checkLoginUser();
@@ -43,12 +42,14 @@ if (isset($_POST['export_csv']) || isset($_GET['export_csv'])) {
         __('ID', 'slareport'),
         __('Subject', 'slareport'),
         __('Entity', 'slareport'),
-        __('Date', 'slareport'),
+        __('Opening Date', 'slareport'),
         __('Status', 'slareport'),
         __('Violation Type', 'slareport'),
         __('SLA Definition', 'slareport'),
         __('Pending Time', 'slareport'),
-        __('Pending Ratio', 'slareport'),
+        __('Pending Reason', 'slareport'),
+        __('Risk Level', 'slareport'),
+        __('Audit Flags', 'slareport'),
         __('TTO Deadline', 'slareport'),
         __('TTR Deadline', 'slareport'),
         __('Resolution Date', 'slareport'),
@@ -66,7 +67,9 @@ if (isset($_POST['export_csv']) || isset($_GET['export_csv'])) {
             $ticket['violation_type'] ?: '-',
             $ticket['sla_name'] ?: '-',
             $ticket['pending_formatted'] ?: '-',
-            $ticket['breach_probability'] . '%',
+            $ticket['pending_reason'] ?: '-',
+            strtoupper($ticket['audit']['risk_level']),
+            implode(', ', $ticket['audit']['flags']) ?: 'NONE',
             ($ticket['status'] == 'none' ? '-' : $ticket['tto_deadline']),
             ($ticket['status'] == 'none' ? '-' : $ticket['ttr_deadline']),
             $ticket['solvedate'],
@@ -74,6 +77,19 @@ if (isset($_POST['export_csv']) || isset($_GET['export_csv'])) {
             ($ticket['status'] == 'none' ? '-' : $ticket['solve_delay_formatted'])
         ]);
     }
+    
+    // Add Legend rows at the end of CSV
+    fputcsv($output, []); // Empty row
+    fputcsv($output, ['SLA Audit Legend / Denetim Sözlüğü']);
+    fputcsv($output, ['HIGH RISK', 'SLA manipülasyonu belirtileri (Yüksek Risk)']);
+    fputcsv($output, ['SUSPICIOUS', 'Olağandışı kullanım örüntüleri (Şüpheli)']);
+    fputcsv($output, ['NORMAL', 'Kurallara uygun yönetim']);
+    fputcsv($output, []);
+    fputcsv($output, ['Risk Flags / Risk Bayrakları']);
+    fputcsv($output, ['stagnant', 'Bekleme süresi SLA süresini aşmış (Durağan)']);
+    fputcsv($output, ['last_minute', 'SLA bitimine %10 kala beklemeye alınmış (Son Dakika)']);
+    fputcsv($output, ['excessive_toggling', '3 kereden fazla beklemeye al/çıkar yapılmış (Aşırı Git-Gel)']);
+
     fclose($output);
     exit;
 }
@@ -239,6 +255,24 @@ function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
         width: 100% !important;
         background: white;
     }
+
+    .audit-badge {
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        display: inline-block;
+    }
+    .audit-high { background: #fee2e2; color: #991b1b; }
+    .audit-suspicious { background: #fef3c7; color: #92400e; }
+    .audit-normal { background: #ecfdf5; color: #065f46; }
+    
+    .flag-icon {
+        display: inline-block;
+        margin-left: 4px;
+        cursor: help;
+    }
 </style>
 
 <div class='dashboard-container'>
@@ -295,6 +329,10 @@ function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
             <div class='kpi-label'><?php echo __('Breaches', 'slareport'); ?></div>
         </div>
         <div class='kpi-card'>
+            <div class='kpi-value' style='color: var(--warning)'><?php echo $summary['sla_waiting']; ?></div>
+            <div class='kpi-label'><?php echo __('Pending', 'slareport'); ?></div>
+        </div>
+        <div class='kpi-card'>
             <div class='kpi-value' style='color: var(--info)'><?php echo $summary['sla_active']; ?></div>
             <div class='kpi-label'><?php echo __('Active SLAs', 'slareport'); ?></div>
         </div>
@@ -316,12 +354,13 @@ function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
             <th><a href="<?php echo getSortLink('glpi_tickets.id', $sort, $order, $start_date, $end_date, $entity_id); ?>">ID</a></th>
             <th style='width: 30%'><a href="<?php echo getSortLink('glpi_tickets.name', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo __('Subject', 'slareport'); ?></a></th>
             <th><a href="<?php echo getSortLink('glpi_entities.completename', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo __('Entity', 'slareport'); ?></a></th>
-            <th><a href="<?php echo getSortLink('glpi_tickets.date', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo __('Date', 'slareport'); ?></a></th>
+            <th><a href="<?php echo getSortLink('glpi_tickets.date', $sort, $order, $start_date, $end_date, $entity_id); ?>"><?php echo __('Opening Date', 'slareport'); ?></a></th>
             <th><?php echo __('Status', 'slareport'); ?></th>
             <th><?php echo __('Violation', 'slareport'); ?></th>
             <th><?php echo __('SLA Definition', 'slareport'); ?></th>
             <th><?php echo __('Pending Time', 'slareport'); ?></th>
-            <th><?php echo __('Pending Ratio', 'slareport'); ?></th>
+            <th><?php echo __('Reason', 'slareport'); ?></th>
+            <th><?php echo __('Audit / Risk', 'slareport'); ?></th>
             <th><?php echo __('Deadline', 'slareport'); ?></th>
         </tr>
         <?php foreach ($tickets as $ticket):
@@ -355,8 +394,34 @@ function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
                 <td style='text-align: center; background: <?php echo $pending_bg; ?>'>
                     <strong><?php echo $ticket['pending_formatted']; ?></strong>
                 </td>
-                <td style='text-align: center; color: <?php echo $pending_color; ?>'>
-                    <strong><?php echo $ticket['breach_probability']; ?>%</strong>
+                <td><small><?php echo $ticket['pending_reason']; ?></small></td>
+                <td>
+                    <span class="audit-badge audit-<?php echo $ticket['audit']['risk_level']; ?>">
+                        <?php 
+                        if ($ticket['audit']['risk_level'] == 'high') echo '⚠️ ' . __('HIGH RISK', 'slareport');
+                        elseif ($ticket['audit']['risk_level'] == 'suspicious') echo '🧐 ' . __('SUSPICIOUS', 'slareport');
+                        else echo '✅ ' . __('NORMAL', 'slareport');
+                        ?>
+                    </span>
+                    <div style="margin-top: 4px;">
+                        <?php foreach ($ticket['audit']['flags'] as $flag): ?>
+                            <span class="flag-icon" title="<?php 
+                                switch($flag) {
+                                    case 'stagnant': echo __('Pending time exceeds TTR limit', 'slareport'); break;
+                                    case 'last_minute': echo __('Moved to pending at the last minute of SLA', 'slareport'); break;
+                                    case 'excessive_toggling': echo __('Frequent status changes to/from Pending', 'slareport'); break;
+                                }
+                            ?>">
+                                <?php 
+                                switch($flag) {
+                                    case 'stagnant': echo '🛑'; break;
+                                    case 'last_minute': echo '⏰'; break;
+                                    case 'excessive_toggling': echo '🔄'; break;
+                                }
+                                ?>
+                            </span>
+                        <?php endforeach; ?>
+                    </div>
                 </td>
                 <td>
                     <?php if ($ticket['status'] != 'none'): ?>
@@ -380,11 +445,17 @@ function getSortLink($col, $current_sort, $current_order, $start, $end, $ent)
             labels: [
                 "<?php echo __s('Compliant', 'slareport'); ?>",
                 "<?php echo __s('Violated', 'slareport'); ?>",
-                "<?php echo __s('Active', 'slareport'); ?>"
+                "<?php echo __s('Active', 'slareport'); ?>",
+                "<?php echo __s('Pending', 'slareport'); ?>"
             ],
             datasets: [{
-                data: [<?php echo $summary['sla_ok']; ?>, <?php echo $summary['sla_violated']; ?>, <?php echo $summary['sla_active']; ?>],
-                backgroundColor: ['#10b981', '#ef4444', '#3b82f6'],
+                data: [
+                    <?php echo $summary['sla_ok']; ?>, 
+                    <?php echo $summary['sla_violated']; ?>, 
+                    <?php echo $summary['sla_active']; ?>,
+                    <?php echo $summary['sla_waiting']; ?>
+                ],
+                backgroundColor: ['#10b981', '#ef4444', '#3b82f6', '#f59e0b'],
                 borderWidth: 0
             }]
         },

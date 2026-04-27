@@ -8,7 +8,7 @@ $end_date    = $_GET['end_date'] ?? date('Y-m-d');
 $entities_id = isset($_GET['entity_id']) ? (int)$_GET['entity_id'] : 0;
 
 $report = new PluginSlareportReport();
-$data = $report->getSlaComplianceData($start_date, $end_date, $entities_id);
+$data = PluginSlareportReport::getSlaComplianceData($start_date, $end_date, $entities_id);
 
 $summary = $data['summary'];
 $tickets = $data['tickets'];
@@ -82,6 +82,7 @@ $html_kpi = '
         <th align="center">SLA Tickets</th>
         <th align="center">Compliant</th>
         <th align="center">Violated</th>
+        <th align="center">Pending</th>
         <th align="center">Active</th>
         <th align="center">Compliance Rate</th>
     </tr>
@@ -90,6 +91,7 @@ $html_kpi = '
         <td align="center">'.$summary['sla_total'].'</td>
         <td align="center" style="color:#10b981; font-weight:bold;">'.$summary['sla_ok'].'</td>
         <td align="center" style="color:#ef4444; font-weight:bold;">'.$summary['sla_violated'].'</td>
+        <td align="center" style="color:#f59e0b;">'.$summary['sla_waiting'].'</td>
         <td align="center" style="color:#3b82f6;">'.$summary['sla_active'].'</td>
         <td align="center" style="background-color:#4f46e5; color:#ffffff; font-weight:bold;">'.$compliance_rate.'%</td>
     </tr>
@@ -132,30 +134,34 @@ $pdf->SetFont('dejavusans', 'B', 16);
 $pdf->Cell(0, 15, '3. Detailed SLA Breach List', 0, 1, 'L');
 
 $widths = [
-    'id'        => '8%',
-    'entity'    => '12%',
-    'title'     => '15%',
-    'date'      => '10%',
-    'status'    => '10%',
-    'breach'    => '10%',
-    'deadlines' => '15%',
-    'solvedate' => '10%',
+    'id'        => '4%',
+    'entity'    => '8%',
+    'date'      => '8%',
+    'title'     => '12%',
+    'status'    => '7%',
+    'sla'       => '10%',
+    'pending'   => '12%',
+    'audit'     => '10%',
+    'deadlines' => '11%',
+    'solvedate' => '8%',
     'delay'     => '10%'
 ];
 
 $tbl_header = '
-<table border="1" cellpadding="4" style="border-collapse:collapse; width:100%; font-size:8px;">
+<table border="1" cellpadding="4" style="border-collapse:collapse; width:100%; font-size:7px;">
     <thead>
         <tr style="background-color:#334155; color:#ffffff; font-weight:bold;">
             <th width="'.$widths['id'].'" align="center">ID</th>
             <th width="'.$widths['entity'].'">Entity</th>
+            <th width="'.$widths['date'].'" align="center">Opening Date</th>
             <th width="'.$widths['title'].'">Title</th>
-            <th width="'.$widths['date'].'" align="center">Date</th>
             <th width="'.$widths['status'].'" align="center">Status</th>
-            <th width="'.$widths['breach'].'" align="center">Breach Type</th>
-            <th width="'.$widths['deadlines'].'" align="center">Deadlines (TTO/TTR)</th>
-            <th width="'.$widths['solvedate'].'" align="center">Solve Date</th>
-            <th width="'.$widths['delay'].'" align="center">Delay</th>
+            <th width="'.$widths['sla'].'" align="center">SLA / Violation</th>
+            <th width="'.$widths['pending'].'" align="center">Pending (Time/Reason)</th>
+            <th width="'.$widths['audit'].'" align="center">Audit</th>
+            <th width="'.$widths['deadlines'].'" align="center">Deadlines</th>
+            <th width="'.$widths['solvedate'].'" align="center">Solved</th>
+            <th width="'.$widths['delay'].'" align="center">Delay (TTO/TTR)</th>
         </tr>
     </thead>
     <tbody>';
@@ -165,21 +171,52 @@ foreach ($tickets as $t) {
     $bg = ($t['status'] == 'violated') ? '#fef2f2' : '#ffffff';
     $status_col = ($t['status'] == 'violated') ? '#ef4444' : (($t['status'] == 'active') ? '#3b82f6' : '#10b981');
     
+    $audit_text = strtoupper($t['audit']['risk_level']);
+    $audit_col = ($t['audit']['risk_level'] == 'high' ? '#ef4444' : ($t['audit']['risk_level'] == 'suspicious' ? '#f59e0b' : '#10b981'));
+    $flags_text = implode(', ', $t['audit']['flags']);
+
+    $sla_info = ($t['sla_name'] ?: '-') . '<br><small>(' . ($t['violation_type'] ?: 'None') . ')</small>';
+    $pending_info = '<b>' . $t['pending_formatted'] . '</b><br><small>' . htmlspecialchars($t['pending_reason']) . '</small>';
+
     $tbl_rows .= '<tr style="background-color:'.$bg.';">
         <td width="'.$widths['id'].'" align="center">#'.$t['id'].'</td>
-        <td width="'.$widths['entity'].'">'.$t['entity'].'</td>
-        <td width="'.$widths['title'].'">'.htmlspecialchars(mb_strimwidth($t['name'], 0, 30, '...')).'</td>
+        <td width="'.$widths['entity'].'">'.htmlspecialchars(mb_strimwidth($t['entity'], 0, 20, "...")).'</td>
         <td width="'.$widths['date'].'" align="center">'.$t['date'].'</td>
+        <td width="'.$widths['title'].'">'.htmlspecialchars(mb_strimwidth($t['name'], 0, 30, "...")).'</td>
         <td width="'.$widths['status'].'" align="center" style="color:'.$status_col.'; font-weight:bold;">'.$t['status_label'].'</td>
-        <td width="'.$widths['breach'].'" align="center">'.$t['violation_type'].'</td>
-        <td width="'.$widths['deadlines'].'" align="center">TTO: '.Html::convDateTime($t['tto_deadline']).'<br>TTR: '.Html::convDateTime($t['ttr_deadline']).'</td>
-        <td width="'.$widths['solvedate'].'" align="center">'.Html::convDateTime($t['solvedate']).'</td>
-        <td width="'.$widths['delay'].'" align="right">'.($t['tto_delay_formatted'] ?: '-').' / '.($t['solve_delay_formatted'] ?: '-').'</td>
+        <td width="'.$widths['sla'].'" align="center" style="font-size: 6px;">'.$sla_info.'</td>
+        <td width="'.$widths['pending'].'" align="center" style="font-size: 6px;">'.$pending_info.'</td>
+        <td width="'.$widths['audit'].'" align="center" style="color:'.$audit_col.'; font-size: 6px;"><b>'.$audit_text.'</b><br>'.htmlspecialchars($flags_text).'</td>
+        <td width="'.$widths['deadlines'].'" align="center" style="font-size: 6px;">TTO: '.($t['tto_deadline'] ? Html::convDateTime($t['tto_deadline']) : '-').'<br>TTR: '.($t['ttr_deadline'] ? Html::convDateTime($t['ttr_deadline']) : '-').'</td>
+        <td width="'.$widths['solvedate'].'" align="center">'.($t['solvedate'] ? Html::convDateTime($t['solvedate']) : '-').'</td>
+        <td width="'.$widths['delay'].'" align="right" style="font-size: 6px;">'.($t['tto_delay_formatted'] ?: '-').' / '.($t['solve_delay_formatted'] ?: '-').'</td>
     </tr>';
 }
 
 $tbl_footer = '</tbody></table>';
 
 $pdf->writeHTML($tbl_header . $tbl_rows . $tbl_footer, true, false, false, false, '');
+
+// --- LEGEND / FOOTNOTE ---
+$pdf->Ln(5);
+$pdf->SetFont('dejavusans', '', 7);
+$legend_html = '
+<table cellpadding="4" style="background-color:#f1f5f9; border: 1px solid #cbd5e1; width:100%;">
+    <tr>
+        <td>
+            <b>SLA Audit Legend / Denetim Sözlüğü:</b><br>
+            <b>HIGH RISK:</b> SLA manipülasyonu belirtileri (Yüksek Risk).<br>
+            <b>SUSPICIOUS:</b> Olağandışı kullanım örüntüleri (Şüpheli).<br>
+            <b>NORMAL:</b> Kurallara uygun yönetim.
+        </td>
+        <td>
+            <b>Risk Flags / Risk Bayrakları:</b><br>
+            <b>stagnant:</b> Bekleme süresi SLA süresini aşmış (Durağan).<br>
+            <b>last_minute:</b> SLA bitimine %10 kala beklemeye alınmış (Son Dakika).<br>
+            <b>excessive_toggling:</b> 3 kereden fazla beklemeye al/çıkar yapılmış (Aşırı Git-Gel).
+        </td>
+    </tr>
+</table>';
+$pdf->writeHTML($legend_html, true, false, false, false, '');
 
 $pdf->Output('SLA_Report_'.date('Ymd').'.pdf', 'I');

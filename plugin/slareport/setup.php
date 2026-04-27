@@ -1,6 +1,6 @@
 <?php
 
-define('PLUGIN_SLAREPORT_VERSION', '1.0.1');
+define('PLUGIN_SLAREPORT_VERSION', '1.2.0');
 
 /**
  * Init function for the plugin
