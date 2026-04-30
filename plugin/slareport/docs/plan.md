@@ -1,25 +1,34 @@
-# Plan: SLA Translation & Deployment Optimization
+# Plan: Adding Plugin Logo to SLA Breach Report
 
-## Goal
-Fix persistent translation issues, enhance PDF report aesthetics, and establish a reliable production deployment workflow.
+This plan outlines the steps to add a professional logo to the `slareport` plugin, following the structure observed in the reference `escalade` plugin.
 
-## Steps (Completed)
-- [x] **Custom Translation Engine**: Implement `PluginSlareportReport::trans()` to bypass GLPI cache issues.
-- [x] **Locale Conversion**: Migrate `.mo/.po` files to direct PHP return arrays for TR/EN.
-- [x] **UI Integration**: Update `index.php`, `report.class.php`, and `export_pdf.php` to use the new engine.
-- [x] **Premium PDF Restoration**: Re-implement cover page, charts, and executive summary with multi-language support.
-- [x] **PROD Deployment**: Create `deploy_prod.sh` targeting `10.42.2.149` with correct paths and users.
-- [x] **Bug Fixes**: 
-    - Resolved 500 error in `setup.php`.
-    - Fixed TCPDF inclusion for GLPI 10/11.
-    - Fixed CSV output buffering issues.
+## Proposed Changes
 
-## Verification
-- [x] Dashboard fully translated in itsm-dev.
-- [x] PDF export generated with cover page and Turkish characters.
-- [x] CSV export working without errors.
-- [x] deploy_prod.sh tested and verified.
+### 1. Logo Generation & Asset Management
+- **Task**: Generate a premium, professional logo for the "SLA Breach Report" plugin.
+- **Design Concept**: A modern, clean icon representing "Reports", "SLA/Time", and "Accuracy". Likely a combination of a document/chart icon with a subtle clock or shield element, using a professional color palette (Dark Slate, Blue, or Teal).
+- **Format**: PNG (transparent background).
+- **Location**: Save as `slareport.png` in the plugin root directory.
 
-## Next Steps (Future)
-- Monitor memory usage for extremely large PDF exports.
-- Implement background processing for very large date ranges.
+### 2. Plugin Metadata (Optional Check)
+- **Task**: Verify if `setup.php` requires any explicit registration.
+- **Rationale**: Based on the `escalade` plugin analysis, GLPI automatically detects `[plugin_key].png` in the root. No code changes were found in `escalade`'s `setup.php` for the logo, so we will follow this convention.
+
+### 3. Documentation Update
+- **Task**: Update `docs/project_state.md` to reflect the addition of branding assets.
+
+## Affected Files
+- `slareport.png` (New)
+- `docs/project_state.md` (Update)
+
+## Verification Plan
+1. **Visual Check**: Inspect the generated PNG to ensure it meets premium standards. [DONE]
+2. **Path Check**: Ensure the filename exactly matches the plugin directory name (`slareport`) and added `logo.png` for specific compatibility. [DONE]
+3. **Deployment**: The `deploy.sh` script should automatically pick up the new file since it syncs the directory content. [DONE]
+
+---
+**Status: COMPLETED (2026-04-30)**
+- Logo generated and added in 3 variations (`slareport.png`, `logo.png`, `pics/icon.png`).
+- Version bumped to `1.2.3`.
+- Documentation (`README.md`, `project_state.md`) updated.
+

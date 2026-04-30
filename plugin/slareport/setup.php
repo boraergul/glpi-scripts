@@ -1,6 +1,6 @@
 <?php
 
-define('PLUGIN_SLAREPORT_VERSION', '1.2.2');
+define('PLUGIN_SLAREPORT_VERSION', '1.2.3');
 
 /**
  * Safe translation for setup.php (avoids Class Not Found error)

@@ -1,6 +1,9 @@
 # GLPI SLA Breach Report Plugin
 
-Bu eklenti, GLPI 10 ve 11 sürümleri için geliştirilmiş, SLA ihlallerini denetleyen ve detaylı raporlayan profesyonel bir araçtır.
+![SLA Breach Report Logo](slareport.png)
+
+Bu eklenti (v1.2.3), GLPI 10 ve 11 sürümleri için geliştirilmiş, SLA ihlallerini denetleyen ve detaylı raporlayan profesyonel bir araçtır.
+
 
 ## 🚀 Öne Çıkan Özellikler
 

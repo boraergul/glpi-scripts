@@ -13,6 +13,16 @@ A specialized GLPI reporting plugin designed to provide accurate SLA compliance 
 
 ## Chronological Work Log
 
+### [2026-04-29] - Version 1.2.3 Branding & UI
+- **[UI]** Added official **Plugin Logo** with multi-naming support for maximum GLPI compatibility:
+    - `logo.png` (Root): Identified as the primary priority for this specific GLPI environment.
+    - `slareport.png` (Root): Standard GLPI 10+ naming convention.
+    - `pics/icon.png`: Fallback for legacy GLPI structures.
+- **[UI]** Implemented premium minimalist icon representing "Compliance, Time, and Reporting".
+- **[VERSION]** Bumped version to `1.2.3` in `setup.php`.
+
+
+
 ### [2026-04-27] - Version 1.2.2 Translation Stability & PROD Deployment
 - **[ENGINE]** Implemented **Custom Translation Engine** to resolve persistent translation key issues in GLPI 11.
     - Created `PluginSlareportReport::trans()` to manually load locale files from `locales/` directory.
